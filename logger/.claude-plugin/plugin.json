@@ -1,5 +1,5 @@
 {
   "name": "agent-logger",
   "description": "Log Claude sessions (prompts and tool uses) to a local file for later analysis.",
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
