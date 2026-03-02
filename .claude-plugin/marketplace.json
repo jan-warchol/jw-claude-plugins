@@ -1,0 +1,14 @@
+{
+  "name": "jan-warchol-plugins",
+  "owner": {
+    "name": "Jan Warchoł",
+    "email": "jan.warchol@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "agent-logger",
+      "source": "./logger",
+      "description": "Log Claude sessions (prompts and tool uses) to a local file for later analysis."
+    }
+  ]
+}
