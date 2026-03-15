@@ -1,5 +1,5 @@
 {
   "name": "agent-logger",
-  "description": "Log Claude sessions (prompts and tool uses) to a local file for later analysis.",
-  "version": "0.3.0"
+  "description": "Log selected events from Claude sessions (SessionStart, UserPromptSubmit, PreToolUse and PermissionRequest) to a local file for later analysis.",
+  "version": "0.4.0"
 }

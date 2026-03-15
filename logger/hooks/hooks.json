@@ -29,6 +29,16 @@
           }
         ]
       }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
     ]
   }
 }

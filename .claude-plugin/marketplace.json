@@ -8,7 +8,7 @@
     {
       "name": "agent-logger",
       "source": "./logger",
-      "description": "Log Claude sessions (prompts and tool uses) to a local file for later analysis."
+      "description": "Log selected events from Claude sessions (SessionStart, UserPromptSubmit, PreToolUse and PermissionRequest) to a local file for later analysis."
     }
   ]
 }
