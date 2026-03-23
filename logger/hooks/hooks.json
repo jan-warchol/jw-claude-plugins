@@ -39,6 +39,36 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
     ]
   }
 }
