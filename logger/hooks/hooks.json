@@ -20,7 +20,7 @@
         ]
       }
     ],
-    "PreToolUse": [
+    "InstructionsLoaded": [
       {
         "hooks": [
           {
@@ -30,7 +30,7 @@
         ]
       }
     ],
-    "PostToolUse": [
+    "PreToolUse": [
       {
         "hooks": [
           {
@@ -50,7 +50,37 @@
         ]
       }
     ],
-    "Stop": [
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
       {
         "hooks": [
           {
@@ -71,6 +101,26 @@
       }
     ],
     "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c '{timestamp: now | floor} + .' >> .claude-history.jsonl"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
       {
         "hooks": [
           {
