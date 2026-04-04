@@ -9,6 +9,11 @@
       "name": "trivial-logger",
       "source": "./trivial-logger",
       "description": "Log selected events from Claude sessions to a local file for later analysis."
+    },
+    {
+      "name": "claude-session-reporter",
+      "source": "./claude-session-reporter",
+      "description": "Log and filter events from Claude sessions for later analysis."
     }
   ]
 }

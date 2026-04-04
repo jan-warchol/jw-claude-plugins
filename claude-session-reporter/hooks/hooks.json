@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "SessionStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SessionEnd": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "InstructionsLoaded": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "UserPromptSubmit": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PreToolUse": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PostToolUse": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PostToolUseFailure": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PermissionRequest": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PermissionDenied": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "StopFailure": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SubagentStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SubagentStop": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "TaskCreated": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "TaskCompleted": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "TeammateIdle": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PreCompact": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "PostCompact": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "WorktreeCreate": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "WorktreeRemove": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "FileChanged": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "CwdChanged": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "ConfigChange": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "Notification": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "Elicitation": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "ElicitationResult": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}]
+  }
+}
