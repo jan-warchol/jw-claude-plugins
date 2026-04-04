@@ -1,5 +1,5 @@
 {
-  "name": "agent-logger",
+  "name": "trivial-logger",
   "description": "Log selected events from Claude sessions to a local file for later analysis.",
-  "version": "0.6.0"
+  "version": "1.0.0"
 }

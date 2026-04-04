@@ -1,6 +1,6 @@
 # My dev plugins for Claude Code
 
-- `agent-logger`: a simple logger for collecting prompt, tool use
+- `trivial-logger`: a trivial logger for collecting prompt, tool use
   and permission request events to a local file for later analysis,
 - ...more to come.
 
@@ -15,5 +15,5 @@ First, register the marketplace:
 Then install the plugin itself:
 
 ```
-/plugin install agent-logger@jw-claude-plugins
+/plugin install trivial-logger@jw-claude-plugins
 ```

@@ -6,8 +6,8 @@
   },
   "plugins": [
     {
-      "name": "agent-logger",
-      "source": "./logger",
+      "name": "trivial-logger",
+      "source": "./trivial-logger",
       "description": "Log selected events from Claude sessions to a local file for later analysis."
     }
   ]
