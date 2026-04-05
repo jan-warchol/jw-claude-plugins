@@ -4,6 +4,11 @@ import sys
 from pathlib import Path
 
 
+DEFAULT_DIR = ".claude-sessions"
+EVENTS_FILE = "all-events.jsonl"
+FILTERED_EVENTS_FILE = "filtered-events.jsonl"
+
+
 def _read_json(path: Path) -> dict | None:
     try:
         with open(path) as f:
@@ -31,14 +36,14 @@ def write_entry(path: Path, entry: dict) -> None:
         f.write(json.dumps(entry, separators=(",", ":")) + "\n")
 
 
-def get_log_dir(config: dict, default_dir: str) -> Path:
+def get_log_dir(config: dict) -> Path:
     """Return the directory where log files should be written.
 
-    Defaults to default_dir in cwd; overridden by logs_base_dir in the config file.
+    Defaults to DEFAULT_DIR in cwd; overridden by logs_base_dir in the config file.
     """
     base = config.get("logs_base_dir")
     if not base:
-        log_dir = Path(default_dir)
+        log_dir = Path(DEFAULT_DIR)
         log_dir.mkdir(exist_ok=True)
         return log_dir
 

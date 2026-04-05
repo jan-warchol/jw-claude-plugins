@@ -9,7 +9,10 @@
     "PostToolUseFailure": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "PermissionRequest": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "PermissionDenied": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
-    "Stop": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "Stop": [{"hooks": [
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"},
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/filter_events.py"}
+    ]}],
     "StopFailure": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "SubagentStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "SubagentStop": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],

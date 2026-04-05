@@ -2,10 +2,7 @@
 import json
 import sys
 import time
-from utils import get_log_dir, load_config, write_entry
-
-FILE_NAME = "all-events.jsonl"
-DEFAULT_DIR = "./.claude-sessions"
+from utils import EVENTS_FILE, get_log_dir, load_config, write_entry
 
 if __name__ == "__main__":
     # Add timestamp and move subagent info to the end for better readability.
@@ -15,5 +12,5 @@ if __name__ == "__main__":
     entry = {"timestamp": int(time.time()), **event, **tail}
 
     config = load_config()
-    log_dir = get_log_dir(config, DEFAULT_DIR)
-    write_entry(log_dir / FILE_NAME, entry)
+    log_dir = get_log_dir(config)
+    write_entry(log_dir / EVENTS_FILE, entry)
