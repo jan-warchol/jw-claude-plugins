@@ -4,9 +4,18 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_DIR = ".claude-sessions"
+DEFAULT_DIR = ".claude-history"
 EVENTS_FILE = "all-events.jsonl"
 FILTERED_EVENTS_FILE = "filtered-events.jsonl"
+SESSION_SUMMARIES_FILE = "session-summaries.json"
+
+
+def read_jsonl(path: Path):
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                yield json.loads(line)
 
 
 def _read_json(path: Path) -> dict | None:

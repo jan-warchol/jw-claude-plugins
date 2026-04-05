@@ -7,7 +7,7 @@ Writes to <input-stem>-filtered.<extension>.
 import json
 import sys
 from pathlib import Path
-from utils import EVENTS_FILE, FILTERED_EVENTS_FILE, get_log_dir, load_config
+from utils import EVENTS_FILE, FILTERED_EVENTS_FILE, get_log_dir, load_config, read_jsonl
 
 TOP_LEVEL_BLACKLIST = {
     # "timestamp",
@@ -42,6 +42,10 @@ def should_skip(entry):
         return True
     if event == "PostToolUse" and tool != "AskUserQuestion":
         return True
+    if event == "UserPromptSubmit":
+        stripped = entry.get("prompt", "").strip()
+        if stripped.startswith("<task-notification>") and stripped.endswith("</task-notification>"):
+            return True
     return False
 
 
@@ -79,11 +83,8 @@ if __name__ == "__main__":
     else:
         print("Usage: filter_events.py [input_file]", file=sys.stderr)
         sys.exit(1)
-    with open(in_path) as f_in, open(out_path, "w") as f_out:
-        for line in f_in:
-            if not line.strip():
-                continue
-            entry = json.loads(line)
+    with open(out_path, "w") as f_out:
+        for entry in read_jsonl(in_path):
             if should_skip(entry):
                 continue
             filtered = filter_entry(entry)

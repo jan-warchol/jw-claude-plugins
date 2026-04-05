@@ -1,8 +1,11 @@
 ## Overview
 
-Logs all Claude Code hook events (session start/end, tool use, prompts, etc.) to a
-JSONL file for later analysis. By default, logs go to `.claude-sessions/all-events.jsonl`
-in the current working directory.
+Logs all Claude Code hook events (tool use, prompts, etc.) to a JSONL file for later
+analysis. By default, logs go to `.claude-history/` in the current working directory.
+
+At the end of each session, the raw log is also filtered into a more readable version
+with noisy fields (large tool inputs etc.) stripped out, and an event more condensed
+session summary is also produced.
 
 ## Installation
 

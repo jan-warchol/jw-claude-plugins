@@ -1,5 +1,5 @@
 {
   "name": "claude-session-reporter",
-  "description": "Log and filter events from Claude sessions for later analysis.",
-  "version": "0.2.0"
+  "description": "Log events from Claude sessions, filter them and produce summaries for later analysis. All data is saved locally.",
+  "version": "0.3.0"
 }

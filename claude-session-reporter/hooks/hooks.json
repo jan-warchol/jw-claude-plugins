@@ -1,7 +1,10 @@
 {
   "hooks": {
     "SessionStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
-    "SessionEnd": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SessionEnd": [{"hooks": [
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"},
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/summarize_sessions.py"}
+    ]}],
     "InstructionsLoaded": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "UserPromptSubmit": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "PreToolUse": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],

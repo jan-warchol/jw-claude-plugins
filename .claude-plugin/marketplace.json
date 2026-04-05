@@ -13,7 +13,7 @@
     {
       "name": "claude-session-reporter",
       "source": "./claude-session-reporter",
-      "description": "Log and filter events from Claude sessions for later analysis."
+      "description": "Log events from Claude sessions, filter them and produce summaries for later analysis. All data is saved locally."
     }
   ]
 }
