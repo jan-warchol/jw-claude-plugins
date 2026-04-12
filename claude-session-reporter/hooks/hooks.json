@@ -1,7 +1,10 @@
 {
   "hooks": {
     "SessionStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
-    "SessionEnd": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SessionEnd": [{"hooks": [
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"},
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/filter_events.py; python3 ${CLAUDE_PLUGIN_ROOT}/summarize_sessions.py"}
+    ]}],
     "InstructionsLoaded": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "UserPromptSubmit": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "PreToolUse": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
@@ -14,8 +17,14 @@
       {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/filter_events.py; python3 ${CLAUDE_PLUGIN_ROOT}/summarize_sessions.py"}
     ]}],
     "StopFailure": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
-    "SubagentStart": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
-    "SubagentStop": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
+    "SubagentStart": [{"hooks": [
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"},
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/filter_events.py; python3 ${CLAUDE_PLUGIN_ROOT}/summarize_sessions.py"}
+    ]}],
+    "SubagentStop": [{"hooks": [
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"},
+      {"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/filter_events.py; python3 ${CLAUDE_PLUGIN_ROOT}/summarize_sessions.py"}
+    ]}],
     "TaskCreated": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "TaskCompleted": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
     "TeammateIdle": [{"hooks": [{"type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/log_events.py"}]}],
