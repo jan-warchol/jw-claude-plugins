@@ -10,7 +10,7 @@ Output structure:
     "last_event": "<ISO 8601 datetime>",
     "important_events": [
       {"prompt": "..."},   // UserPromptSubmit
-      {"reply": "..."},    // Stop
+      {"agent_reply": "..."},    // Stop
       {"skill": "..."},    // PreToolUse Skill
       ...
     ]
@@ -75,15 +75,22 @@ def process(in_path: Path) -> dict:
             if skill:
                 s["important_events"].append({"skill": skill})
 
-        elif event == "SubagentStart":
-            agent_type = entry.get("agent_type")
-            if agent_type:
-                s["important_events"].append({"subagent": agent_type})
+        elif event == "PreToolUse" and entry.get("tool_name") == "Agent":
+            subagent_type = (entry.get("tool_input") or {}).get(
+                "subagent_type"
+            ) or "<unknown type>"
+            description = (entry.get("tool_input") or {}).get(
+                "description"
+            ) or "<no description>"
+            if subagent_type or description:
+                s["important_events"].append(
+                    {"subagent": f"{subagent_type}: {description}"}
+                )
 
         elif event == "Stop":
             msg = entry.get("last_assistant_message")
             if msg:
-                s["important_events"].append({"reply": msg})
+                s["important_events"].append({"agent_reply": msg})
 
     return sessions
 
