@@ -87,6 +87,11 @@ def process(in_path: Path) -> dict:
                     {"subagent": f"{subagent_type}: {description}"}
                 )
 
+        elif event == "PostToolUse" and entry.get("tool_name") == "AskUserQuestion":
+            answers = (entry.get("tool_response") or {}).get("answers")
+            if answers:
+                s["important_events"].append(answers)
+
         elif event == "Stop":
             msg = entry.get("last_assistant_message")
             if msg:

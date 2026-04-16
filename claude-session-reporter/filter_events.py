@@ -61,7 +61,7 @@ def should_skip(entry):
     return False
 
 
-def trim_long(text, limit=1000, head=400, tail=400):
+def trim_long(text, limit=1100, head=500, tail=500):
     if len(text) > limit:
         return text[:head] + "[...................................]" + text[-tail:]
     return text
@@ -91,7 +91,7 @@ def filter_entry(entry):
 
     if "last_assistant_message" in result:
         result["last_assistant_message"] = trim_long(
-            result["last_assistant_message"], head=300, tail=600
+            result["last_assistant_message"], head=400, tail=600
         )
     return result
 
