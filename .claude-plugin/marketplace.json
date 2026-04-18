@@ -14,6 +14,11 @@
       "name": "claude-session-reporter",
       "source": "./claude-session-reporter",
       "description": "Log events from Claude sessions, filter them and produce summaries for later analysis. All data is saved locally."
+    },
+    {
+      "name": "catnip",
+      "source": "./catnip",
+      "description": "Complexity-Aware Task Navigation and Intelligent Planning. Adjusts model behavior based on the assessed complexity of each user request."
     }
   ]
 }
