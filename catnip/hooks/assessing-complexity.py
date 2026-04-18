@@ -106,7 +106,7 @@ def _parse_complexity_write_command(command: str) -> dict | None:
         return None
     if tokens[2] != ">":
         return None
-    if tokens[3] != str(CURRENT_TASK_COMPLEXITY_FILE):
+    if Path(tokens[3]).resolve() != CURRENT_TASK_COMPLEXITY_FILE.resolve():
         return None
 
     try:

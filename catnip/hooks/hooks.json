@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'For each new user request, start by evaluating it with the assessing-complexity skill'"
+            "command": "echo 'For each new user request, call the Skill tool with skill=catnip:assessing-complexity and args set to the user\\'s request text.'"
           },
           {
             "type": "command",
