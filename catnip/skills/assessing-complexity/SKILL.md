@@ -28,7 +28,5 @@ Output "Request complexity:" with your rating and a 6-18 word rationale.
 Then log it by running this Bash command (with actual values substituted):
 
 ```
-echo '{"timestamp":<unix timestamp>, "event":"complexity_assessment", "rating":<N>, "prompt":"<user prompt>", "rationale":"<your rationale>"}' >> $COMPLEXITY_LOG_FILE
+echo '{"rating":<N>,"input":"<user prompt>","rationale":"<your rationale>"}' > .cc-current-task-complexity.json
 ```
-
-Current timestamp is !`date +%s`.

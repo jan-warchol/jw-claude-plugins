@@ -1,5 +1,5 @@
 {
   "name": "catnip",
   "description": "Complexity-Aware Task Navigation and Intelligent Planning. Adjusts model behavior based on the assessed complexity of each user request.",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

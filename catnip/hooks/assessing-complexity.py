@@ -20,6 +20,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 COMPLEXITY_ASSESSMENTS_LOG_FILE = "complexity-logs.jsonl"
+CURRENT_TASK_COMPLEXITY_FILE = Path(".cc-current-task-complexity.json")
 
 _FIELDS_TO_DROP = {"transcript_path", "cwd", "tool_use_id", "permission_mode"}
 
@@ -46,11 +47,12 @@ def _config_dir() -> Path:
     return base / "claude-session-reporter"
 
 
-def load_config() -> dict:
+def _load_config() -> dict:
     return _read_json(_config_dir() / "config.json") or {}
 
 
-def get_log_dir(config: dict) -> Path:
+def get_log_dir() -> Path:
+    config = _load_config()
     base = config.get("logs_base_dir")
     if not base:
         log_dir = Path(".claude-history")
@@ -72,58 +74,51 @@ def get_log_dir(config: dict) -> Path:
 
 
 def write_log_entry(entry: dict) -> None:
-    path = get_log_dir(load_config()) / COMPLEXITY_ASSESSMENTS_LOG_FILE
+    path = get_log_dir() / COMPLEXITY_ASSESSMENTS_LOG_FILE
     with open(path, "a") as f:
-        f.write(json.dumps(entry, separators=(",", ":")) + "\n")
+        f.write(json.dumps(entry) + "\n")
 
 
 # ---------------------------------------------------------------------------
-# SessionStart: export COMPLEXITY_LOG_FILE into the session environment
+# SessionStart: clear stale complexity file from previous session
 # ---------------------------------------------------------------------------
 
 
-def handle_session_start() -> None:
-    env_file = os.environ.get("CLAUDE_ENV_FILE")
-    if env_file:
-        log_path = get_log_dir(load_config()) / COMPLEXITY_ASSESSMENTS_LOG_FILE
-        with open(env_file, "a") as f:
-            f.write(f"export COMPLEXITY_LOG_FILE={log_path}\n")
+def clear_old_complexity_file(_event: dict) -> None:
+    CURRENT_TASK_COMPLEXITY_FILE.unlink(missing_ok=True)
 
 
 # ---------------------------------------------------------------------------
-# PermissionRequest: auto-approve the complexity assessment log-write command
+# PermissionRequest: auto-approve Bash commands logging task complexity, like:
+# echo '{"rating":<number>,"input":"<string>"}' > .cc-current-task-complexity.json
 # ---------------------------------------------------------------------------
 
 
-def _is_complexity_log_write_command(command: str) -> bool:
+def _parse_complexity_write_command(command: str) -> dict | None:
     try:
         tokens = shlex.split(command)
     except ValueError:
-        return False
+        return None
 
     if len(tokens) != 4:
-        return False
+        return None
     if tokens[0] != "echo":
-        return False
-    if tokens[2] != ">>":
-        return False
-    if not (
-        tokens[3].endswith("complexity-logs.jsonl")
-        or tokens[3] == "$COMPLEXITY_LOG_FILE"
-    ):
-        return False
+        return None
+    if tokens[2] != ">":
+        return None
+    if tokens[3] != str(CURRENT_TASK_COMPLEXITY_FILE):
+        return None
 
     try:
         payload = json.loads(tokens[1])
     except json.JSONDecodeError:
-        return False
+        return None
 
-    return (
-        payload.get("event") == "complexity_assessment"
-        and isinstance(payload.get("rating"), (int, float))
-        and isinstance(payload.get("prompt"), str)
-        and "timestamp" in payload
-    )
+    if isinstance(payload.get("rating"), (int, float)) and isinstance(
+        payload.get("input"), str
+    ):
+        return payload
+    return None
 
 
 def _approve_permission() -> None:
@@ -139,12 +134,22 @@ def _approve_permission() -> None:
     )
 
 
-def handle_permission_request(event: dict) -> None:
+def approve_complexity_write_and_log(event: dict) -> None:
     if event.get("tool_name") != "Bash":
         return
     command = event.get("tool_input", {}).get("command", "")
-    if _is_complexity_log_write_command(command):
-        _approve_permission()
+    payload = _parse_complexity_write_command(command)
+    if payload is None:
+        return
+    _approve_permission()
+    write_log_entry(
+        {
+            "timestamp": int(time.time()),
+            "session_id": event.get("session_id"),
+            "hook_event_name": "ComplexityAssessment",
+            **payload,
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -152,7 +157,7 @@ def handle_permission_request(event: dict) -> None:
 # ---------------------------------------------------------------------------
 
 
-def handle_pre_tool_use(event: dict) -> None:
+def log_skill_invocation(event: dict) -> None:
     if event.get("tool_name") != "Skill":
         return
     if event.get("tool_input", {}).get("skill") != "catnip:assessing-complexity":
@@ -165,7 +170,7 @@ def handle_pre_tool_use(event: dict) -> None:
 # ---------------------------------------------------------------------------
 
 
-def handle_user_prompt_submit(event: dict) -> None:
+def log_user_prompt(event: dict) -> None:
     write_log_entry({"timestamp": int(time.time()), **_filter_fields(event)})
 
 
@@ -174,10 +179,10 @@ def handle_user_prompt_submit(event: dict) -> None:
 # ---------------------------------------------------------------------------
 
 HANDLERS = {
-    "SessionStart": handle_session_start,
-    "PermissionRequest": handle_permission_request,
-    "PreToolUse": handle_pre_tool_use,
-    "UserPromptSubmit": handle_user_prompt_submit,
+    "SessionStart": clear_old_complexity_file,
+    "PermissionRequest": approve_complexity_write_and_log,
+    "PreToolUse": log_skill_invocation,
+    "UserPromptSubmit": log_user_prompt,
 }
 
 
@@ -191,10 +196,6 @@ def main() -> None:
     if handler is None:
         print(f"Unknown event: {event_name}", file=sys.stderr)
         sys.exit(1)
-
-    if event_name == "SessionStart":
-        handle_session_start()
-        return
 
     try:
         event = json.load(sys.stdin)
