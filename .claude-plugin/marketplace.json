@@ -19,6 +19,11 @@
       "name": "catnip",
       "source": "./catnip",
       "description": "Complexity-Aware Task Navigation and Intelligent Planning. Adjusts model behavior based on the assessed complexity of each user request."
+    },
+    {
+      "name": "custom-span-tracker",
+      "source": "./custom-span-tracker",
+      "description": "Track user-defined spans: logs prompts, agent replies, skills, subagents, Q&A answers, and snapshots plan/spec/review files on agent edits."
     }
   ]
 }

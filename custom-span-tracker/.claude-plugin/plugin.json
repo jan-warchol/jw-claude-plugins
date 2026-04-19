@@ -1,0 +1,5 @@
+{
+  "name": "custom-span-tracker",
+  "description": "Track user-defined spans: logs prompts, agent replies, skills, subagents, Q&A answers, and snapshots plan/spec/review files on agent edits.",
+  "version": "0.1.0"
+}

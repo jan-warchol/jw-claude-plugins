@@ -1,0 +1,3 @@
+Known issues:
+- when using short skill name, skill invocation must go through the model and takes more time.
+- sometimes the model will not call the skill...
