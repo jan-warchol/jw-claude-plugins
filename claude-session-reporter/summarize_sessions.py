@@ -6,11 +6,11 @@ Output structure:
   {
     "session_id": "<session_id>",
     "model": "<model>",
-    "first_event": "<ISO 8601 datetime>",
-    "last_event": "<ISO 8601 datetime>",
-    "important_events": [
-      {"prompt": "..."},   // UserPromptSubmit
-      {"agent_reply": "..."},    // Stop
+    "start_time": "<ISO 8601 datetime>",
+    "end_time": "<ISO 8601 datetime>",
+    "highlights": [
+      {"user": "..."},   // UserPromptSubmit
+      {"agent": "..."},    // Stop
       {"skill": "..."},    // PreToolUse Skill
       ...
     ]
@@ -18,7 +18,7 @@ Output structure:
   ...
 ]
 
-Sessions with no important events are omitted. The list is sorted by first_event.
+Sessions with no important events are omitted. The list is sorted by start_time.
 """
 
 import json
@@ -47,18 +47,18 @@ def process(in_path: Path) -> dict:
         if sid not in sessions:
             sessions[sid] = {
                 "model": None,
-                "first_event": None,
-                "last_event": None,
-                "important_events": [],
+                "start_time": None,
+                "end_time": None,
+                "highlights": [],
             }
 
         s = sessions[sid]
         ts = entry.get("timestamp")
         if ts is not None:
-            if s["first_event"] is None or ts < s["first_event"]:
-                s["first_event"] = ts
-            if s["last_event"] is None or ts > s["last_event"]:
-                s["last_event"] = ts
+            if s["start_time"] is None or ts < s["start_time"]:
+                s["start_time"] = ts
+            if s["end_time"] is None or ts > s["end_time"]:
+                s["end_time"] = ts
 
         if event == "SessionStart":
             model = entry.get("model")
@@ -68,12 +68,12 @@ def process(in_path: Path) -> dict:
         elif event == "UserPromptSubmit":
             prompt = entry.get("prompt")
             if prompt:
-                s["important_events"].append({"prompt": prompt})
+                s["highlights"].append({"user": prompt})
 
         elif event == "PreToolUse" and entry.get("tool_name") == "Skill":
             skill = (entry.get("tool_input") or {}).get("skill")
             if skill:
-                s["important_events"].append({"skill": skill})
+                s["highlights"].append({"skill": skill})
 
         elif event == "PreToolUse" and entry.get("tool_name") == "Agent":
             subagent_type = (entry.get("tool_input") or {}).get(
@@ -83,19 +83,19 @@ def process(in_path: Path) -> dict:
                 "description"
             ) or "<no description>"
             if subagent_type or description:
-                s["important_events"].append(
+                s["highlights"].append(
                     {"subagent": f"{subagent_type}: {description}"}
                 )
 
         elif event == "PostToolUse" and entry.get("tool_name") == "AskUserQuestion":
             answers = (entry.get("tool_response") or {}).get("answers")
             if answers:
-                s["important_events"].append(answers)
+                s["highlights"].append(answers)
 
         elif event == "Stop":
             msg = entry.get("last_assistant_message")
             if msg:
-                s["important_events"].append({"agent_reply": msg})
+                s["highlights"].append({"agent": msg})
 
     return sessions
 
@@ -124,14 +124,14 @@ if __name__ == "__main__":
 
     result = []
     for sid, session in sessions_by_id.items():
-        if not session["important_events"]:
+        if not session["highlights"]:
             continue
         session["session_id"] = sid
-        session["first_event"] = to_iso(session["first_event"])
-        session["last_event"] = to_iso(session["last_event"])
+        session["start_time"] = to_iso(session["start_time"])
+        session["end_time"] = to_iso(session["end_time"])
         result.append(session)
 
-    result.sort(key=lambda s: s["first_event"] or "")
+    result.sort(key=lambda s: s["start_time"] or "")
 
     with open(out_path, "w") as f:
         json.dump(result, f, indent=2)
