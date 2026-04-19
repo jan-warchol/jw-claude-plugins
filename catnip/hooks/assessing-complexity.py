@@ -37,18 +37,20 @@ def _read_json(path: Path) -> dict | None:
         return None
 
 
-def _config_dir() -> Path:
+def _base_config_dir() -> Path:
     if sys.platform == "win32":
-        base = Path(os.environ["APPDATA"])
+        return Path(os.environ["APPDATA"])
     elif sys.platform == "darwin":
-        base = Path.home() / "Library" / "Application Support"
+        return Path.home() / "Library" / "Application Support"
     else:
-        base = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
-    return base / "claude-session-reporter"
+        return Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
 
 
 def _load_config() -> dict:
-    return _read_json(_config_dir() / "config.json") or {}
+    base = _base_config_dir()
+    config = _read_json(base / "jw-claude-plugins" / "config.json") or {}
+    config.update(_read_json(base / "claude-session-reporter" / "config.json") or {})
+    return config
 
 
 def get_log_dir() -> Path:
