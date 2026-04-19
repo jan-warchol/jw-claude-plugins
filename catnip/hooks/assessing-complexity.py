@@ -134,14 +134,22 @@ def _approve_permission() -> None:
     )
 
 
-def approve_complexity_write_and_log(event: dict) -> None:
+def approve_complexity_write(event: dict) -> None:
+    if event.get("tool_name") != "Bash":
+        return
+    command = event.get("tool_input", {}).get("command", "")
+    if _parse_complexity_write_command(command) is None:
+        return
+    _approve_permission()
+
+
+def log_complexity_write(event: dict) -> None:
     if event.get("tool_name") != "Bash":
         return
     command = event.get("tool_input", {}).get("command", "")
     payload = _parse_complexity_write_command(command)
     if payload is None:
         return
-    _approve_permission()
     write_log_entry(
         {
             "timestamp": int(time.time()),
@@ -180,8 +188,9 @@ def log_user_prompt(event: dict) -> None:
 
 HANDLERS = {
     "SessionStart": clear_old_complexity_file,
-    "PermissionRequest": approve_complexity_write_and_log,
+    "PermissionRequest": approve_complexity_write,
     "PreToolUse": log_skill_invocation,
+    "PreToolUseBash": log_complexity_write,
     "UserPromptSubmit": log_user_prompt,
 }
 

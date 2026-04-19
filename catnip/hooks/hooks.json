@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'For each new user request, call the Skill tool with skill=catnip:assessing-complexity and args set to the user\\'s request text.'"
+            "command": "echo 'For each new user request, start by evaluating it with the assessing-complexity skill. Include user request verbatim as the skill args.'"
           },
           {
             "type": "command",
@@ -31,6 +31,15 @@
           {
             "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py PreToolUse"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py PreToolUseBash"
           }
         ]
       }
