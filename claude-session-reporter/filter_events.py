@@ -83,11 +83,11 @@ def filter_entry(entry):
     event = entry.get("hook_event_name")
     if event == "PostToolUse" and tool == "AskUserQuestion":
         del result["tool_input"]
-        del result["tool_response"]["questions"]
+        result.get("tool_response", {}).pop("questions", None)
 
     if event == "PermissionRequest" and tool == "ExitPlanMode":
         del result["tool_input"]
-        del result["tool_response"]["questions"]
+        result.get("tool_response", {}).pop("questions", None)
 
     if "last_assistant_message" in result:
         result["last_assistant_message"] = trim_long(
