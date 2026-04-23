@@ -9,6 +9,7 @@ PreToolUse, PostToolUse, UserPromptSubmit. Event payload is read from stdin.
 
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -160,12 +161,34 @@ def log_complexity_write(event: dict) -> None:
 # ---------------------------------------------------------------------------
 
 
+def _log_git_overview() -> None:
+    try:
+        subprocess.run(
+            ["git", "rev-parse", "--git-dir"],
+            check=True,
+            capture_output=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return
+    result = subprocess.run(
+        ["git", "ls", "--no-color"],
+        capture_output=True,
+        text=True,
+    )
+    output = result.stdout + result.stderr
+    ts = int(time.time())
+    snapshots_dir = Path(".debug")
+    snapshots_dir.mkdir(parents=True, exist_ok=True)
+    (snapshots_dir / f"{ts}_git_overview").write_text(output)
+
+
 def log_skill_invocation(event: dict) -> None:
     if event.get("tool_name") != "Skill":
         return
     if event.get("tool_input", {}).get("skill") != "catnip:assessing-complexity":
         return
     write_log_entry({"timestamp": int(time.time()), **_filter_fields(event)})
+    _log_git_overview()
 
 
 # ---------------------------------------------------------------------------
