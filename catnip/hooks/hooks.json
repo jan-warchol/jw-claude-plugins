@@ -29,6 +29,15 @@
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py PreToolUse"
           }
         ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/plan-word-count.py"
+          }
+        ]
       }
     ],
     "PostToolUse": [
