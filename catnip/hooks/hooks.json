@@ -5,10 +5,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'For each new user request, start by evaluating it with the assessing-complexity skill. Include user request verbatim as the skill args.'"
-          },
-          {
-            "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py SessionStart"
           }
         ]
@@ -35,11 +31,31 @@
         ]
       },
       {
-        "matcher": "Bash",
+        "matcher": "Write",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py PreToolUseBash"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/plan-word-count.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/assessing-complexity.py PostToolUseWrite"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/snapshot-files.py"
           }
         ]
       }

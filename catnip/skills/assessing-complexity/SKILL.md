@@ -25,8 +25,9 @@ of lower ratings.
 
 Output "Request complexity:" with your rating and a 6-18 word rationale.
 
-Then log it by running this Bash command (with actual values substituted):
+Then log it by writing the file `.catnip-task-complexity.json` using the Write tool,
+with this JSON content (with actual values substituted):
 
-```
-echo '{"rating":<N>,"input":"<user prompt>","rationale":"<your rationale>"}' > .cc-current-task-complexity.json
+```json
+{"rating":<N>,"input":"<user prompt>","rationale":"<your rationale>"}
 ```
