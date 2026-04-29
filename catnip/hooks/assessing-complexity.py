@@ -177,7 +177,7 @@ def _log_git_overview() -> None:
     )
     output = result.stdout + result.stderr
     ts = int(time.time())
-    snapshots_dir = Path(".debug")
+    snapshots_dir = Path(".catnip-debug")
     snapshots_dir.mkdir(parents=True, exist_ok=True)
     (snapshots_dir / f"{ts}_git_overview").write_text(output)
 

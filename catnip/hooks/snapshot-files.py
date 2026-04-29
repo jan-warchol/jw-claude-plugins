@@ -4,7 +4,6 @@ Save timestamped snapshots of tracked markdown files on every agent Edit or Writ
 
 A .md file is snapshotted if "plan", "spec", or "review" appears anywhere in
 its path relative to the project root (including the filename itself).
-Snapshots are saved to .debug/<stem>_<timestamp><ext>.
 """
 
 import shutil
@@ -14,8 +13,8 @@ import json
 from pathlib import Path
 
 KEYWORDS = {"plan", "spec", "review"}
-FILENAMES = {".catnip-task-complexity.json"}
-SNAPSHOTS_DIR = Path(".debug")
+FILENAMES = {}
+SNAPSHOTS_DIR = Path(".catnip-debug")
 
 
 def load_event() -> dict:
