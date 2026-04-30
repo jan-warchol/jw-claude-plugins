@@ -1,5 +1,5 @@
 ❯ Compare plans catnip/benchmarks/gmail-attachment-search/reference-plans/typical.md and                  
-  catnip/benchmarks/gmail-attachment-search/catnip-plans/gmail-search-plan-auto3.md. Which is better?     
+  catnip/benchmarks/gmail-attachment-search/catnip-d36c5ad-plans/auto-detected-3.md. Which is better?     
 
 ● auto3 (catnip plan) is better for its purpose as a plan.
 
