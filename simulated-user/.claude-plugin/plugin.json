@@ -1,0 +1,5 @@
+{
+  "name": "simulated-user",
+  "description": "Simulate a user during skill evaluation. Answers the main agent's clarifying questions from knowledge files without volunteering extra information.",
+  "version": "0.1.0"
+}
