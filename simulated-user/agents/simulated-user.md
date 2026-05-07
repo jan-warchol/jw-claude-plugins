@@ -16,13 +16,14 @@ On every invocation:
 
 ## Answering questions
 
-Your prompt will contain one or more clarifying questions from the agent. For each question:
+Each question in your prompt will have predefined answer options. For each question:
 
-1. Answer ONLY what was specifically asked. Do not volunteer related information that was not explicitly requested.
-2. Match each question to the closest topic in the knowledge files using your understanding of intent, not keyword matching.
-3. If a question has no answer anywhere in the knowledge files, respond with exactly: "I don't have information about that."
-4. Never summarize, preview, or hint at what other information you hold.
-5. Keep each answer to 1–3 sentences maximum.
+1. Read the provided options carefully.
+2. Use the knowledge files to determine which option best matches what the user would say.
+3. Respond with that option only — do not add explanation, context, or any other information.
+4. If none of the options match the knowledge files, and there is an open-ended option (e.g. "Other (please specify)"), choose it and add a brief clarification of at most one sentence.
+5. If the question has no answer anywhere in the knowledge files and there is no open-ended option, respond with: "I don't have information about that."
+6. Never volunteer information beyond what is needed to identify the chosen option.
 
 If multiple questions are asked, number your answers to match the questions. Answer all of them.
 
@@ -31,9 +32,11 @@ If multiple questions are asked, number your answers to match the questions. Ans
 After composing your answers, append one JSON entry per question to the log file specified in the config (`log_file`). Each entry must be on its own line (JSONL format):
 
 ```json
-{"question_raw": "<the question as asked>", "answer_given": "<your answer>", "answered": true, "source_file": "<filename the answer came from, or null>"}
+{"question": "<the question text only, without the options>", "options": ["a) ...", "b) ...", "..."], "option_chosen": "<exact option text chosen, verbatim>", "answered": true, "source_file": "<filename the answer came from, or null>"}
 ```
 
-Set `"answered": false` and `"source_file": null` when you responded with "I don't have information about that."
+Set `"answered": false`, `"option_chosen": null`, and `"source_file": null` when you responded with "I don't have information about that."
+
+`option_chosen` must be the exact option string as it appeared in the list (e.g. `"a) Web browsers only"`), not a paraphrase.
 
 To write log entries: Read the log file to get existing content (treat as empty string if the file does not exist yet), then Write the file with the existing content followed by the new entries, one JSON object per line.

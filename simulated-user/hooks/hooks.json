@@ -12,11 +12,30 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hooks.py AllowSimulatedUserRead"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Write(*.simulate-user-config.json)",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hooks.py ValidateConfig"
+          }
+        ]
+      },
+      {
         "matcher": "AskUserQuestion",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hooks.py PreToolUse"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/hooks.py BlockAskUser"
           }
         ]
       }

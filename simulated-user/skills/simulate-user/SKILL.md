@@ -11,9 +11,7 @@ Steps:
 
 1. Parse the file paths from the arguments you received.
 
-2. For each path, verify it exists and is readable (use the Read tool). If any path does not exist or cannot be read, report the specific error and stop without writing the config file.
-
-3. Write `.simulate-user-config.json` in the current project directory:
+2. Write `.simulate-user-config.json` in the current project directory:
    ```json
    {"knowledge_files": ["<path1>", "<path2>", ...], "log_file": "simulate-user-log.jsonl"}
    ```
@@ -26,6 +24,17 @@ Steps:
 
 5. Remind yourself: for the rest of this session, when you need to ask clarifying questions before starting a task, do NOT use AskUserQuestion. Instead, compile all your questions and send them to the simulated-user subagent in a single call:
 
-   Agent(subagent_type="simulated-user", prompt="<all your questions, clearly numbered>")
+   Agent(subagent_type="simulated-user:simulated-user", prompt="<your numbered questions>")
 
-   The subagent will answer each question. Do not ask the human user anything — all answers come from the simulated user.
+   Format each question exactly as you would for AskUserQuestion: include a short question followed by predefined answer options. The simulated user will pick the closest matching option — they will not volunteer free-form information.
+
+   Example prompt:
+   ```
+   1. What platform should the app target?
+      Options: a) Web browsers only  b) Mobile only  c) Both web and mobile  d) Other (please specify)
+
+   2. Should the app support dark mode?
+      Options: a) Yes, required  b) Nice to have  c) No
+   ```
+
+   Include an "Other (please specify)" or equivalent open option only when the answer space is genuinely open-ended. Send all questions in one call. Do not ask the human user anything — all answers come from the simulated user.
