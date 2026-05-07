@@ -1,0 +1,6 @@
+There are two directories in this project:
+- `old-app` with a legacy codebase for a TODO web application
+- `new-app` with a rewrite of the same application using newer version of the framework, better architecture etc.
+
+I want to reimplement time-based planning features in the new version.
+It should behave similarly (not necessarily the same) to the old one but take advatage of the new, better architecture.

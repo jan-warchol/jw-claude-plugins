@@ -1,0 +1,7 @@
+There are two directories in this project:
+- `old-app` with a legacy codebase for a TODO web application
+- `new-app` with a rewrite of the same application using newer version of the framework, better architecture etc.
+
+The new codebase has very few features implemented, but the architecture is mostly ready.
+I want to reimplement the calendar and time-based planning features in the new version.
+They should behave similarly to the old version (not necessarily exactly the same) but take advatage of the new, better architecture. Note that data format compatibility is not required.
