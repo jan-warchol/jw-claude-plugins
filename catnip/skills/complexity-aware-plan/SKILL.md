@@ -1,6 +1,7 @@
 ---
 name: complexity-aware-plan
 description: Create a plan based on the complexity of the user request.
+disable-model-invocation: true
 ---
 
 This skill requires two inputs: user request and its complexity rating on a 1-10 scale.

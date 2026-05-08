@@ -7,7 +7,14 @@ A Claude Code plugin that adjusts model behavior based on the assessed complexit
 ## Skills
 
 - `catnip:complexity-aware-plan` - Create a spec/plan with depth and composition based on task complexity
-  specified by the user on a 1-10 scale.
+  specified by the user on a 1-10 scale. Note that the skill can only be invoked directly by the user
+  (not by the model), so you must use full skill name to trigger it.
+
+Example usage:
+
+```
+/catnip:complexity-aware-plan Create a simple Python script that searches Gmail for emails matching a user-provided query, then returns the last 3 matching emails that have attachments. complexity: 4
+```
 
 Guidelines for specifying complexity:
 
