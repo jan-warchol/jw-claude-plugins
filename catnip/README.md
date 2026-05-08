@@ -4,6 +4,23 @@
 
 A Claude Code plugin that adjusts model behavior based on the assessed complexity of each user request.
 
+
+## Installation
+
+
+First, register the marketplace. Assuming you have SSH authentication configured:
+
+```
+/plugin marketplace add git@github.com:jan-warchol/jw-claude-plugins.git
+```
+
+Then install the plugin itself:
+
+```
+/plugin install catnip@jan-warchol-plugins
+```
+
+
 ## Skills
 
 - `catnip:complexity-aware-plan` - Create a spec/plan with depth and composition based on task complexity
