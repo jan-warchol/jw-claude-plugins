@@ -41,8 +41,52 @@ The total score is the sum of all point scores.
 
 Please print:
 
-- a full table containg columns for: tier, point text (summarize or cut with ellipsis points that would take more than 3 lines), actual score.
+- a full table containg columns for: actual score, tier, point text (summarize or cut with ellipsis points that would take more than 3 lines). It should look something like this:
 
-- Max possible score.
+        | Score | Tier | Point text |
+        |------|-------|-------|
+        | +10 | **MUST** | Foobar is required input |
+        | +10 | **MUST** | Frobnicator must not throw exceptions |
+        | 0 | **MUST** | Lorem ipsum |
+        | -10 | **MUST** | Dolor sit amet |
+        | +3 | **SHOULD** | consectetur adipiscing elit |
 
-- The actual total score.
+
+- 3-part list of the points with the scores: accepted points, missed points, contradicted points. Divide points in each of the list in subsections for each tier. For negative tiers, put them in Contradicted list (rather than Accepted) when found. Shorten the points text like in the table if necessary.
+
+    The result should look something like the following:
+
+        ### Accepted points
+
+        - Must
+          - Use OAuth auhentication (+10)
+        - Should
+          - Use `frobnicate` library (+3)
+
+        ### Missing points
+
+        - Could
+          - Eat ice cream for breakfast (0)
+
+        ### Contradicted points
+
+        - Must
+          - Handle errors by printing whole Lorem ipsum to stderr (-10)
+        - Must not
+          - Allow user to shot themselves in the foot (-10)
+
+If a section has no points to show, fill it with `_(none)_`, like
+
+        ### Missing points
+
+        _(none)_
+
+- Max possible score in form like:
+
+        **Max possible score**: 80 (Must: 8 × 10) + 24 (Should: 8 × 3) + 8 (Could: 8 × 1) = **112**
+
+- The actual total score in form like
+
+        **Actual score**: 60 + 3 + 4 = **67**
+
+Please do not add anything else and don't add extra headers between the output parts.
