@@ -1,0 +1,194 @@
+=== TASK (complexity 8) ===
+Help me write a spec for a fast, canvas-based plotting library -
+line/point/band charts at massive scale.
+
+Context: ML training dashboards, many charts × many series, ≤100k pts/chart
+from 1M+/series pre-aggregated server-side. Hunt outliers; NaN/±Inf markers;
+synced zoom+highlight; log/symlog; independent X per series. uPlot perf bar (no
+decimation); Dygraphs responsiveness bar. Zero deps; React peer.
+
+Bake in: 100k pts/chart (100×1000 or 1000×100), 1M usable, 100+ charts
+loaded/visible; log = symlog special case, params auto-derived; stable ids as
+cache keys; reactive-only shared controller (no init sync — async blink
+storms); Path2D cached in zoom-normalized coords; data normalization; stacked
+main+highlight canvases; DOM for crosshair/zoom-rect/axes; virtualize
+off-viewport; DPR/ResizeObserver/raster-cap. Reject WebGL (16-context limit, no
+wide lines/dashes) and OffscreenCanvas/Workers (IPC cost). Out of scope: SSR,
+a11y, plugins/theming/animations, bar/pie/categorical, CommonJS. ESM-only.
+=== TASK ===
+
+=== USER ANSWERS ===
+These questions were answered directly by a human user.
+
+Q: What should the React API shape look like?
+A: JSX component + hook. useChartController() hook for shared state; <Chart data={series} options={opts} controller={ctrl} /> component.
+
+Q: What is the input data format for a series?
+A: Nested arrays — [[x0, y0], [x1, y1], ...]. NaN and Inf are legal y values.
+
+Q: How should independent X-axes per series interact with shared zoom/pan?
+A: Logical time zoom, each series maps independently. Zoom operates in a shared logical domain (e.g. time); each series maps its own X array into that domain independently.
+
+Q: What zoom/pan interactions should be supported?
+A: Scroll-wheel zoom (centered on cursor) and drag-rect zoom (click-drag rectangle). No drag-to-pan. No double-click reset gesture.
+
+Q: How should NaN and ±Infinity values be visually represented?
+A: Gap + gutter marker. NaN breaks the line (gap in the series). ±Inf shown as a small symbol/arrow in the top/bottom gutter of the chart area.
+
+Q: What should the crosshair/tooltip behavior be?
+A: Vertical crosshair line only — no tooltip overlay. Crosshair position is synced across all charts sharing a controller.
+
+Q: What does a "band" chart mean in this context?
+A: Filled area between two series — two y-series define upper/lower bounds; area between them is filled (e.g. confidence interval ribbon).
+
+Q: Should the library be written in TypeScript and ship types?
+A: Yes — TypeScript source, ship .d.ts. Consumers get full type safety.
+
+Q: What is the "highlight" canvas used for?
+A: Hover/crosshair overlay. The highlight canvas sits on top of the main canvas and is redrawn cheaply on mousemove for the crosshair line and zoom-rect rectangle, avoiding invalidation of the expensive main canvas.
+
+Q: How should the shared controller surface its state to React?
+A: Opaque ref, no re-renders. The controller is a stable ref object; zoom/highlight changes do NOT cause React re-renders — charts update via direct canvas calls triggered by the controller's internal pub/sub.
+
+Q: How should off-viewport charts be virtualized?
+A: Suspend render, keep DOM. Off-viewport charts keep their DOM node and canvas elements but skip canvas painting. An IntersectionObserver triggers a full repaint when the chart re-enters the viewport. Path2D cache remains valid during suspension.
+
+Q: What package name/npm scope should the library use?
+A: Decided later — use a placeholder (e.g. @mlplot/core) in the spec.
+
+Q: Complexity score?
+A: 8
+=== USER ANSWERS ===
+
+=== PREPARED ANSWERS ===
+These answers were prepared by AI agent in order to reduce ambiguity.
+
+--- Data pipeline ---
+
+Q: How is the nested-array input converted internally?
+A: On data ingestion, [[x,y],...] is normalized to two Float64Arrays (x-column, y-column) stored on the series object. This happens once. All internal rendering code operates on Float64Arrays. ±Inf and NaN survive as-is in the arrays; they are handled at render time.
+
+Q: What does "1M usable" mean?
+A: The library must handle series with up to 1M total points without crashing or producing corrupt renders. The ≤100k pts/chart target is for smooth interactive performance (the primary perf bar). 1M is the correctness upper bound; render speed may degrade beyond 100k.
+
+Q: Does the library perform decimation?
+A: No. The spec explicitly rejects decimation (uPlot perf bar: no decimation). The library renders all points in the visible X window. Server-side pre-aggregation is the consumer's responsibility.
+
+--- Series and chart types ---
+
+Q: What series types exist and how are they rendered?
+A: Three types, composable within a single chart:
+  - line: straight-line segments between consecutive non-NaN points; NaN creates a gap.
+  - point: filled circle at each non-NaN (x, y); no connecting line. Default radius 3 CSS px.
+  - band: filled area between an upper-series and a lower-series; both series are drawn as lines, area between filled with fillOpacity.
+Rendering order within a chart: bands (bottom) → lines → points (top). Within each type, array order determines z-order.
+
+Q: Can a single chart mix line, point, and band series?
+A: Yes.
+
+--- Axes and styling ---
+
+Q: How are axes rendered?
+A: In DOM — absolutely-positioned HTML divs overlaying the canvas stack. Tick marks and labels use the browser's text engine (no canvas fillText for axes). This also means axis redraws don't invalidate the main canvas.
+
+Q: What axis types are supported on X?
+A: Numeric only (floats; Unix ms timestamps are the primary case). No categorical X. The library treats X values as opaque numbers.
+
+Q: How are tick labels formatted?
+A: Optional formatXTick: (x: number) => string and formatYTick: (y: number) => string props on <Chart>. Defaults to String(x). No built-in date formatting.
+
+Q: How is Y-axis scaling determined?
+A: Y auto-scales to the min/max of all visible (within current X zoom window) finite points across all series in the chart. Consumers may override with explicit yMin/yMax props to fix the range.
+
+Q: Are multiple Y-axes supported?
+A: No. One Y-axis per chart.
+
+Q: Is a legend included?
+A: No. Out of scope. Consumers build their own.
+
+Q: How are per-series visual styles specified?
+A: In the series options object alongside data:
+  { id: string, data: number[][], type: 'line'|'point'|'band', color: string,
+    width?: number,   // stroke width, CSS px, default 1.5
+    dash?: number[],  // line dash pattern, default solid
+    pointRadius?: number,   // for type 'point', default 3
+    fillOpacity?: number,   // for type 'band', default 0.2
+    upper?: string, lower?: string  // ids of the two bounding series for band
+  }
+
+--- Coordinate system and caching ---
+
+Q: What does "Path2D cached in zoom-normalized coords" mean?
+A: Path2D objects are built once in data-space coordinates (raw x/y values). The canvas 2D transform (ctx.setTransform) maps data coords → CSS pixels on each frame. When the user zooms, only the transform changes; the Path2D is reused. The Path2D is invalidated (rebuilt) only when the series data changes (detected via a new or changed id).
+
+Q: What are "stable IDs" and how do they act as cache keys?
+A: Each series object must supply id: string. The Path2D cache is a Map<string, Path2D> keyed by id. If the consumer changes the data in-place without changing the id, the cache will serve a stale path — this is by design (caller's responsibility). To signal new data, change the id (e.g., append a version counter or content hash).
+
+--- Log / symlog ---
+
+Q: How does log scale work? What is symlog?
+A: log is implemented as symlog (symmetric log), which handles zero and negative values by being linear near zero and logarithmic away from it. It is not a separate mode — log IS symlog.
+
+Q: How are symlog parameters auto-derived?
+A: The linear threshold C (the point where symlog transitions from linear to logarithmic behaviour) is derived from the data: C = 1st percentile of |y| among finite, non-zero values. If all values are zero or no finite non-zero values exist, C defaults to 1. Scale factor is computed to normalize the output range. Consumers cannot configure C directly.
+
+--- Controller and sync ---
+
+Q: What is the zoom state format?
+A: { xMin: number, xMax: number } — X-axis only. Y always auto-scales.
+
+Q: How does zoom reset work (no double-click gesture)?
+A: Programmatically via controller.reset(), which sets zoom back to the full X extent of all series across all subscribed charts. The consuming application is responsible for providing a reset UI (e.g., a button).
+
+Q: How does the controller broadcast without React re-renders?
+A: The controller object (returned by useChartController) is a stable class instance stored in a React ref. It maintains a Set of subscriber callbacks registered by each mounted <Chart> via an internal subscribe(callback) call. When zoom or highlight changes, the controller calls each callback directly (not via setState), which schedules a canvas repaint via requestAnimationFrame. No React state is involved.
+
+Q: What does "no init sync — async blink storms" mean?
+A: When the controller is first created it holds no zoom state. Charts that mount subscribe but receive no initial zoom push from the controller — each initialises to its own full data extent independently. This prevents 100+ charts all repainting simultaneously during the first render. Shared zoom only flows from explicit user interactions.
+
+Q: Does highlight (crosshair) sync work the same way?
+A: Yes. The controller also stores the current highlight x (cursor position in data coords) and broadcasts it to all subscribers on mousemove. Each subscriber redraws only its highlight canvas.
+
+--- DPR, resize, raster cap ---
+
+Q: How is device pixel ratio handled?
+A: On mount and on every ResizeObserver callback: canvas.width = round(cssWidth × dpr), canvas.height = round(cssHeight × dpr), then ctx.scale(dpr, dpr). All internal coordinates remain in CSS pixels.
+
+Q: What is the "raster cap"?
+A: Some browsers/GPUs cap canvas pixel dimensions (commonly 16384 or 32767px). At init the library probes the maximum supported canvas size and stores it. Chart canvas dimensions are clamped to this cap (irrelevant in normal chart sizes but required for correctness).
+
+Q: What happens on resize?
+A: ResizeObserver fires → canvas dimensions are updated (DPR-adjusted) → main canvas is fully repainted (Path2D reused, only transform recalculated) → highlight canvas is cleared.
+
+--- Canvas stack ---
+
+Q: What is the exact layering of the canvas stack and DOM?
+A: From bottom to top (CSS z-index order):
+  1. main canvas — all series paths, painted only when data or zoom changes.
+  2. highlight canvas — crosshair line, zoom-rect rectangle; repainted on mousemove/mousedown.
+  3. DOM overlay — axes (ticks + labels), positioned absolutely over the canvases.
+All three share the same bounding box (position: absolute, inset: 0).
+
+--- Scope clarifications ---
+
+Q: Is server-side pre-aggregation in scope?
+A: No. The library is a pure renderer. Pre-aggregation is the consumer's concern.
+
+Q: Are annotations supported?
+A: No. Out of scope.
+
+Q: Is SSR supported?
+A: No. Canvas API is browser-only; no SSR shim.
+
+Q: Is CommonJS output provided?
+A: No. ESM-only.
+
+Q: What is the expected bundle size?
+A: No hard limit stated, but the zero-dependency ESM-only constraint implies < ~20 kB gzipped is a reasonable target. Spec should note this as a goal.
+
+Q: What build tooling is expected?
+A: Vite (library mode) or Rollup; TypeScript compiled via tsc or esbuild. Output: ESM only.
+
+Q: What testing approach?
+A: Unit tests for coordinate math, data normalization, symlog derivation, and cache invalidation. Visual regression testing out of scope for MVP.
+=== PREPARED ANSWERS ===

@@ -1,0 +1,72 @@
+  Verdict: several real mismatches
+
+  The big-picture story is consistent (canvas-based, perf-focused, log/symlog, ID-keyed Path2D cache, zero deps, ESM-only), but several answers contradict the README — some are notable.
+
+  Significant mismatches
+
+  1. NaN rendering (user answer) — Q "How should NaN and ±Infinity values be visually represented?"
+  - Knowledge: "NaN breaks the line (gap in the series)."
+  - README:1325-1328 "Skip missing points and connect across — the line continues through the neighbors of the gap."
+  - These are opposites.
+
+  2. Crosshair / zoom-rect location (prepared) — "Canvas stack" Q
+  - Knowledge: places crosshair + zoom-rect on the highlight canvas (layer 2).
+  - README:1246 and task brief explicitly say crosshair/zoom-rect live in the DOM overlay, not on canvas. (Tip: README explicitly lists "crosshair or zoom rectangle" as the canonical DOM elements.)
+
+  3. Path2D coordinate space (prepared) — "Path2D cached in zoom-normalized coords" Q
+  - Knowledge: "Path2D objects are built once in data-space coordinates (raw x/y values)."
+  - README:1239-1241 (and task brief) say paths are stored in zoom-normalized data coords, bound to the configured window/zoom, with re-normalization only on large zoom changes. The "normalized" part is the whole
+  point; raw data-space contradicts it.
+  
+  4. Y-axis zoom (prepared) — "Zoom state format" Q
+  - Knowledge: "{ xMin, xMax } — X-axis only. Y always auto-scales."
+  - README:1166 "When zoomed in, the automatic fit on Y axis should be maintained, unless explicitly zoomed in on Y axis. Auto zoom should never show range exceeding last Y axis zoom."
+  - README explicitly supports an explicit Y zoom mode the knowledge file rules out.
+  
+  5. Symlog manual parametrization (prepared) — "How are symlog parameters auto-derived?" Q
+  - Knowledge: "Consumers cannot configure C directly."
+  - README:41 and the Q&A at line 386 say: "Symlog scale parametrization should be automated, with manual override only as a fallback option" / "manual parametrization needs to still be available."
+
+  6. Visual regression testing (prepared) — "Testing approach" Q
+  - Knowledge: "Visual regression testing out of scope for MVP."
+  - README:51-55 explicitly wants a visual-test layer (with cairo-based canvas, color quantization, antialiasing tweaks) — it's described in detail, not deferred.
+
+  7. Per-axis tick formatter (prepared) — "Tick labels formatted" Q
+  - Knowledge: formatXTick / formatYTick as V0 chart props.
+  - README:131 "Per-axis formatter override is a V1 concern." V0 derives formatting from chosen tick values.
+
+  8. Default tick formatting (prepared) — same Q
+  - Knowledge: "Defaults to String(x)."
+  - README:118-128 has a long list of requirements (no repeated labels, no overlap, no overflow, adaptive Y width, "nice" decimal alignment, precision matching tick placement). String(x) violates almost all of
+  these.
+
+  9. Bundle size (prepared) — "Expected bundle size" Q
+  - Knowledge: "<~20 kB gzipped is a reasonable target. Spec should note this as a goal."
+  - README:362 "No target. Correctness and performance come first." Explicitly contradicted.
+
+  10. Legend (prepared) — "Is a legend included?" Q
+  - Knowledge: "No. Out of scope. Consumers build their own."
+  - README:160 "Some sort of legend. ... for first iteration it's likely to be a bit of an afterthought." Reduced legend, not absent.
+
+  Smaller divergences
+
+  11. Input data format (user) — knowledge restricts to [[x,y],...]. README:304-309 lists number[], Float64Array, Float32Array, and number[][] as acceptable, and notes the data API isn't fixed at V0. The knowledge
+  narrows this without flagging it.
+
+  12. Tooltip (user) — knowledge: "no tooltip overlay." README:151-154 treats tooltip as undecided ("I don't have clarity yet... built-in feature or... plugin... always-on display... might also be an alternative"),
+   not as ruled out.
+
+  13. Drawing order (prepared) — knowledge: "bands → lines → points." README:101-102 adds a second pass: "then the same again for highlighted stuff." The knowledge omits the highlight pass.
+
+  14. Raster cap (prepared) — knowledge covers preemptive clamping. README:181 also requires "canvas drawing verification to ensure successful allocation (forcing reduced raster size in case of a failure)" — the
+  runtime fallback isn't mentioned.
+
+  Items that do match
+
+  User answers on React API shape, independent X per series, zoom interactions (no pan/no dbl-click reset), band definition, TypeScript+.d.ts, highlight canvas role, opaque-ref controller, virtualization approach,
+  and package-name placeholder all align with the README. Most prepared answers about DPR handling, series/style options, log==symlog identity, no init sync, controller pub/sub, and SSR/ESM-only scope also match.
+
+  Recommendation
+
+  Items 1–5 are direct contradictions and should be reconciled before this knowledge file is used as ground truth. 6–10 look like the prepared-answer pass over-pruned scope that the README clearly wants in V0/V1.
+  The remaining items are softer but worth a once-over.
