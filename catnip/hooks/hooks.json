@@ -9,6 +9,17 @@
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/plan-word-count.py"
           }
         ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/answer-ask-user-question-with-knowledge.sh",
+            "timeout": 120,
+            "statusMessage": "Simulated user is answering..."
+          }
+        ]
       }
     ]
   }
