@@ -1,6 +1,6 @@
 ---
-name: complexity-aware-plan
-description: Create a plan based on the complexity of the user request.
+name: complexity-aware-spec
+description: Create a spec based on the complexity of the user request.
 disable-model-invocation: true
 ---
 
@@ -9,7 +9,7 @@ If the rating was not provided as an argument, invoke `assessing-complexity` ski
 Throughout this skill, N will mean the complexity rating.
 
 
-Before writing the plan, identify biggest sources of uncertainty (risks, assumptions,
+Before writing the spec, identify biggest sources of uncertainty (risks, assumptions,
 missing information) and use AskUserQuestion tool to clarify the most important points
 and confirm most important design decisions with the user.
 Ask between floor(N/2)-1 and 2×(N-1)-1 questions (e.g. 0-3 questions for complexity 3, 2-7 for complexity 5).
@@ -17,9 +17,9 @@ Ask between floor(N/2)-1 and 2×(N-1)-1 questions (e.g. 0-3 questions for comple
 
 Document decisions when the user did not choose the recommended option.
 
-## Plan size and structure
+## spec size and structure
 
-The plan document must begin with YAML frontmatter containing these required fields:
+The spec document must begin with YAML frontmatter containing these required fields:
 
 ```yaml
 ---
@@ -31,13 +31,13 @@ model: <agent model ID>
 ---
 ```
 
-The size of the plan should correspond to the request complexity. Overall word count
+The size of the spec should correspond to the request complexity. Overall word count
 should be between 50×(N-1) and 100×(N-1) words (e.g. 200-400 words for complexity 5).
 Note: only words with letters count towards the limit - punctuation and markdown formatting
 such as ### 1. 2. |----| are not counted, so you can use formatting freely.
 
 
-## What to include in the plan
+## What to include in the spec
 
 If the complexity is 2 or more:
 
@@ -68,5 +68,5 @@ if you consider them important. For example, you can list a significant risk in 
 
 ## Final notes
 
-Save the plan as a markdown file ending with `-plan.md` in project root directory (unless
+Save the spec as a markdown file ending with `-spec.md` in project root directory (unless
 the user specified otherwise).
