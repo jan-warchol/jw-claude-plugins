@@ -42,6 +42,8 @@ command -v claude >/dev/null 2>&1 || exit 0
 INPUT="$(cat)"
 [[ "$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" == "AskUserQuestion" ]] || exit 0
 
+jq -c '{ request: . }' <<<"$INPUT" >>.answer-ask-user-question-with-knowledge.log.jsonl
+
 TOOL_INPUT="$(jq -c '.tool_input' <<<"$INPUT" 2>/dev/null)"
 [[ -n "$TOOL_INPUT" && "$TOOL_INPUT" != "null" ]] || exit 0
 QUESTIONS="$(jq -c '.tool_input.questions // []' <<<"$INPUT" 2>/dev/null)"
@@ -97,11 +99,17 @@ fi
 [[ -n "$ANSWERS" && "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -gt 0 ]] || exit 0
 
 # Emit the decision: pre-fill `answers` in the original tool input.
-jq -nc \
-  --argjson ti  "$TOOL_INPUT" \
-  --argjson ans "$ANSWERS" \
-  '{ hookSpecificOutput: {
-       hookEventName: "PreToolUse",
-       permissionDecision: "allow",
-       updatedInput: ($ti + { answers: (($ti.answers // {}) + $ans) })
-     } }'
+OUTPUT="$(
+  jq -nc \
+    --argjson ti  "$TOOL_INPUT" \
+    --argjson ans "$ANSWERS" \
+    '{ hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow",
+        updatedInput: ($ti + { answers: (($ti.answers // {}) + $ans) })
+      } }'
+)"
+
+jq -c '{ response: . }' <<<"$OUTPUT" >>.answer-ask-user-question-with-knowledge.log.jsonl
+
+printf "%s" "$OUTPUT"
