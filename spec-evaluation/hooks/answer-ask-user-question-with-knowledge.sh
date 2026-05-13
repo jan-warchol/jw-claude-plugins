@@ -85,7 +85,7 @@ EOF
 MODEL_ARGS=()
 [[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
 WORKDIR="$(mktemp -d)"
-RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}" 2>/dev/null)"
+RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}" 2>/dev/null)"
 rm -rf "$WORKDIR"
 
 # Parse the reply as a JSON object; tolerate a stray ```json ... ``` fence.
