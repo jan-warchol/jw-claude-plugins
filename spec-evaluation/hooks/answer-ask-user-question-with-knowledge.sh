@@ -39,6 +39,28 @@ KNOWLEDGE_PATH="${CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH:-}"
 command -v jq     >/dev/null 2>&1 || exit 0
 command -v claude >/dev/null 2>&1 || exit 0
 
+# Bootstrap auth for `claude --bare`: if no API key is in env, lift the OAuth
+# access token from the user's credentials file. The subprocess runs with
+# `--bare`, which refuses OAuth/keychain reads and only honors ANTHROPIC_API_KEY
+# (or apiKeyHelper via --settings). The `sk-ant-oat01-...` access token works
+# when passed via ANTHROPIC_API_KEY, and bills against the user's subscription.
+# Skipped if expired so the subprocess fails loudly rather than swallowing a 401.
+if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  CRED_FILE="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.credentials.json"
+  if [[ -r "$CRED_FILE" ]]; then
+    OAUTH_TOK="$(jq -r '.claudeAiOauth.accessToken // empty' "$CRED_FILE" 2>/dev/null)"
+    OAUTH_EXP="$(jq -r '.claudeAiOauth.expiresAt // 0'     "$CRED_FILE" 2>/dev/null)"
+    if [[ -n "$OAUTH_TOK" && "$OAUTH_EXP" -gt "$(($(date +%s) * 1000))" ]]; then
+      export ANTHROPIC_API_KEY="$OAUTH_TOK"
+    fi
+  fi
+fi
+
+if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  echo >&2 "ANTHROPIC_API_KEY is unset or empty and an attempt to get valid OAuth access token from .credentials.json failed. Can't use claude --bare."
+  exit 2
+fi
+
 INPUT="$(cat)"
 [[ "$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" == "AskUserQuestion" ]] || exit 0
 
@@ -87,7 +109,8 @@ EOF
 MODEL_ARGS=()
 [[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
 WORKDIR="$(mktemp -d)"
-RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}" 2>/dev/null)"
+STDERR_LOG="$PWD/.answer-ask-user-question-with-knowledge.stderr.log"
+RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}" 2>>"$STDERR_LOG")"
 rm -rf "$WORKDIR"
 
 # Parse the reply as a JSON object; tolerate a stray ```json ... ``` fence.
@@ -96,7 +119,20 @@ if [[ -z "$ANSWERS" ]]; then
   ANSWERS="$(sed -n '/```/,/```/p' <<<"$RAW" | sed '1d;$d' \
             | jq -ce 'if type == "object" then . else empty end' 2>/dev/null)"
 fi
-[[ -n "$ANSWERS" && "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -gt 0 ]] || exit 0
+if [[ -z "$ANSWERS" || "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -le 0 ]]; then
+  # We've committed to handling this AskUserQuestion (knowledge file present,
+  # tools available, payload was a valid AskUserQuestion call) but the sim-user
+  # subprocess failed to produce a usable JSON answer. Block the tool via
+  # exit 2 and surface the cause — better than silently falling back to a
+  # human prompt, which is what made this hook hard to debug previously.
+  {
+    echo "spec-evaluation: simulated-user hook failed to answer AskUserQuestion."
+    echo "  Subprocess stderr captured at: $STDERR_LOG"
+    echo "  Last lines of that log:"
+    tail -n 20 "$STDERR_LOG" 2>/dev/null | sed 's/^/    /'
+  } >&2
+  exit 2
+fi
 
 # Emit the decision: pre-fill `answers` in the original tool input.
 OUTPUT="$(
