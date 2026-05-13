@@ -4,9 +4,9 @@ description: Prepare knowledge file that will be used for planner evaluation
 disable-model-invocation: true
 ---
 
-This skill requires a prompt for plan/specification (the same thing that would be passed to catnip:complexity-aware-plan skill) and its complexity rating on a 1-10 scale. If not given both as skill arguments, immediately ask user for the missing pieces.
+This skill requires a prompt for plan/specification (the same thing that would be passed to catnip:complexity-aware-spec skill) and its complexity rating on a 1-10 scale. If not given both as skill arguments, immediately ask user for the missing pieces.
 
-You need to prepare to answer questions that an agent running catnip:complexity-aware-plan would ask the user with AskUserQuestion tool. Your task right now is to prepare for all questions that such agent would plausibly ask and write down the answers.
+You need to prepare to answer questions that an agent running catnip:complexity-aware-spec would ask the user with AskUserQuestion tool. Your task right now is to prepare for all questions that such agent would plausibly ask and write down the answers.
 
 For all questions that are important, you must ask user for the answer. For other questions, you'll be able to pick or invent
 your own answers.
@@ -19,7 +19,7 @@ Prepare up to 20 most important questions and add the user with AskUserQuestion 
 
 The idea is that you'll be able to answer any sensible question consistently, based just on this written down knowledge.
 
-For any question you think the agent running catnip:complexity-aware-plan is likely to ask and that wasn't answered by the user,
+For any question you think the agent running catnip:complexity-aware-spec is likely to ask and that wasn't answered by the user,
 write down the answer in PREPARED ANSWERS section. Make it succinct succinct, they just need to be long enough to resolve
 ambiguities consistently. Whether you write it down in Q&A format or just as list of decisions is up to you, as long as
 you'll be able to understand it without ambiguity.
