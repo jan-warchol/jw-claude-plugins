@@ -26,8 +26,17 @@ The value depends on which section the criterion belongs to. The criteria file m
 For each of the criteria, check whether the spec mentions the issue it is about and whether it's
 meaning is consistent with the expectation.
 
+A mention must substantively address the concept the criterion describes. Incidental use of related
+terms in a different context does not qualify — e.g. naming a service as a file's download source
+is not the same as acknowledging that setup in that service is required. Parenthetical content in
+criteria is for clarifying the concept's meaning, it's not a definitivs checklist of required details.
+
 For positive tiers (Must/Should/Could), the score is:
 - Full points when the issue is mentioned and consistent with the expectation,
+- Half points when the concept is partially addressed — the spec shows awareness but misses a key
+  element (e.g. mentions a file exists but not that it must be created/obtained). For Must, half is
+  exactly 5. For Should, half is 1.5 — round to 1 or 2 based on how much of the concept is covered.
+  Could criteria have no partial credit: score 0 if not fully addressed.
 - No points if the issue is not mentioned at all,
 - Negative full points if the spec contradicts the criterion.
 
@@ -102,7 +111,7 @@ When evaluating multiple specs against the same criteria, please print:
 
 - Notes on any non-obious score assignments
 
-- A summary table showing, for each spec, how many criteria per tier scored positively (e.g. matched "must") and negatively (e.g. matched "must not", contradicted "must"), plus the overall score and percentage. Row headers name the tier and its total criterion count. Cell values show positive vs negative count separately; omit negative count when it is zero. Example:
+- A summary table showing, for each spec, how many criteria per tier scored positively (e.g. matched "must") and negatively (e.g. matched "must not", contradicted "must"), plus the overall score and percentage. Row headers name the tier and its total criterion count. Cell values show positive vs negative count separately; omit negative count when it is zero. The "Total points" row header should include the max possible points in parentheses. Example:
 
         | Tier | plan-a | plan-b | plan-c |
         |---|--------|--------|--------|

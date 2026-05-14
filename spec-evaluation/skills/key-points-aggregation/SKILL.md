@@ -19,19 +19,19 @@ a checklist for evaluating plan/spec files.
 ```markdown
 # Key Points
 
-## Must mention (weight: 5)
+## Must mention
 - <point>
 
-## Should mention (weight: 3)
+## Should mention
 - <point>
 
-## Could mention (weight: 1)
+## Could mention
 - <point>
 
-## Must Not mention (weight: -5)
+## Must Not mention
 - <point>
 
-## Should Not mention (weight: -3)
+## Should Not mention
 - <point>
 ```
 
@@ -48,7 +48,9 @@ Each tier answers the question: *should a good spec mention this?*
 - **Could mention**: easily inferable; low cost if missing
 - **Must Not mention**: manually added only — never inferred from source documents
 
-When in doubt, prefer a lower tier. It's easier to promote than demote.
+When in doubt, prefer a lower tier. It's easier to promote than demote. Sort items according to importance in each tier.
+
+Implementation-specific details (a particular API method name, an exact file format, a specific scope string) generally belong at **Should** or **Could**, unless the implementation choice is itself the quality criterion — e.g., server-side vs. client-side filtering is a design criterion; which exact API method achieves it is not.
 
 ## Point formulation rules
 
@@ -62,7 +64,15 @@ Each point names a topic the spec should mention — not what it should say abou
 | "Use `maxResults=3` to limit at the API level" | "Result count limit at the API level (not client-side truncation)" |
 | "Load credentials from `credentials.json`, cache token in `token.json`" | "`credentials.json` as OAuth client secrets file" + "`token.json` for token caching" |
 
-A brief parenthetical is fine when it prevents ambiguity, as in the second example above.
+A brief parenthetical is fine when it prevents ambiguity, as in the second example above. The parenthetical should clarify **what** the point covers, not **how** to implement it — `(not client-side truncation)` is a scope clarifier; `(exit code 1)` is an implementation prescription. Parentheticals are context for the evaluator to understand the concept; they are not a checklist of details that must appear verbatim in the spec.
+
+**Outcome, not implementation**: A point should check whether a concern is addressed — not require a specific implementation approach. Avoid prescribing exact exit codes, specific library method names, or exact error message wording; those are for the spec author to decide. Name the concern, not the mechanics.
+
+| ❌ Prescriptive (wrong) | ✅ Outcome-focused (correct) |
+|---|---|
+| "Missing `credentials.json`: clear error message + exit code 1" | "Error handling for missing `credentials.json` (message with setup instructions)" |
+| "`messages.get` to extract headers and MIME part filenames" | "Per-message retrieval of headers and attachment filenames" |
+| "No-results case: informative message + exit 0" | "Graceful handling when there are no results (informative message, no crash)" |
 
 **Atomicity**: each point should be independently checkable. If a point bundles multiple facts that could each be present or absent separately, split it. Apply this even when source documents used compound statements.
 
