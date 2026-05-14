@@ -21,7 +21,6 @@
 
 ## Could mention
 - Interactive query prompt as fallback when no CLI argument is given
-- Avoiding the overhead of fetching whole emails (using `messages.get` with `format=metadata` and `metadataHeaders`)
 - Dependencies: gmail API libraries (`google-api-python-client` and `google-auth-oauthlib`)
 - Dependency: `argparse` for CLI argument parsing
 - Excluding `credentials.json` and `token.json` from version control
