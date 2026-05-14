@@ -57,6 +57,12 @@ If there are 2 questions that are very much independent, you can pick them both 
 If all the questions left are fairly trivial and don't require much thinking from the user, you can ask 3 or 4
 questions at once. However, at that point you should consider whether asking these questions is really that important.
 
+If the most important question is too open-ended to fit possibilities into 4 options, consider breaking it down into
+2 or more questions. If you can break it down into 2 perpendicular questions, ask them in a single AskUserQuestion
+call. If the partial questions depend on each other, ask first part with one AskUserQuestion call, then decide
+on the exact form of the second question and ask it with another AskUserQuestion call. In such case never pick more
+questions from the list, just the one you are breaking down.
+
 ## Check recursion depth
 
 Check how many answers you have already asked about this topic and consider whether the next question is important
