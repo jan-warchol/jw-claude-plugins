@@ -13,7 +13,7 @@
 - Server-side result count limit (`maxResults` API parameter, not client-side truncation)
 - Error handling for missing `credentials.json` (message with setup instructions)
 - API/network error handling (catch `HttpError`, print message)
-- Graceful handling when fewer than 3 emails match (informative message, no crash)
+- Graceful handling when there are no results (informative message, no crash)
 - Read-only OAuth scope (`gmail.readonly` - minimum privilege)
 - Caching OAuth tokens across runs (`token.json` file)
 - Browser-based OAuth consent flow on first run
