@@ -36,8 +36,18 @@ set -u
 
 KNOWLEDGE_PATH="${CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH:-}"
 [[ -n "$KNOWLEDGE_PATH" && -f "$KNOWLEDGE_PATH" && -r "$KNOWLEDGE_PATH" ]] || exit 0
-command -v jq     >/dev/null 2>&1 || exit 0
-command -v claude >/dev/null 2>&1 || exit 0
+
+INPUT="$(cat)"
+[[ "$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" == "AskUserQuestion" ]] || exit 0
+
+if ! command -v jq     >/dev/null 2>&1; then
+  echo >&2 "'jq' command is missing, can't execute the hook."
+  exit 2
+fi
+if ! command -v claude >/dev/null 2>&1; then
+  echo >&2 "'claude' command is missing, can't execute the hook."
+  exit 2
+fi
 
 # Bootstrap auth for `claude --bare`: if no API key is in env, lift the OAuth
 # access token from the user's credentials file. The subprocess runs with
@@ -61,19 +71,29 @@ if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
   exit 2
 fi
 
-INPUT="$(cat)"
-[[ "$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" == "AskUserQuestion" ]] || exit 0
+LOGFILE="$PWD/.answer-ask-user-question-with-knowledge.log.jsonl"
+STDERR_LOG="$PWD/.answer-ask-user-question-with-knowledge.stderr.log"
 
-jq -c '{ request: . }' <<<"$INPUT" >>.answer-ask-user-question-with-knowledge.log.jsonl
+jq -c '{ request: . }' <<<"$INPUT" >>"$LOGFILE"
 
 TOOL_INPUT="$(jq -c '.tool_input' <<<"$INPUT" 2>/dev/null)"
-[[ -n "$TOOL_INPUT" && "$TOOL_INPUT" != "null" ]] || exit 0
+if ! [[ -n "$TOOL_INPUT" && "$TOOL_INPUT" != "null" ]]; then
+  echo >&2 "Empty .tool_input in request."
+  exit 2
+fi
 QUESTIONS="$(jq -c '.tool_input.questions // []' <<<"$INPUT" 2>/dev/null)"
-[[ "$(jq 'length' <<<"$QUESTIONS" 2>/dev/null)" -gt 0 ]] || exit 0
+if ! [[ "$(jq 'length' <<<"$QUESTIONS" 2>/dev/null)" -gt 0 ]]; then
+  echo >&2 "Empty .questions in request."
+  exit 2
+fi
 
-KNOWLEDGE="$(cat "$KNOWLEDGE_PATH")"
+(
+  set -u
+  set -e
 
-PROMPT="$(cat <<EOF
+  KNOWLEDGE="$(cat "$KNOWLEDGE_PATH")"
+
+  PROMPT="$(cat <<EOF
 You are simulating a human user clicking through an interactive multiple-choice
 prompt inside a developer tool. Answer the way that user would.
 
@@ -100,54 +120,59 @@ Rules:
 - Output ONLY a JSON object mapping each question's exact "question" string to
   the chosen answer string. No commentary, no markdown fences.
 EOF
-)"
+  )"
 
-# Ask the simulated user. Run from an empty dir so the headless instance picks
-# up no project context — it should know only what we put in the prompt above.
-# (It still loads ~/.claude/ — user-level memory/settings. Add --settings etc.
-# here if you want tighter isolation.)
-MODEL_ARGS=()
-[[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
-WORKDIR="$(mktemp -d)"
-STDERR_LOG="$PWD/.answer-ask-user-question-with-knowledge.stderr.log"
-RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}" 2>>"$STDERR_LOG")"
-rm -rf "$WORKDIR"
+  # Ask the simulated user. Run from an empty dir so the headless instance picks
+  # up no project context — it should know only what we put in the prompt above.
+  # (It still loads ~/.claude/ — user-level memory/settings. Add --settings etc.
+  # here if you want tighter isolation.)
+  MODEL_ARGS=()
+  [[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
+  WORKDIR="$(mktemp -d)"
+  RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}")"
+  CLAUDE_ERROR_CODE=
+  rm -rf "$WORKDIR"
 
-# Parse the reply as a JSON object; tolerate a stray ```json ... ``` fence.
-ANSWERS="$(jq -ce 'if type == "object" then . else empty end' <<<"$RAW" 2>/dev/null)"
-if [[ -z "$ANSWERS" ]]; then
-  ANSWERS="$(sed -n '/```/,/```/p' <<<"$RAW" | sed '1d;$d' \
-            | jq -ce 'if type == "object" then . else empty end' 2>/dev/null)"
-fi
-if [[ -z "$ANSWERS" || "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -le 0 ]]; then
-  # We've committed to handling this AskUserQuestion (knowledge file present,
-  # tools available, payload was a valid AskUserQuestion call) but the sim-user
-  # subprocess failed to produce a usable JSON answer. Block the tool via
-  # exit 2 and surface the cause — better than silently falling back to a
-  # human prompt, which is what made this hook hard to debug previously.
-  {
-    echo "spec-evaluation: simulated-user hook failed to answer AskUserQuestion."
-    echo "  Subprocess stderr captured at: $STDERR_LOG"
-    echo "  Last lines of that log:"
-    tail -n 20 "$STDERR_LOG" 2>/dev/null | sed 's/^/    /'
-  } >&2
-  # Add the failure to the log as well for consistency.
-  jq -R --slurp -c '{ claudeError: . }' <"$STDERR_LOG" | jq >>.answer-ask-user-question-with-knowledge.log.jsonl
+  # Parse the reply as a JSON object; tolerate a stray ```json ... ``` fence.
+  ANSWERS="$(jq -ce 'if type == "object" then . else empty end' <<<"$RAW" 2>/dev/null)"
+  if [[ -z "$ANSWERS" ]]; then
+    ANSWERS="$(sed -n '/```/,/```/p' <<<"$RAW" | sed '1d;$d' \
+              | jq -ce 'if type == "object" then . else empty end' 2>/dev/null)"
+  fi
+  if [[ -z "$ANSWERS" || "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -le 0 ]]; then
+    # We've committed to handling this AskUserQuestion (knowledge file present,
+    # tools available, payload was a valid AskUserQuestion call) but the sim-user
+    # subprocess failed to produce a usable JSON answer. Block the tool via
+    # exit 2 and surface the cause — better than silently falling back to a
+    # human prompt, which is what made this hook hard to debug previously.
+    echo >&2 "Claude invocation failed to answer AskUserQuestion: output is empty or could not be parsed."
+    jq -R --slurp -c '{ rawClaudeOutput: . }' <"$RAW" | jq >>"$LOGFILE"
+    exit 2
+  fi
+
+  # Emit the decision: pre-fill `answers` in the original tool input.
+  OUTPUT="$(
+    jq -nc \
+      --argjson ti  "$TOOL_INPUT" \
+      --argjson ans "$ANSWERS" \
+      '{ hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+          updatedInput: ($ti + { answers: (($ti.answers // {}) + $ans) })
+        } }'
+  )"
+
+  jq -c '{ response: . }' <<<"$OUTPUT" >>"$LOGFILE"
+
+  printf "%s" "$OUTPUT"
+
+) 2>"$STDERR_LOG"
+
+EXIT_CODE=$?
+
+if ((EXIT_CODE)); then
+  jq -c -R --slurp "{ exitCode: $EXIT_CODE, stderr: . }" <"$STDERR_LOG" >>"$LOGFILE"
+  # Regardless of original error code, if there was an error, make it surface to the user.
+  printf >&2 'Hook failed to answer the question.\nFull stderr: %s\nLog: %s\nLast lines of stderr:\n%s' "$STDERR_LOG" "$LOGFILE" "$(tail -n5 "$STDERR_LOG")"
   exit 2
 fi
-
-# Emit the decision: pre-fill `answers` in the original tool input.
-OUTPUT="$(
-  jq -nc \
-    --argjson ti  "$TOOL_INPUT" \
-    --argjson ans "$ANSWERS" \
-    '{ hookSpecificOutput: {
-        hookEventName: "PreToolUse",
-        permissionDecision: "allow",
-        updatedInput: ($ti + { answers: (($ti.answers // {}) + $ans) })
-      } }'
-)"
-
-jq -c '{ response: . }' <<<"$OUTPUT" >>.answer-ask-user-question-with-knowledge.log.jsonl
-
-printf "%s" "$OUTPUT"
