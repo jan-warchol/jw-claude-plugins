@@ -131,6 +131,8 @@ if [[ -z "$ANSWERS" || "$(jq 'length' <<<"$ANSWERS" 2>/dev/null)" -le 0 ]]; then
     echo "  Last lines of that log:"
     tail -n 20 "$STDERR_LOG" 2>/dev/null | sed 's/^/    /'
   } >&2
+  # Add the failure to the log as well for consistency.
+  jq -R --slurp -c '{ claudeError: . }' <"$STDERR_LOG" | jq >>.answer-ask-user-question-with-knowledge.log.jsonl
   exit 2
 fi
 
