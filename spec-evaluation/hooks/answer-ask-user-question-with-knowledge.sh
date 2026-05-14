@@ -18,18 +18,20 @@
 #
 # USAGE
 #
-# Setting the model is optional, but can optimize the cost and latency. There's no lever
+# Setting the model and effort is optional, but can optimize the cost and latency. There's no lever
 # for effort now, but maybe we should add one.
 #
 # export CLAUDE_EVAL_SIM_USER_MODEL=claude-haiku-4-5
 # export CLAUDE_EVAL_SIM_USER_MODEL=claude-sonnet-4-6
+#
+# export CLAUDE_EVAL_SIM_USER_EFFORT=medium
 #
 # Setting the knowledge path is required, otherwise the hook will disengage immediately.
 #
 # export CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH=/knowledge/file/path
 #
 # Perhaps the most convenient option would be to just set it on the claude command line:
-# CLAUDE_EVAL_SIM_USER_MODEL=claude-sonnet-4-6 CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH=/knowledge/file/path claude
+# CLAUDE_EVAL_SIM_USER_MODEL=claude-sonnet-4-6 CLAUDE_EVAL_SIM_USER_EFFORT=medium CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH=/knowledge/file/path claude
 #
 
 set -u
@@ -127,7 +129,9 @@ EOF
   # (It still loads ~/.claude/ — user-level memory/settings. Add --settings etc.
   # here if you want tighter isolation.)
   MODEL_ARGS=()
-  [[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
+  [[ -n "${CLAUDE_EVAL_SIM_USER_MODEL:-}" ]] && MODEL_ARGS+=(--model "$CLAUDE_EVAL_SIM_USER_MODEL")
+  [[ -n "${CLAUDE_EVAL_SIM_USER_EFFORT:-}" ]] && MODEL_ARGS+=(--effort "$CLAUDE_EVAL_SIM_USER_EFFORT")
+
   WORKDIR="$(mktemp -d)"
   RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}")"
   CLAUDE_ERROR_CODE=
