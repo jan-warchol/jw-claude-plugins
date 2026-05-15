@@ -134,7 +134,7 @@ EOF
 
   WORKDIR="$(mktemp -d)"
   RAW="$(cd "$WORKDIR" && printf '%s' "$PROMPT" | claude -p --bare --tools '' --no-session-persistence --permission-mode dontAsk "${MODEL_ARGS[@]}")"
-  CLAUDE_ERROR_CODE=
+  CLAUDE_ERROR_CODE=$?
   rm -rf "$WORKDIR"
 
   # Parse the reply as a JSON object; tolerate a stray ```json ... ``` fence.
@@ -149,8 +149,8 @@ EOF
     # subprocess failed to produce a usable JSON answer. Block the tool via
     # exit 2 and surface the cause — better than silently falling back to a
     # human prompt, which is what made this hook hard to debug previously.
-    echo >&2 "Claude invocation failed to answer AskUserQuestion: output is empty or could not be parsed."
-    jq -R --slurp -c '{ rawClaudeOutput: . }' <"$RAW" | jq >>"$LOGFILE"
+    echo >&2 "Claude invocation failed to answer AskUserQuestion: output is empty or could not be parsed. claude exit code: $CLAUDE_ERROR_CODE"
+    jq -R --slurp -c '{ rawClaudeOutput: . }' <<<"$RAW" >>"$LOGFILE"
     exit 2
   fi
 
