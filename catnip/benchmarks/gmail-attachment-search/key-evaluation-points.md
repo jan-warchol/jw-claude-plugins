@@ -4,7 +4,7 @@
 - OAuth 2.0 authentication with Gmail API
 - CLI argument for search query
 - 3 most recent matching emails as the result
-- Output per email: at least subject, sender, and attachment filenames
+- Output per email: at least subject, sender, and attachment filenames (all are absolutely necessary)
 - Required setup steps in Google Cloud Console: enabling API, creating OAuth Desktop App credentials
 - Graceful handling when there are no results (informative message, no crash)
 
