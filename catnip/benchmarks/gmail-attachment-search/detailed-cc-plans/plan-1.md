@@ -2,7 +2,8 @@
 
 ## Overview
 
-A command-line Python script that accepts a search query from the user, searches Gmail for matching emails, and returns the 3 most recent results that contain attachments.
+A command-line Python script that accepts a search query from the user, searches Gmail for matching
+emails, and returns the 3 most recent results that contain attachments.
 
 ---
 
@@ -11,7 +12,8 @@ A command-line Python script that accepts a search query from the user, searches
 - Accept a search query string as input (CLI argument or interactive prompt).
 - Use the Gmail API to search for matching threads/messages.
 - Filter results to only those that include at least one attachment.
-- Return the 3 most recent qualifying emails, printing key metadata (sender, date, subject, attachment names).
+- Return the 3 most recent qualifying emails, printing key metadata (sender, date, subject,
+  attachment names).
 
 ---
 
@@ -37,20 +39,22 @@ gmail_search.py
 └── format_result()          — pretty-print email metadata
 ```
 
-Single file, no unnecessary abstractions. No classes needed if the script stays small — plain functions are fine.
+Single file, no unnecessary abstractions. No classes needed if the script stays small — plain
+functions are fine.
 
 ---
 
 ## Dependencies
 
-| Package | Purpose |
-|---|---|
-| `google-auth` | OAuth2 credential handling |
-| `google-auth-oauthlib` | OAuth2 browser-based login flow |
-| `google-auth-httplib2` | HTTP transport for the API client |
-| `google-api-python-client` | Gmail REST API wrapper |
+| Package                    | Purpose                           |
+| -------------------------- | --------------------------------- |
+| `google-auth`              | OAuth2 credential handling        |
+| `google-auth-oauthlib`     | OAuth2 browser-based login flow   |
+| `google-auth-httplib2`     | HTTP transport for the API client |
+| `google-api-python-client` | Gmail REST API wrapper            |
 
 Install:
+
 ```bash
 pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
 ```
@@ -66,6 +70,7 @@ pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-pyt
 5. The resulting token is cached in `token.json` for subsequent runs.
 
 Required OAuth scope:
+
 ```
 https://www.googleapis.com/auth/gmail.readonly
 ```
@@ -108,7 +113,9 @@ def authenticate():
 
 ### Step 3 — Search messages
 
-Use `messages.list` with the user's query. Gmail's search syntax is the same as the web UI (`has:attachment`, `from:`, `subject:`, etc.). To find emails with attachments, append `has:attachment` to the user's query automatically.
+Use `messages.list` with the user's query. Gmail's search syntax is the same as the web UI
+(`has:attachment`, `from:`, `subject:`, etc.). To find emails with attachments, append
+`has:attachment` to the user's query automatically.
 
 ```python
 def search_messages(service, query, max_results=20):
@@ -121,7 +128,8 @@ def search_messages(service, query, max_results=20):
     return response.get("messages", [])
 ```
 
-The API returns results newest-first by default, so the first 3 results are already the most recent matching messages.
+The API returns results newest-first by default, so the first 3 results are already the most recent
+matching messages.
 
 ### Step 4 — Fetch message details
 
@@ -136,7 +144,8 @@ def get_message(service, msg_id):
 
 ### Step 5 — Extract attachment names
 
-Walk the MIME payload parts recursively. A part is an attachment when it has a `filename` and a non-empty `body.attachmentId`.
+Walk the MIME payload parts recursively. A part is an attachment when it has a `filename` and a
+non-empty `body.attachmentId`.
 
 ```python
 def get_attachment_names(payload):
@@ -202,13 +211,13 @@ Attachments:
 
 ## Edge Cases
 
-| Case | Handling |
-|---|---|
-| Query returns fewer than 3 results | Print however many are found; note if zero |
-| `has:attachment` returns false positives (inline images) | `get_attachment_names` filters by `attachmentId` presence |
-| `credentials.json` missing | Print a clear error with setup instructions |
-| Network / API error | Let the exception surface with its message; no silent swallowing |
-| Token expired | `creds.refresh()` handles it transparently |
+| Case                                                     | Handling                                                         |
+| -------------------------------------------------------- | ---------------------------------------------------------------- |
+| Query returns fewer than 3 results                       | Print however many are found; note if zero                       |
+| `has:attachment` returns false positives (inline images) | `get_attachment_names` filters by `attachmentId` presence        |
+| `credentials.json` missing                               | Print a clear error with setup instructions                      |
+| Network / API error                                      | Let the exception surface with its message; no silent swallowing |
+| Token expired                                            | `creds.refresh()` handles it transparently                       |
 
 ---
 

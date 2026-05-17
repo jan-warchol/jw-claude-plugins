@@ -2,17 +2,20 @@
 
 ## Goal
 
-A Python CLI script that accepts a search query from the user, searches Gmail for matching emails, and returns the 3 most recent results that contain attachments.
+A Python CLI script that accepts a search query from the user, searches Gmail for matching emails,
+and returns the 3 most recent results that contain attachments.
 
 ---
 
 ## Approach
 
-Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 for authentication. The script will:
+Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 for authentication. The
+script will:
 
 1. Authenticate with Gmail using OAuth 2.0 credentials stored locally.
 2. Accept a search query string from the user (CLI argument or `input()`).
-3. Search Gmail using the query, appending `has:attachment` to ensure only emails with attachments are returned.
+3. Search Gmail using the query, appending `has:attachment` to ensure only emails with attachments
+   are returned.
 4. Fetch message details for the top 3 results.
 5. Print a summary of each email (date, sender, subject, attachment filenames).
 
@@ -35,6 +38,7 @@ gmail_search/
 ### Step 1 — Dependencies
 
 Install required packages:
+
 ```
 google-api-python-client
 google-auth-httplib2
@@ -59,11 +63,13 @@ Add a `requirements.txt` listing these three packages.
 ### Step 4 — `search.py`
 
 **`search_messages(service, query, max_results=3)`**
+
 - Build the final query: `f"{query} has:attachment"`.
 - Call `service.users().messages().list(userId="me", q=query, maxResults=max_results)`.
 - Return the list of message ID/thread ID dicts (up to 3).
 
 **`get_message_details(service, msg_id)`**
+
 - Call `service.users().messages().get(userId="me", id=msg_id, format="full")`.
 - Extract from headers: `Date`, `From`, `Subject`.
 - Walk `payload.parts` to find parts where `filename` is non-empty — collect attachment filenames.
@@ -75,9 +81,11 @@ Add a `requirements.txt` listing these three packages.
 - Call `auth.get_service()` to authenticate.
 - Call `search.search_messages(service, query)`.
 - If no results, print a friendly message and exit.
-- For each message ID, call `search.get_message_details(service, msg_id)` and print a formatted summary.
+- For each message ID, call `search.get_message_details(service, msg_id)` and print a formatted
+  summary.
 
 **Output format per email:**
+
 ```
 --- Email 1 ---
 Date:        Thu, 20 Apr 2026 14:32:00 +0000
@@ -90,13 +98,13 @@ Attachments: invoice_q1.pdf, receipt.png
 
 ## Edge Cases
 
-| Scenario | Handling |
-|---|---|
-| Fewer than 3 matching emails | Print however many are found; no error |
-| Email has no readable headers | Fall back to `"(unknown)"` for missing fields |
-| `credentials.json` missing | Exit with a clear error message pointing to setup instructions |
-| Token expired | `google-auth` handles silent refresh automatically |
-| Network error | Let the exception propagate with its message; no silent swallowing |
+| Scenario                      | Handling                                                           |
+| ----------------------------- | ------------------------------------------------------------------ |
+| Fewer than 3 matching emails  | Print however many are found; no error                             |
+| Email has no readable headers | Fall back to `"(unknown)"` for missing fields                      |
+| `credentials.json` missing    | Exit with a clear error message pointing to setup instructions     |
+| Token expired                 | `google-auth` handles silent refresh automatically                 |
+| Network error                 | Let the exception propagate with its message; no silent swallowing |
 
 ---
 

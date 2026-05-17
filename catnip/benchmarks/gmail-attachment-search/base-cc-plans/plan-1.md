@@ -2,13 +2,15 @@
 
 ## Goal
 
-Create a Python script that accepts a user-provided search query, searches Gmail for matching emails, and returns the last 3 that have attachments.
+Create a Python script that accepts a user-provided search query, searches Gmail for matching
+emails, and returns the last 3 that have attachments.
 
 ---
 
 ## Approach
 
-Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The script will:
+Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The
+script will:
 
 1. Authenticate with Gmail using OAuth credentials.
 2. Accept a search query string from the user (CLI argument or interactive prompt).
@@ -49,6 +51,7 @@ google-auth-oauthlib
 ```
 
 Install with:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -56,6 +59,7 @@ pip install -r requirements.txt
 ### Step 3 – Authentication Helper
 
 Write a `get_gmail_service()` function that:
+
 - Checks for a cached `token.json`.
 - If missing or expired, launches the OAuth browser flow to obtain and save a new token.
 - Returns an authenticated Gmail API service object.
@@ -69,6 +73,7 @@ query = f"({user_query}) has:attachment"
 ```
 
 Call `service.users().messages().list()` with:
+
 - `userId="me"`
 - `q=query`
 - `maxResults=10` (fetch a small buffer in case some results need to be skipped)
@@ -78,9 +83,11 @@ This returns a list of `{id, threadId}` objects ordered newest-first by default.
 ### Step 5 – Fetch Message Details
 
 For each of the top message IDs (up to the first 3):
+
 - Call `service.users().messages().get(userId="me", id=msg_id, format="full")`.
 - Extract headers: `Subject`, `From`, `Date`.
-- Walk the `payload.parts` tree to find `filename` fields that are non-empty (these are attachments).
+- Walk the `payload.parts` tree to find `filename` fields that are non-empty (these are
+  attachments).
 - Collect attachment names and sizes.
 
 ### Step 6 – Output
@@ -115,13 +122,13 @@ Enter search query: invoice from:billing@company.com
 
 ## Key Design Decisions
 
-| Decision | Choice | Reason |
-|---|---|---|
-| Auth library | `google-auth-oauthlib` | Official Google library, handles token refresh |
-| API scope | `gmail.readonly` | Least privilege; script only reads emails |
-| Query strategy | Append `has:attachment` | Delegates filtering to Gmail server-side, more efficient than client-side filtering |
-| Result limit | Fetch up to 10, display 3 | Small buffer handles edge cases without over-fetching |
-| Output format | Plain text summary | Simple and readable without extra dependencies |
+| Decision       | Choice                    | Reason                                                                              |
+| -------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+| Auth library   | `google-auth-oauthlib`    | Official Google library, handles token refresh                                      |
+| API scope      | `gmail.readonly`          | Least privilege; script only reads emails                                           |
+| Query strategy | Append `has:attachment`   | Delegates filtering to Gmail server-side, more efficient than client-side filtering |
+| Result limit   | Fetch up to 10, display 3 | Small buffer handles edge cases without over-fetching                               |
+| Output format  | Plain text summary        | Simple and readable without extra dependencies                                      |
 
 ---
 
@@ -130,7 +137,8 @@ Enter search query: invoice from:billing@company.com
 - Missing `credentials.json`: print a clear setup message and exit.
 - No results found: print informative message instead of crashing.
 - API quota/network errors: catch `googleapiclient.errors.HttpError` and print the error.
-- Emails with no attachment metadata despite `has:attachment`: skip gracefully (rare Gmail indexing edge case).
+- Emails with no attachment metadata despite `has:attachment`: skip gracefully (rare Gmail indexing
+  edge case).
 
 ---
 

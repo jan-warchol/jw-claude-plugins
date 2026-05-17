@@ -2,13 +2,16 @@
 
 ## Goal
 
-Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching emails that have attachments, and returns the 3 most recent results.
+Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching
+emails that have attachments, and returns the 3 most recent results.
 
 ---
 
 ## Approach
 
-Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The script appends `has:attachment` to the user's query automatically, delegates filtering to the server side, and fetches up to 3 results.
+Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The
+script appends `has:attachment` to the user's query automatically, delegates filtering to the server
+side, and fetches up to 3 results.
 
 ---
 
@@ -44,7 +47,8 @@ Record in `requirements.txt` and install with `pip install -r requirements.txt`.
 
 ### Step 3 — Authentication
 
-- Check for a cached `token.json`; if missing or expired, launch the OAuth browser flow and save the new token.
+- Check for a cached `token.json`; if missing or expired, launch the OAuth browser flow and save the
+  new token.
 - Return an authenticated Gmail API service object.
 - Required scope: `https://www.googleapis.com/auth/gmail.readonly`
 
@@ -56,7 +60,9 @@ Build the full query:
 full_query = f"({user_query}) has:attachment"
 ```
 
-Call `service.users().messages().list()` with `userId="me"`, `q=full_query`, and `maxResults=3`. For each returned message ID, call `service.users().messages().get()` to retrieve headers (`From`, `Subject`, `Date`) and attachment filenames from `payload.parts`.
+Call `service.users().messages().list()` with `userId="me"`, `q=full_query`, and `maxResults=3`. For
+each returned message ID, call `service.users().messages().get()` to retrieve headers (`From`,
+`Subject`, `Date`) and attachment filenames from `payload.parts`.
 
 ### Step 5 — Output
 
@@ -74,7 +80,8 @@ If no results are found, print a clear message and exit.
 
 ### Step 6 — CLI Interface
 
-Accept the search query as a command-line argument; fall back to an interactive prompt if none is provided:
+Accept the search query as a command-line argument; fall back to an interactive prompt if none is
+provided:
 
 ```bash
 python search_gmail.py "invoice from:boss@example.com"
@@ -84,13 +91,13 @@ python search_gmail.py "invoice from:boss@example.com"
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| `credentials.json` missing | Print setup instructions and exit |
-| No emails match the query | Print a friendly "no results" message and exit |
-| API / network error | Catch `HttpError`, print the error message, and exit cleanly |
-| Token expired and refresh fails | Prompt the user to re-authenticate |
-| Email with no readable metadata | Fall back to `"(unknown)"` for missing fields |
+| Scenario                        | Handling                                                     |
+| ------------------------------- | ------------------------------------------------------------ |
+| `credentials.json` missing      | Print setup instructions and exit                            |
+| No emails match the query       | Print a friendly "no results" message and exit               |
+| API / network error             | Catch `HttpError`, print the error message, and exit cleanly |
+| Token expired and refresh fails | Prompt the user to re-authenticate                           |
+| Email with no readable metadata | Fall back to `"(unknown)"` for missing fields                |
 
 ---
 

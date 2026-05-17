@@ -2,19 +2,22 @@
 
 ## Overview
 
-A command-line Python script that accepts a search query from the user, searches their Gmail inbox via the Gmail API, and prints details for the last 3 matching emails that contain at least one attachment.
+A command-line Python script that accepts a search query from the user, searches their Gmail inbox
+via the Gmail API, and prints details for the last 3 matching emails that contain at least one
+attachment.
 
 ---
 
 ## 1. Prerequisites & Dependencies
 
-| Dependency | Purpose |
-|---|---|
-| `google-auth-oauthlib` | OAuth 2.0 flow for user consent |
-| `google-auth-httplib2` | HTTP transport for Google auth |
-| `google-api-python-client` | Gmail REST API client |
+| Dependency                 | Purpose                         |
+| -------------------------- | ------------------------------- |
+| `google-auth-oauthlib`     | OAuth 2.0 flow for user consent |
+| `google-auth-httplib2`     | HTTP transport for Google auth  |
+| `google-api-python-client` | Gmail REST API client           |
 
 Install with:
+
 ```
 pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client
 ```
@@ -29,7 +32,8 @@ pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client
 4. Download the credentials JSON and save it as `credentials.json` in the project directory.
 5. Add the user's Gmail address as a test user (while the app is in "testing" mode).
 
-The script will store a refresh token in `token.json` after the first successful login so subsequent runs skip the browser flow.
+The script will store a refresh token in `token.json` after the first successful login so subsequent
+runs skip the browser flow.
 
 ---
 
@@ -53,7 +57,8 @@ Return authenticated gmail service object
 ```
 
 - Scope required: `https://www.googleapis.com/auth/gmail.readonly`
-- If `token.json` is expired, `google-auth-oauthlib` refreshes it automatically using the stored refresh token.
+- If `token.json` is expired, `google-auth-oauthlib` refreshes it automatically using the stored
+  refresh token.
 
 ---
 
@@ -91,20 +96,24 @@ def main()
 
 - Calls `service.users().messages().list()` with:
   - `userId="me"`
-  - `q=query` — the user-provided search string, passed directly to Gmail's search engine (supports all Gmail search operators, e.g. `from:alice`, `subject:invoice`, `has:attachment`)
+  - `q=query` — the user-provided search string, passed directly to Gmail's search engine (supports
+    all Gmail search operators, e.g. `from:alice`, `subject:invoice`, `has:attachment`)
   - `maxResults=max_results`
-- Handles pagination via `nextPageToken` if needed, but stops once `max_results` message stubs are collected.
+- Handles pagination via `nextPageToken` if needed, but stops once `max_results` message stubs are
+  collected.
 - Returns a list of message stubs: `[{"id": "...", "threadId": "..."}, ...]`.
 
 ### `has_attachment(message: dict) -> bool`
 
 - Inspects the `payload` of a fully-fetched message.
-- Returns `True` if any part in `payload["parts"]` has `"filename"` set to a non-empty string and `mimeType != "text/plain"` and `mimeType != "text/html"`.
+- Returns `True` if any part in `payload["parts"]` has `"filename"` set to a non-empty string and
+  `mimeType != "text/plain"` and `mimeType != "text/html"`.
 - Handles messages with no `"parts"` key (single-part messages) gracefully — returns `False`.
 
 ### `format_message(service, message: dict) -> dict`
 
-- Fetches full message via `service.users().messages().get(userId="me", id=message["id"], format="full")`.
+- Fetches full message via
+  `service.users().messages().get(userId="me", id=message["id"], format="full")`.
 - Extracts from headers:
   - `Subject`
   - `From`
@@ -125,8 +134,10 @@ def main()
 
 1. Parse `query` from `sys.argv[1]` (or prompt the user interactively if no argument is given).
 2. Call `authenticate()` to get the service object.
-3. Call `search_messages(service, query)` to get up to 100 message stubs. Gmail returns results newest-first by default, so no explicit sort is needed.
-4. Iterate through stubs, fetching each full message, and collect those where `has_attachment()` is `True`.
+3. Call `search_messages(service, query)` to get up to 100 message stubs. Gmail returns results
+   newest-first by default, so no explicit sort is needed.
+4. Iterate through stubs, fetching each full message, and collect those where `has_attachment()` is
+   `True`.
 5. Stop after collecting 3 such messages.
 6. Print a formatted summary for each of the 3 results.
 
@@ -152,21 +163,23 @@ Files   : invoice_q1.pdf, terms.docx
 
 ## 7. Error Handling
 
-| Condition | Handling |
-|---|---|
-| `credentials.json` missing | Print clear message and exit with code 1 |
-| OAuth flow cancelled by user | Catch `SystemExit`/`KeyboardInterrupt`, exit cleanly |
-| API quota exceeded | Catch `HttpError 429`, print retry message |
-| No matching emails found | Print "No emails found for query." and exit 0 |
-| Fewer than 3 emails with attachments | Print however many were found (0–2) with a note |
+| Condition                            | Handling                                             |
+| ------------------------------------ | ---------------------------------------------------- |
+| `credentials.json` missing           | Print clear message and exit with code 1             |
+| OAuth flow cancelled by user         | Catch `SystemExit`/`KeyboardInterrupt`, exit cleanly |
+| API quota exceeded                   | Catch `HttpError 429`, print retry message           |
+| No matching emails found             | Print "No emails found for query." and exit 0        |
+| Fewer than 3 emails with attachments | Print however many were found (0–2) with a note      |
 
 ---
 
 ## 8. Security & Privacy Notes
 
 - `credentials.json` and `token.json` must be added to `.gitignore`.
-- The script requests read-only scope (`gmail.readonly`) — it cannot send, delete, or modify any email.
-- No email body content or attachment bytes are downloaded; only metadata (headers + filenames) is read.
+- The script requests read-only scope (`gmail.readonly`) — it cannot send, delete, or modify any
+  email.
+- No email body content or attachment bytes are downloaded; only metadata (headers + filenames) is
+  read.
 
 ---
 
@@ -180,7 +193,8 @@ Files   : invoice_q1.pdf, terms.docx
 6. Implement `format_message()` and verify header extraction.
 7. Wire everything together in `main()` with the stop-at-3 logic.
 8. Add error handling for all edge cases listed above.
-9. Test with several queries: one with results, one with no results, one where fewer than 3 have attachments.
+9. Test with several queries: one with results, one with no results, one where fewer than 3 have
+   attachments.
 
 ---
 

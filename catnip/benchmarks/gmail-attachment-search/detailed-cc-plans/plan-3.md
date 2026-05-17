@@ -2,13 +2,17 @@
 
 ## Goal
 
-A command-line Python script that accepts a search query from the user, searches their Gmail inbox, and returns the 3 most recent matching emails that contain attachments.
+A command-line Python script that accepts a search query from the user, searches their Gmail inbox,
+and returns the 3 most recent matching emails that contain attachments.
 
 ---
 
 ## Approach
 
-Use the Gmail MCP tools already available in this session to search threads and retrieve message details. The script will call those tools via the Claude API (using Claude as the backend), or — for a standalone deployable artifact — use the Gmail REST API directly via the `google-api-python-client` library with OAuth 2.0.
+Use the Gmail MCP tools already available in this session to search threads and retrieve message
+details. The script will call those tools via the Claude API (using Claude as the backend), or — for
+a standalone deployable artifact — use the Gmail REST API directly via the
+`google-api-python-client` library with OAuth 2.0.
 
 The plan below covers the **standalone script** path (no MCP dependency), which is more portable.
 
@@ -24,6 +28,7 @@ The plan below covers the **standalone script** path (no MCP dependency), which 
 - Refresh the token automatically when it expires.
 
 **Steps:**
+
 1. Load `credentials.json` (downloaded from Google Cloud Console).
 2. If `token.json` exists and is valid, load it; otherwise run the browser-based OAuth flow.
 3. Return an authenticated `googleapiclient.discovery.Resource` (the Gmail service object).
@@ -34,8 +39,10 @@ The plan below covers the **standalone script** path (no MCP dependency), which 
 
 - Call `users.messages.list` with:
   - `userId = "me"`
-  - `q = <user_query>` — passed directly to Gmail's search syntax (supports `has:attachment`, `from:`, `subject:`, date ranges, etc.)
-- The query does **not** need to include `has:attachment`; we filter for attachments ourselves so the user's query stays flexible.
+  - `q = <user_query>` — passed directly to Gmail's search syntax (supports `has:attachment`,
+    `from:`, `subject:`, date ranges, etc.)
+- The query does **not** need to include `has:attachment`; we filter for attachments ourselves so
+  the user's query stays flexible.
 - Request enough results to find 3 with attachments (start with `maxResults=20`, page if needed).
 
 ---
@@ -45,7 +52,9 @@ The plan below covers the **standalone script** path (no MCP dependency), which 
 Gmail's `messages.list` returns only message IDs. For each candidate:
 
 1. Fetch the message with `format="metadata"` and `metadataHeaders=["Subject", "From", "Date"]`.
-2. Inspect `payload.parts` recursively: a message has an attachment if any part has a non-empty `filename` field **or** a `mimeType` that is not `text/plain` / `text/html` and has a non-zero `body.size`.
+2. Inspect `payload.parts` recursively: a message has an attachment if any part has a non-empty
+   `filename` field **or** a `mimeType` that is not `text/plain` / `text/html` and has a non-zero
+   `body.size`.
 3. Stop once 3 qualifying messages are found (lazy evaluation — avoid fetching more than necessary).
 
 ---
@@ -135,20 +144,21 @@ main.py  ──► format & print results
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| `credentials.json` missing | Print instructions to download from Google Cloud Console and exit with code 1 |
-| OAuth flow cancelled by user | Catch `KeyboardInterrupt`, exit gracefully |
-| No messages match the query | Print "No results found." and exit 0 |
-| Fewer than 3 results with attachments | Return however many were found, note the count |
-| HTTP 429 / quota exceeded | Retry with exponential backoff (max 3 retries) |
-| HTTP 401 / token invalid | Delete `token.json`, re-run auth flow automatically |
+| Scenario                              | Handling                                                                      |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| `credentials.json` missing            | Print instructions to download from Google Cloud Console and exit with code 1 |
+| OAuth flow cancelled by user          | Catch `KeyboardInterrupt`, exit gracefully                                    |
+| No messages match the query           | Print "No results found." and exit 0                                          |
+| Fewer than 3 results with attachments | Return however many were found, note the count                                |
+| HTTP 429 / quota exceeded             | Retry with exponential backoff (max 3 retries)                                |
+| HTTP 401 / token invalid              | Delete `token.json`, re-run auth flow automatically                           |
 
 ---
 
 ## Implementation Order
 
-1. `auth.py` — OAuth flow (testable in isolation: `python auth.py` should print "Authenticated successfully").
+1. `auth.py` — OAuth flow (testable in isolation: `python auth.py` should print "Authenticated
+   successfully").
 2. `search.py` — `search_messages(service, query, max_results)` returning raw message metadata.
 3. `search.py` — `has_attachment(payload)` recursive helper.
 4. `search.py` — `collect_with_attachments(service, query, limit=3)` combining the above.
@@ -162,7 +172,8 @@ main.py  ──► format & print results
 1. Create a project at [console.cloud.google.com](https://console.cloud.google.com).
 2. Enable the **Gmail API**.
 3. Create OAuth 2.0 credentials → **Desktop app** → download `credentials.json`.
-4. Add the test user's email (`lemniskata.bernoullego@gmail.com`) to the OAuth consent screen's **Test users** list (required while the app is in "Testing" status).
+4. Add the test user's email (`lemniskata.bernoullego@gmail.com`) to the OAuth consent screen's
+   **Test users** list (required while the app is in "Testing" status).
 
 ---
 

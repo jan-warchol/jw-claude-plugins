@@ -1,12 +1,15 @@
 ---
 goal: Python script to find last 3 Gmail emails with attachments
-prompt: Create a simple Python script that searches Gmail for emails matching a user-provided query, then returns the last 3 matching emails that have attachments.
+prompt:
+  Create a simple Python script that searches Gmail for emails matching a user-provided query, then
+  returns the last 3 matching emails that have attachments.
 complexity: 2
 ---
 
 ## Plan
 
-Use the Gmail MCP tools already available in this session to search for emails matching the user's query, filter those with attachments, and return the 3 most recent.
+Use the Gmail MCP tools already available in this session to search for emails matching the user's
+query, filter those with attachments, and return the 3 most recent.
 
 ### Success criteria
 

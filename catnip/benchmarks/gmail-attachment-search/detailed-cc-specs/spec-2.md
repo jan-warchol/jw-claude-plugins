@@ -2,7 +2,8 @@
 
 ## Overview
 
-A command-line Python script that accepts a search query from the user, searches Gmail for matching emails, and returns the 3 most recent results that contain attachments.
+A command-line Python script that accepts a search query from the user, searches Gmail for matching
+emails, and returns the 3 most recent results that contain attachments.
 
 ---
 
@@ -57,7 +58,8 @@ Attachments (2):
   - summary.xlsx    (application/vnd.ms-excel, 12 KB)
 ```
 
-If fewer than 3 emails with attachments are found, all qualifying results are shown. If none are found, the script prints a clear message and exits with code 0.
+If fewer than 3 emails with attachments are found, all qualifying results are shown. If none are
+found, the script prints a clear message and exits with code 0.
 
 ---
 
@@ -69,10 +71,10 @@ If fewer than 3 emails with attachments are found, all qualifying results are sh
 
 ### Dependencies
 
-| Dependency | Purpose |
-|---|---|
-| `anthropic` Python SDK | Driving the Claude agent loop that calls Gmail MCP tools |
-| `mcp__claude_ai_Gmail` MCP server | Gmail API access (search, thread retrieval) |
+| Dependency                        | Purpose                                                  |
+| --------------------------------- | -------------------------------------------------------- |
+| `anthropic` Python SDK            | Driving the Claude agent loop that calls Gmail MCP tools |
+| `mcp__claude_ai_Gmail` MCP server | Gmail API access (search, thread retrieval)              |
 
 No external HTTP libraries are needed; all Gmail access goes through MCP tools.
 
@@ -107,6 +109,7 @@ An attachment is any MIME part satisfying **either** condition:
 - `part["headers"]` contains `Content-Disposition: attachment`.
 
 For each attachment, record:
+
 - `filename` (string, may be empty → show as `<unnamed>`)
 - `mimeType` (string)
 - `size` (bytes from `part["body"]["size"]`; format as KB or MB for display)
@@ -123,19 +126,20 @@ This keeps attachment filtering at the API layer, reducing data transfer and thr
 
 ### Result Ordering
 
-`search_threads` returns threads in descending date order by default. The script processes them in that order and stops after collecting 3 results, so no client-side sorting is needed.
+`search_threads` returns threads in descending date order by default. The script processes them in
+that order and stops after collecting 3 results, so no client-side sorting is needed.
 
 ---
 
 ## Error Handling
 
-| Situation | Behaviour |
-|---|---|
-| No CLI argument provided | Print usage, exit 1 |
-| MCP tool call fails | Print error message with tool name and returned error, exit 2 |
-| Zero results from search | Print "No emails with attachments found for query: `<query>`", exit 0 |
-| Fewer than 3 results | Print all available results, note count in footer |
-| Thread fetch fails for one result | Skip that thread, log a warning, continue to next |
+| Situation                         | Behaviour                                                             |
+| --------------------------------- | --------------------------------------------------------------------- |
+| No CLI argument provided          | Print usage, exit 1                                                   |
+| MCP tool call fails               | Print error message with tool name and returned error, exit 2         |
+| Zero results from search          | Print "No emails with attachments found for query: `<query>`", exit 0 |
+| Fewer than 3 results              | Print all available results, note count in footer                     |
+| Thread fetch fails for one result | Skip that thread, log a warning, continue to next                     |
 
 ---
 
@@ -197,7 +201,10 @@ Example: python search_gmail.py "invoice from:billing@example.com"
 
 ## Implementation Notes
 
-- The script runs as a **Claude agent loop**: it instantiates an `anthropic.Anthropic` client, passes the task as a system prompt, and lets Claude issue the MCP tool calls (`search_threads`, `get_thread`) to complete the task. This avoids manually parsing the Gmail API response structure.
-- Alternatively, the script can call MCP tools directly (not via agent loop) if the runtime exposes them as a Python-callable interface — the spec is compatible with both approaches.
+- The script runs as a **Claude agent loop**: it instantiates an `anthropic.Anthropic` client,
+  passes the task as a system prompt, and lets Claude issue the MCP tool calls (`search_threads`,
+  `get_thread`) to complete the task. This avoids manually parsing the Gmail API response structure.
+- Alternatively, the script can call MCP tools directly (not via agent loop) if the runtime exposes
+  them as a Python-callable interface — the spec is compatible with both approaches.
 - Keep the script self-contained in one file with no custom modules.
 - Target Python 3.11+.

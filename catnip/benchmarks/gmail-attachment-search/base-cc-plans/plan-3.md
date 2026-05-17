@@ -2,13 +2,16 @@
 
 ## Goal
 
-Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching emails that have attachments, and returns the 3 most recent results.
+Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching
+emails that have attachments, and returns the 3 most recent results.
 
 ---
 
 ## Approach
 
-Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The script will append `has:attachment` to the user's query automatically, fetch up to 3 results, and print a structured summary of each email.
+Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The
+script will append `has:attachment` to the user's query automatically, fetch up to 3 results, and
+print a structured summary of each email.
 
 ---
 
@@ -60,10 +63,12 @@ full_query = f"({user_query}) has:attachment"
 ### 4. Call the Gmail API
 
 Use `users.messages.list` with:
+
 - `q=full_query`
 - `maxResults=3`
 
-Then call `users.messages.get` for each message ID with `format='metadata'` and headers `['From', 'Subject', 'Date']` to retrieve email metadata efficiently.
+Then call `users.messages.get` for each message ID with `format='metadata'` and headers
+`['From', 'Subject', 'Date']` to retrieve email metadata efficiently.
 
 ### 5. Output
 
@@ -90,18 +95,19 @@ python search_attachments.py "invoice from:boss@example.com"
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| `credentials.json` missing | Print a clear setup instruction and exit |
-| No emails match the query | Print "No matching emails with attachments found." |
-| API quota/network error | Catch `HttpError`, print the error message, and exit cleanly |
-| Token expired and refresh fails | Delete `token.json` and prompt the user to re-authenticate |
+| Scenario                        | Handling                                                     |
+| ------------------------------- | ------------------------------------------------------------ |
+| `credentials.json` missing      | Print a clear setup instruction and exit                     |
+| No emails match the query       | Print "No matching emails with attachments found."           |
+| API quota/network error         | Catch `HttpError`, print the error message, and exit cleanly |
+| Token expired and refresh fails | Delete `token.json` and prompt the user to re-authenticate   |
 
 ---
 
 ## Security Notes
 
-- `credentials.json` and `token.json` must never be committed to version control (add both to `.gitignore`).
+- `credentials.json` and `token.json` must never be committed to version control (add both to
+  `.gitignore`).
 - Use read-only scope (`gmail.readonly`) — the script never modifies or deletes any email.
 
 ---

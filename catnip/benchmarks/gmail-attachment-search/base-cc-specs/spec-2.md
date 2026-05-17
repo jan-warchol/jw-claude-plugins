@@ -2,21 +2,25 @@
 
 ## Overview
 
-A command-line Python script that accepts a search query, searches the user's Gmail inbox, and returns the 3 most recent matching emails that contain attachments.
+A command-line Python script that accepts a search query, searches the user's Gmail inbox, and
+returns the 3 most recent matching emails that contain attachments.
 
 ## Inputs
 
-- `query` (required, positional CLI argument): A Gmail search query string (e.g. `"from:boss@example.com"`, `"subject:invoice"`).
+- `query` (required, positional CLI argument): A Gmail search query string (e.g.
+  `"from:boss@example.com"`, `"subject:invoice"`).
 
 ## Outputs
 
 Prints to stdout a list of up to 3 emails, each showing:
+
 - Date sent
 - Sender (`From`)
 - Subject
 - List of attachment filenames
 
-If fewer than 3 matching emails with attachments exist, print however many are found. If none are found, print a message indicating no results.
+If fewer than 3 matching emails with attachments exist, print however many are found. If none are
+found, print a message indicating no results.
 
 ## Behavior
 
@@ -24,7 +28,8 @@ If fewer than 3 matching emails with attachments exist, print however many are f
 2. Run a Gmail search combining the user-provided query with `has:attachment`.
 3. Retrieve results sorted by date descending (most recent first).
 4. Return the top 3 results.
-5. For each result, fetch the message metadata and part list to extract sender, date, subject, and attachment filenames.
+5. For each result, fetch the message metadata and part list to extract sender, date, subject, and
+   attachment filenames.
 
 ## Authentication
 
@@ -72,5 +77,6 @@ Found 3 emails matching "from:boss@example.com" with attachments:
 ## Out of Scope
 
 - Downloading attachment contents.
-- Pagination beyond the first API response page (Gmail returns up to 100 results per page; 3 results will always fit in the first page).
+- Pagination beyond the first API response page (Gmail returns up to 100 results per page; 3 results
+  will always fit in the first page).
 - Support for multiple Gmail accounts.

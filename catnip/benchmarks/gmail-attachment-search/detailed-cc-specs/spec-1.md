@@ -2,7 +2,9 @@
 
 ## Overview
 
-A command-line Python script that accepts a Gmail search query from the user, searches their Gmail inbox via the Gmail API, and returns the three most recent matching emails that contain at least one attachment.
+A command-line Python script that accepts a Gmail search query from the user, searches their Gmail
+inbox via the Gmail API, and returns the three most recent matching emails that contain at least one
+attachment.
 
 ---
 
@@ -26,12 +28,12 @@ A command-line Python script that accepts a Gmail search query from the user, se
 
 ## Inputs
 
-| Input | Source | Description |
-|---|---|---|
-| `query` | CLI positional argument | A Gmail search query string (same syntax as the Gmail search box, e.g. `from:boss subject:report`). |
-| `--max-search` | Optional CLI flag | How many candidate threads to fetch before giving up. Default: `50`. |
-| `--credentials` | Optional CLI flag | Path to the OAuth client secrets JSON file. Default: `credentials.json` in the working directory. |
-| `--token` | Optional CLI flag | Path to store/read the cached OAuth token. Default: `token.json` in the working directory. |
+| Input           | Source                  | Description                                                                                         |
+| --------------- | ----------------------- | --------------------------------------------------------------------------------------------------- |
+| `query`         | CLI positional argument | A Gmail search query string (same syntax as the Gmail search box, e.g. `from:boss subject:report`). |
+| `--max-search`  | Optional CLI flag       | How many candidate threads to fetch before giving up. Default: `50`.                                |
+| `--credentials` | Optional CLI flag       | Path to the OAuth client secrets JSON file. Default: `credentials.json` in the working directory.   |
+| `--token`       | Optional CLI flag       | Path to store/read the cached OAuth token. Default: `token.json` in the working directory.          |
 
 ### Example Invocations
 
@@ -81,7 +83,8 @@ No emails matching "<query>" with attachments were found in the first 50 results
 - On first run, open a browser for the user to authorise the application.
 - Persist the resulting token to `token.json` (path configurable via `--token`).
 - On subsequent runs, load the cached token; refresh automatically if expired.
-- If `credentials.json` is missing, print an actionable error message directing the user to the Google Cloud Console and exit with code 1.
+- If `credentials.json` is missing, print an actionable error message directing the user to the
+  Google Cloud Console and exit with code 1.
 
 ---
 
@@ -114,16 +117,17 @@ exit(0)
 
 ### Gmail API Calls
 
-| Step | API method | Key parameters |
-|---|---|---|
-| Search | `users.messages.list` | `userId='me'`, `q=<query>`, `maxResults=<max-search>` |
-| Fetch message | `users.messages.get` | `userId='me'`, `id=<msg_id>`, `format='full'` |
+| Step          | API method            | Key parameters                                        |
+| ------------- | --------------------- | ----------------------------------------------------- |
+| Search        | `users.messages.list` | `userId='me'`, `q=<query>`, `maxResults=<max-search>` |
+| Fetch message | `users.messages.get`  | `userId='me'`, `id=<msg_id>`, `format='full'`         |
 
 `format='full'` is required to inspect MIME parts and identify attachments.
 
 ### Attachment Detection
 
 A message part is considered an attachment if **either** of the following is true:
+
 - `part['filename']` is a non-empty string, **or**
 - `part['headers']` contains `Content-Disposition: attachment`.
 
@@ -132,27 +136,31 @@ Recursively walk all `parts` (including nested `multipart/*` payloads).
 ### Metadata Extraction
 
 For each attachment part, record:
+
 - `filename` — from `part['filename']`; fall back to `"(unnamed)"` if empty.
 - `mimeType` — from `part['mimeType']`.
-- `size` — from `part['body']['size']` (bytes); convert to KB for display (round to nearest integer).
+- `size` — from `part['body']['size']` (bytes); convert to KB for display (round to nearest
+  integer).
 
 For the message envelope, extract from the `payload.headers` list:
+
 - `Date`, `From`, `Subject`
 
-Parse the `Date` header into a UTC datetime for display. Sort order relies on the Gmail API returning results in reverse-chronological order (default behaviour of `messages.list`).
+Parse the `Date` header into a UTC datetime for display. Sort order relies on the Gmail API
+returning results in reverse-chronological order (default behaviour of `messages.list`).
 
 ---
 
 ## Error Handling
 
-| Condition | Behaviour |
-|---|---|
-| `credentials.json` missing | Print a clear setup message; exit code 1. |
-| OAuth token refresh fails | Delete `token.json`, prompt the user to re-run; exit code 1. |
-| `googleapiclient.errors.HttpError` | Print the HTTP status and error message; exit code 1. |
-| Query returns 0 messages | Print "no results" message; exit code 0. |
-| Fewer than 3 results have attachments | Print found results and a count notice; exit code 0. |
-| Keyboard interrupt | Print a short cancellation message; exit code 130. |
+| Condition                             | Behaviour                                                    |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `credentials.json` missing            | Print a clear setup message; exit code 1.                    |
+| OAuth token refresh fails             | Delete `token.json`, prompt the user to re-run; exit code 1. |
+| `googleapiclient.errors.HttpError`    | Print the HTTP status and error message; exit code 1.        |
+| Query returns 0 messages              | Print "no results" message; exit code 0.                     |
+| Fewer than 3 results have attachments | Print found results and a count notice; exit code 0.         |
+| Keyboard interrupt                    | Print a short cancellation message; exit code 130.           |
 
 ---
 
@@ -182,8 +190,10 @@ gmail-attachments/
 
 ## Acceptance Criteria
 
-- [ ] Running with a valid query and credentials prints up to 3 email blocks with attachment metadata.
-- [ ] Running with a query that matches emails but none have attachments prints the "no attachments found" message.
+- [ ] Running with a valid query and credentials prints up to 3 email blocks with attachment
+      metadata.
+- [ ] Running with a query that matches emails but none have attachments prints the "no attachments
+      found" message.
 - [ ] Running without `credentials.json` prints a clear setup error and exits non-zero.
 - [ ] A cached `token.json` is used on the second run without re-opening the browser.
 - [ ] `--max-search` controls how many messages are inspected before giving up.

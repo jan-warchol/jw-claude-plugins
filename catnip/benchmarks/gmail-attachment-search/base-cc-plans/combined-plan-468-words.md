@@ -2,7 +2,8 @@
 
 ## Goal
 
-Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching emails that have attachments, and returns the 3 most recent results.
+Create a Python CLI script that accepts a user-provided search query, searches Gmail for matching
+emails that have attachments, and returns the 3 most recent results.
 
 ---
 
@@ -16,7 +17,9 @@ Create a Python CLI script that accepts a user-provided search query, searches G
 
 ## Approach
 
-Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The script appends `has:attachment` to the user's query automatically, delegates filtering to the server side, and fetches up to 3 results.
+Use the Gmail API via the `google-api-python-client` library with OAuth 2.0 authentication. The
+script appends `has:attachment` to the user's query automatically, delegates filtering to the server
+side, and fetches up to 3 results.
 
 ---
 
@@ -53,7 +56,8 @@ Record in `requirements.txt` and install with `pip install -r requirements.txt`.
 ### Step 3 — Authentication
 
 - Load `credentials.json`.
-- Check for a cached `token.json`; if missing or expired, launch the OAuth browser flow and save the new token.
+- Check for a cached `token.json`; if missing or expired, launch the OAuth browser flow and save the
+  new token.
 - Return an authenticated Gmail API service object.
 - Required scope: `https://www.googleapis.com/auth/gmail.readonly`
 
@@ -65,7 +69,9 @@ Build the full query:
 full_query = f"({user_query}) has:attachment"
 ```
 
-Call `service.users().messages().list()` with `userId="me"`, `q=full_query`, and `maxResults=3`. For each returned message ID, call `service.users().messages().get(format="full")` to retrieve headers (`From`, `Subject`, `Date`) and walk `payload.parts` for non-empty `filename` fields.
+Call `service.users().messages().list()` with `userId="me"`, `q=full_query`, and `maxResults=3`. For
+each returned message ID, call `service.users().messages().get(format="full")` to retrieve headers
+(`From`, `Subject`, `Date`) and walk `payload.parts` for non-empty `filename` fields.
 
 ### Step 5 — Output
 
@@ -93,13 +99,13 @@ python search_gmail.py "invoice from:boss@example.com"
 
 ## Key Design Decisions
 
-| Decision | Choice | Reason |
-|---|---|---|
-| Auth library | `google-auth-oauthlib` | Official Google library, handles token refresh automatically |
-| API scope | `gmail.readonly` | Least privilege — script never modifies or deletes emails |
-| Query strategy | Append `has:attachment` server-side | More efficient than client-side filtering |
-| Result limit | `maxResults=3` | Gmail returns newest-first; no pagination needed for 3 results |
-| Output format | Plain text summary | Readable without extra dependencies |
+| Decision       | Choice                              | Reason                                                         |
+| -------------- | ----------------------------------- | -------------------------------------------------------------- |
+| Auth library   | `google-auth-oauthlib`              | Official Google library, handles token refresh automatically   |
+| API scope      | `gmail.readonly`                    | Least privilege — script never modifies or deletes emails      |
+| Query strategy | Append `has:attachment` server-side | More efficient than client-side filtering                      |
+| Result limit   | `maxResults=3`                      | Gmail returns newest-first; no pagination needed for 3 results |
+| Output format  | Plain text summary                  | Readable without extra dependencies                            |
 
 ---
 
@@ -133,13 +139,13 @@ Attachments: feb_invoice.pdf
 
 ## Error Handling
 
-| Scenario | Handling |
-|---|---|
-| `credentials.json` missing | Print setup instructions and exit |
-| No emails match the query | Print a friendly "no results" message and exit |
-| API / network error | Catch `HttpError`, print the error message, and exit cleanly |
-| Token expired and silent refresh fails | Delete `token.json` and prompt the user to re-authenticate |
-| Email with no readable headers | Fall back to `"(unknown)"` for missing fields |
+| Scenario                               | Handling                                                     |
+| -------------------------------------- | ------------------------------------------------------------ |
+| `credentials.json` missing             | Print setup instructions and exit                            |
+| No emails match the query              | Print a friendly "no results" message and exit               |
+| API / network error                    | Catch `HttpError`, print the error message, and exit cleanly |
+| Token expired and silent refresh fails | Delete `token.json` and prompt the user to re-authenticate   |
+| Email with no readable headers         | Fall back to `"(unknown)"` for missing fields                |
 
 ---
 
