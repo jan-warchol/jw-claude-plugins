@@ -56,3 +56,32 @@ model: claude sonnet 4.6
 | Could (out of 8)      | 4       | 4       | 5       |
 | Total points (92 max) | 73      | 80      | 74      |
 | **Score**             | **79%** | **87%** | **80%** |
+
+# Structure Evaluation
+
+| Topic              | spec-1      | spec-2      | spec-3      |
+| ------------------ | ----------- | ----------- | ----------- |
+| Goal               | 3           | 3           | 3           |
+| Requirements       | 2           | 2           | 2           |
+| Solution           | 2           | 2           | 2           |
+| Out of scope       | 3           | 3           | 3           |
+| Uncertainty        | 0           | 0           | 0           |
+| **Total (max 17)** | **10**      | **10**      | **10**      |
+
+**Notes:**
+
+- **Requirements = 2** for all: verifiable criteria exist (output fields, exit codes, result count)
+  but are scattered across Output/Behavior/Error Handling sections rather than listed in a dedicated
+  requirements/acceptance-criteria section.
+- **Solution = 2** for all: implementation steps are clearly laid out in Behavior + Authentication
+  sections, but no design decisions are articulated with rationale, no trade-offs discussed, and no
+  alternatives considered.
+- **Uncertainty = 0** for all: none of the specs mention risks, assumptions, or open questions.
+
+| Metric               | spec-1 | spec-2 | spec-3 |
+| -------------------- | ------ | ------ | ------ |
+| Word count           | 348    | 320    | 313    |
+| Avg section length   | 35.9   | 29.5   | 42.0   |
+| Avg paragraph length | 31.9   | 28.2   | 36.8   |
+| Avg bullet length    | 10.0   | 9.2    | 11.0   |
+| Code snippets ratio  | 27%    | 29%    | 9%     |
