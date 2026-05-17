@@ -132,15 +132,16 @@ When evaluating multiple specs against the same criteria, please print:
 
 - Notes on any non-obious score assignments
 
-- A summary table showing, for each spec, how many criteria per tier scored positively (e.g. matched
-  "must") and negatively (e.g. matched "must not", contradicted "must"), plus the overall score and
-  percentage. Row headers name the tier and its total criterion count. Cell values show positive vs
-  negative count separately; omit negative count when it is zero. The "Total points" row header
+- A summary table showing, for each spec, how many criteria per tier scored positively (e.g. fully
+  matched "must"), partially (partially matched "must") and negatively (e.g. matched "must not",
+  contradicted "must"), plus the overall score and percentage. Row headers name the tier and its
+  total criterion count. Cell values show positive vs partial vs negative count separately; if both
+  partial and negative counts are zero print just the positive count. The "Total points" row header
   should include the max possible points in parentheses. Example:
 
         | Tier | plan-a | plan-b | plan-c |
         |---|--------|--------|--------|
-        | Must (out of 5) | 5 | 4 / -1 | 3 / -2 |
+        | Must (out of 5) | 5 | 4 / 0 / -1 | 3 / 0 / -2 |
         | Should (out of 10) | 10 | 7 | 9 |
         | Could (out of 8) | 6 | 4 | 5 |
         | Total points (88 max) | 86 | 61 | 74 |
