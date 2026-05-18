@@ -25,8 +25,8 @@ weights - disregard them. Use the following scoring:
 | Must mention       | 10                                 |
 | Should mention     | 3                                  |
 | Could mention      | 1                                  |
-| Must not mention   | -10 (negative points when present) |
 | Should not mention | -3 (negative points when present)  |
+| Must not mention   | -10 (negative points when present) |
 
 For each of the criteria, check whether the spec mentions the issue it is about and whether it's
 meaning is consistent with the expectation.
@@ -82,8 +82,8 @@ When evaluating a single spec, please print:
         | +10 | **MUST** | Foobar is required input |
         | +10 | **MUST** | Frobnicator must not throw exceptions |
         | 0 | **MUST** | Lorem ipsum |
-        | -10 | **MUST** | Dolor sit amet |
         | +3 | **SHOULD** | consectetur adipiscing elit |
+        | -10 | **MUST** | Dolor sit amet |
 
 - 2-part list of missed and contradicted criteria. Divide criteria in each section by tier. For
   negative tiers, put them in Contradicted (rather than Missing) when found. Shorten criteria as

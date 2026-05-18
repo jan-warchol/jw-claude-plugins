@@ -31,11 +31,11 @@ checklist for evaluating plan/spec files.
 
 - <point>
 
-## Must Not mention
+## Should Not mention
 
 - <point>
 
-## Should Not mention
+## Must Not mention
 
 - <point>
 ```
@@ -53,6 +53,7 @@ Each tier answers the question: _should a good spec mention this?_
 - **Must mention**: omitting this would lead to a materially different implementation
 - **Should mention**: important, but a competent agent could plausibly infer it from context
 - **Could mention**: easily inferable; low cost if missing
+- **Should Not mention**: manually added only — never inferred from source documents
 - **Must Not mention**: manually added only — never inferred from source documents
 
 When in doubt, prefer a lower tier. It's easier to promote than demote. Sort items according to
