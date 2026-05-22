@@ -8,7 +8,7 @@ matching emails that have attachments.
 
 model: claude sonnet 4.6
 
-# Evaluation report
+# Content evaluation report
 
 | Tier       | Criterion                                          | plan-1 | plan-2 | plan-3 |
 | ---------- | -------------------------------------------------- | ------ | ------ | ------ |
@@ -58,3 +58,43 @@ model: claude sonnet 4.6
 | Could (out of 8)      | 7       | 6       | 6       |
 | Total points (92 max) | 91      | 90      | 65      |
 | **Score**             | **99%** | **98%** | **71%** |
+
+# Structure Evaluation Report
+
+**File mapping:**
+- `plan-1` → `base-cc-plans/plan-1.md`
+- `plan-2` → `base-cc-plans/plan-2.md`
+- `plan-3` → `base-cc-plans/plan-3.md`
+
+## Topics comparison
+
+| Topic | plan-1 | plan-2 | plan-3 |
+|---|---|---|---|
+| Goal | 3 | 3 | 3 |
+| Requirements | 0 | 0 | 0 |
+| Solution | 3 | 2 | 2 |
+| Out of scope | 3 | 3 | 3 |
+| Uncertainty | 2 | 2 | 2 |
+| **Total (max 17)** | **11** | **10** | **10** |
+
+**Notes on non-obvious scores:**
+
+- **Requirements (0 for all):** None of the plans have verifiable acceptance/testing criteria. All three describe *what the script will do* (in Approach/Implementation sections), but never as a checklist of pass/fail criteria. There's no way to tell from the document alone whether a given implementation satisfies the spec.
+
+- **Solution — plan-1 (3):** Gets +2 for the explicit `## Approach` section and +1 for the `## Key Design Decisions` table, which discusses rationale (e.g. server-side vs. client-side filtering, least-privilege scope). Plans 2 and 3 get +2 for a clear Approach section but no trade-off or alternative discussion.
+
+- **Uncertainty (2 for all):** Each plan has a dedicated `## Error Handling` or `## Edge Cases` section covering risk scenarios (+1 for risks, +1 for dedicated section). None list assumptions or open questions.
+
+## Metrics comparison
+
+| Metric | plan-1 | plan-2 | plan-3 |
+|---|---|---|---|
+| Word count | 522 | 430 | 350 |
+| Avg section length | 35.3 | 39.0 | 23.7 |
+| Avg paragraph length | 20.0 | 22.7 | 19.3 |
+| Avg bullet length | 8.1 | 7.9 | 7.2 |
+| Code snippets ratio | 24% | 32% | 28% |
+
+## Summary
+
+All three plans share the same structural skeleton and nearly identical scores. The universal gap is **Requirements** — none establish verifiable acceptance criteria that would let someone test the spec independently of reading the implementation plan.
