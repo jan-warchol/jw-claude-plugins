@@ -4,7 +4,7 @@ Skills for evaluating and comparing plans and specification documents.
 
 ## Skills
 
-### `evaluate-spec-structure`
+### `structural-evaluation`
 
 Scores one or more spec files on their structural quality using a rubric. It checks five topic
 areas — Goal, Requirements, Solution, Out of scope, and Uncertainty — each on a 0–3 or 0–4 point
@@ -12,21 +12,23 @@ scale (17 points total). In parallel, it runs `measure.py` (via `uv run`) to com
 metrics: word count, average section/paragraph/bullet length, and code snippet ratio. Outputs a
 side-by-side comparison table of scores and metrics when given multiple specs.
 
-### `evaluate-spec-according-to-aggregated-points`
+### `technical-evaluation`
 
-Scores one or more specs against a tiered key-points criteria file (Must / Should / Could / Must
-not / Should not). Each criterion is worth a fixed number of points depending on its tier (Must =
-10, Should = 3, Could = 1, with negatives for "must not" tiers). Produces a per-criterion scoring
-table, a summary of missed/contradicted criteria, and an overall percentage score.
+Scores one or more specs against a tiered key-points criteria file (Must / Should / Could / Should
+not / Must not). Each criterion is worth a fixed number of points depending on its tier (Must = 10,
+Should = 3, Could = 1, with negatives for negative tiers); Must and Should criteria also support
+partial credit (half points) when a concept is only partially addressed. Produces a per-criterion
+scoring table, notes on non-obvious scores, and a summary table showing positive, partial, and
+negative match counts per tier plus an overall percentage score.
 
-### `key-points-aggregation`
+### `criteria-extraction`
 
 Reads one or more plan/spec files and synthesizes them into a single tiered key-points reference
 file (`key-evaluation-points.md`). The output is a rubric (Must / Should / Could mention) used as
-input to `evaluate-spec-according-to-aggregated-points`. Must Not / Should Not sections are
-intentionally left empty — those require manual curation.
+input to `technical-evaluation`. Must Not / Should Not sections are intentionally left empty —
+those require manual curation.
 
-### `prepare-eval-knowledge-file`
+### `preparing-knowledge-file`
 
 Prepares a self-contained "knowledge file" to be used during automated evaluation runs. It
 anticipates the questions that the `catnip:complexity-aware-spec` skill would ask a user, collects
