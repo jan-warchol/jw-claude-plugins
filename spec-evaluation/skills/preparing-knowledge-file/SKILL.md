@@ -1,5 +1,5 @@
 ---
-name: prepare-eval-knowledge-file
+name: preparing-knowledge-file
 description: Prepare knowledge file that will be used for planner evaluation
 disable-model-invocation: true
 ---
@@ -7,7 +7,7 @@ disable-model-invocation: true
 ### Usage
 
 ```
-/prepare-eval-knowledge-file The task to prepare promp text (complexity: <score>) [Extra knowledge: /some/path [/more/paths ...]] [Output path: /some/other/path]
+/preparing-knowledge-file The task to prepare promp text (complexity: <score>) [Extra knowledge: /some/path [/more/paths ...]] [Output path: /some/other/path]
 ```
 
 `[` and `]` indicate optional parts.
@@ -39,9 +39,9 @@ they differ in what catnip:complexity-aware-spec will see:
 - **Task-prompt files** — files the prompt itself points the agent to read (e.g. "Write a spec based
   on notes in my-file.md"). When catnip:complexity-aware-spec is later run with this prompt, it will
   follow those references. Their contents ARE part of its input.
-- **Extra knowledge files** — file paths passed to prepare-eval-knowledge-file after the complexity
+- **Extra knowledge files** — file paths passed to preparing-knowledge-file after the complexity
   score. catnip:complexity-aware-spec will NOT see these; they exist purely so
-  prepare-eval-knowledge-file can resolve non-ambiguous answers without bothering the user.
+  preparing-knowledge-file can resolve non-ambiguous answers without bothering the user.
 
 Both kinds MUST be embedded verbatim in the output knowledge file, each in its own section (see the
 template below). Embedding makes the knowledge file self-contained: any downstream consumer
@@ -80,7 +80,7 @@ entirely if no files of that kind were involved.
 ```
 === TASK (complexity <complexity score given>) ===
 <the initial prompt from the user, verbatim. Strip out any "extra knowledge:
-<path>" pointers that were addressed to prepare-eval-knowledge-file itself —
+<path>" pointers that were addressed to preparing-knowledge-file itself —
 those aren't part of what catnip:complexity-aware-spec would receive.>
 === TASK ===
 

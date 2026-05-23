@@ -1,5 +1,5 @@
 ---
-name: evaluate-spec-according-to-aggregated-points
+name: technical-evaluation
 description:
   Evaluates spec, comparing it to a list of criteria tiered into required, optional, and forbidden.
 ---

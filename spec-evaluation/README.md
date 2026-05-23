@@ -46,7 +46,7 @@ run its metrics script without requiring a manual permission confirmation.
 ### `answer-ask-user-question-with-knowledge.sh` (PreToolUse on AskUserQuestion)
 
 When `$CLAUDE_EVAL_SIM_USER_KNOWLEDGE_PATH` is set to a readable knowledge file (produced by
-`prepare-eval-knowledge-file`), this hook intercepts every `AskUserQuestion` call and answers it
+`preparing-knowledge-file`), this hook intercepts every `AskUserQuestion` call and answers it
 automatically by spawning a headless `claude -p` instance that role-plays the user using the
 knowledge file contents. This enables fully automated evaluation runs where no human needs to click
 through questions. If the env var is unset or the file is missing, the hook disengages and the real

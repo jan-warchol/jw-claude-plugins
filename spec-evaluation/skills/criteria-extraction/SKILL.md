@@ -1,5 +1,5 @@
 ---
-name: key-points-aggregation
+name: criteria-extraction
 description: Aggregates key points from a collection of plans or specs into a structured, tiered key points reference file. Use this skill when the user wants to extract, merge, or consolidate key points from multiple plan/spec documents into a single reference file with must/should/could/must-not tiers. Triggers include: "aggregate key points from plans", "create a key points file", "extract points from specs", "merge key points", "build a reference list from plans".
 ---
 

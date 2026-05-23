@@ -1,5 +1,5 @@
 ---
-name: evaluate-spec-structure
+name: structural-evaluation
 description:
   Evaluates the structural quality of one or more specs — word count, parsability metrics, and
   presence of expected sections. Supports comparing multiple specs side by side.
@@ -92,12 +92,12 @@ environment.
 
 ```
 uv run --project /path/to/spec-evaluation \
-    python /path/to/spec-evaluation/skills/evaluate-spec-structure/measure.py \
+    python /path/to/spec-evaluation/skills/structural-evaluation/measure.py \
     spec1.md spec2.md ...
 ```
 
 To find the plugin directory, locate `pyproject.toml` starting from this SKILL.md's directory and
-walking up. The script is at `skills/evaluate-spec-structure/measure.py` relative to that directory.
+walking up. The script is at `skills/structural-evaluation/measure.py` relative to that directory.
 
 It outputs a JSON array with one object per file. Use the values from there directly — do not
 recompute them manually. The fields are:
