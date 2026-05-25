@@ -58,3 +58,43 @@ model: claude sonnet 4.6
 | Could (out of 8)      | 2       | 2       | 2       | 3       | 3        |
 | Total points (92 max) | 78      | 75      | 75      | 79      | 79       |
 | **Score**             | **85%** | **82%** | **82%** | **86%** | **86%**  |
+
+# Structural Evaluation
+
+**File mapping:**
+
+- **plan-1** = cc-plans-alt/plan-1.md
+- **plan-2** = cc-plans-alt/plan-2.md
+- **plan-3** = cc-plans-alt/plan-3.md
+
+## Topics comparison
+
+| Topic              | plan-1 | plan-2 | plan-3 |
+| ------------------ | ------ | ------ | ------ |
+| Goal               | 3      | 3      | 3      |
+| Requirements       | 0      | 0      | 0      |
+| Solution           | 2      | 3      | 2      |
+| Out of scope       | 0      | 0      | 0      |
+| Uncertainty        | 0      | 0      | 0      |
+| **Total (max 17)** | **5**  | **6**  | **5**  |
+
+**Notes:**
+
+- **Solution, plan-2 (3):** The `## Key Design Decisions` section names four explicit choices with
+  rationale — `has:attachment` server-side filtering over local filtering, `format=metadata` for
+  smaller responses, newest-first API default, minimal dependencies. The rationale contains
+  trade-off reasoning ("more efficient than fetching arbitrary pages and filtering locally", "we
+  don't need the full message body"), earning the trade-offs point. Plans 1 and 3 have an Approach
+  section but no design decisions or trade-offs.
+- **Out of scope (all = 0):** None of the three plans mentions any exclusions. This is the sharpest
+  contrast with the combined plans, which all include an Out of Scope section except 199-w.
+
+## Metrics comparison
+
+| Metric               | plan-1 | plan-2 | plan-3 |
+| -------------------- | ------ | ------ | ------ |
+| Word count           | 216    | 322    | 222    |
+| Avg section length   | 21.1   | 49.2   | 22.0   |
+| Avg paragraph length | 19.9   | 46.2   | 20.3   |
+| Avg bullet length    | 6.2    | 12.9   | 7.6    |
+| Code char ratio      | 28%    | 24%    | 26%    |
