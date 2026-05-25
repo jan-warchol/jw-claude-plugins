@@ -29,14 +29,57 @@ Collect before proceeding:
    }
    ```
 
-## Steps
+## Preparing tasks
 
-Run the following subskills in order, passing the working directory path as the argument to each:
+After setup is ready, prepare tasks for running workflow steps using TaskCreate tool. Prepare following tasks:
 
-1. **`draft-spec`** — save the output as `initial.md` in the working directory
-2. **`enrich-spec`** — save the output as `enriched.md` in the working directory
-3. **`compress-spec`** — save the output as `compressed.md` in the working directory
+```json
+ {
+  "subject": "Prepare draft",
+  "description": "Run skill: `/catnip:draft-spec <working directory path> <user request>`. The skill will create `initial.md` in the working directory.",
+  "metadata": {
+     "slug": <slug>,
+     "user_request": <user request>,
+     "working_dir": <working directory path> 
+  }
+};
+```
 
-## Result
+```json
+ {
+  "subject": "Prepare draft",
+  "description": "Run skill: `/catnip:enrich-spec <working directory path>`. The skill will create `enriched.md` in the working directory.",
+  "metadata": {
+     "slug": <slug>,
+     "working_dir": <working directory path> 
+  }
+};
+```
 
-After all three steps complete, save the `compressed` spec to the project root, as `<slug>.md`.
+```json
+ {
+  "subject": "Prepare draft",
+  "description": "Run skill: `/catnip:compress-spec <working directory path>`. The skill will create `compressed.md` in the working directory.",
+  "metadata": {
+     "slug": <slug>,
+     "working_dir": <working directory path> 
+  }
+};
+```
+
+```json
+ {
+  "subject": "Wrap up the spec",
+  "description": "Copy the `compressed.md` spec from working directory to the project root, as `<slug>.md`",
+  "metadata": {
+     "slug": <slug>,
+     "working_dir": <working directory path> 
+  }
+};
+```
+
+## Start working on the tasks
+
+Execute tasks one by one in the specified order. The tasks and dedicated skills contain all the necessary information.
+
+Focus on each of the tasks separately without thinking too much about the big picture - trust the process.
