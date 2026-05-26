@@ -1,0 +1,72 @@
+
+  ┌────────┬───────────────────────────────────────────────┬──────────────────┐
+  │  Tier  │                   Criterion                   │ gmail-att-search │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ OAuth 2.0 authentication with Gmail API       │ +10              │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ CLI argument for search query                 │ +10              │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ 3 most recent matching emails as the result   │ +10              │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ Output per email: at least subject, sender,…  │ +10              │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ Required setup steps in Google Cloud Consol…  │ +5               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ MUST   │ Graceful handling when there are no results   │ +10              │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ User having to download OAuth client secrets… │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Server-side result filtering                  │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Server-side result count limit                │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Error handling for missing credentials.jso…   │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ API/network error handling                    │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Read-only OAuth scope                         │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Caching OAuth tokens across runs              │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ SHOULD │ Browser-based OAuth consent flow on first ru… │ +3               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Automatic token refresh on expiry             │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Interactive query prompt as fallback when no… │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Dependencies: gmail API libraries (`google-a… │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Dependency: argparse for CLI argument pars…   │ 0                │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Excluding credentials.json and `token.jso…    │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Attachment downloading as explicitly out of … │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Pagination as explicitly out of scope         │ +1               │
+  ├────────┼───────────────────────────────────────────────┼──────────────────┤
+  │ COULD  │ Multiple Gmail accounts as explicitly out of… │ +1               │
+  └────────┴───────────────────────────────────────────────┴──────────────────┘
+
+  Notes on non-obvious scores:
+
+  - Must — "Required setup steps in Google Cloud Console" (+5): Both required concepts are present — enabling the
+  API appears in Assumptions ("User has Gmail API enabled in a Google Cloud project") and creating credentials
+  appears in Authentication ("downloaded 'installed application' client from Google Cloud Console") — but they are
+  scattered as passive preconditions rather than presented as actionable setup steps. Partial credit.
+  - Could — argparse (0): The spec describes --query/-q CLI flags but never names argparse as the mechanism.
+
+  ---
+
+  ┌───────────────────────┬──────────────────┐
+  │         Tier          │ gmail-att-search │
+  ├───────────────────────┼──────────────────┤
+  │ Must (6)              │ 5+ 1±            │
+  ├───────────────────────┼──────────────────┤
+  │ Should (8)            │ 8+               │
+  ├───────────────────────┼──────────────────┤
+  │ Could (8)             │ 7+               │
+  ├───────────────────────┼──────────────────┤
+  │ Total points (92 max) │ 86               │
+  ├───────────────────────┼──────────────────┤
+  │ Score                 │ 93%              │
+  └───────────────────────┴──────────────────┘

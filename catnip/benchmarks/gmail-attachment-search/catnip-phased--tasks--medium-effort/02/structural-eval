@@ -1,0 +1,53 @@
+
+  ---
+  Topics
+  
+  ┌────────────────┬─────────────────────────┐
+  │     Topic      │ gmail-attachment-search │
+  ├────────────────┼─────────────────────────┤
+  │ Goal           │ 3                       │
+  ├────────────────┼─────────────────────────┤
+  │ Requirements   │ 2                       │
+  ├────────────────┼─────────────────────────┤
+  │ Solution       │ 4                       │
+  ├────────────────┼─────────────────────────┤
+  │ Out of scope   │ 3                       │
+  ├────────────────┼─────────────────────────┤
+  │ Uncertainty    │ 3                       │
+  ├────────────────┼─────────────────────────┤
+  │ Total (max 17) │ 15                      │
+  └────────────────┴─────────────────────────┘
+
+  Score notes:
+
+  - Requirements (2): No dedicated "Acceptance criteria" section; criteria are scattered across Goals, Core logic,
+  Output, and Error handling. Most are verifiable (specific outputs, exit codes, result count), but the lack of a
+  consolidated list loses the point.
+  - Solution (4): "Design choices & trade-offs" is a dedicated section (+2), explicitly discusses trade-offs (+1),
+  but no alternative solutions are mentioned with reasons for rejection — only the chosen approach is explained. (+0
+   for alternatives).
+  - Uncertainty (3): "Assumptions & open questions" covers both assumptions and implicit open questions (+2 for
+  content), and it's a dedicated section (+1). No explicit risk discussion beyond the one MIME edge-case mentioned
+  in the design section (+0 for risks).
+
+  ---
+  Metrics
+
+  ┌──────────────────────┬─────────────────────────┐
+  │        Metric        │ gmail-attachment-search │
+  ├──────────────────────┼─────────────────────────┤
+  │ Word count           │ 450                     │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg section length   │ 32.2                    │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg paragraph length │ 31.5                    │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg bullet length    │ 10.2                    │
+  ├──────────────────────┼─────────────────────────┤
+  │ Code snippets ratio  │ 27%                     │
+  └──────────────────────┴─────────────────────────┘
+
+  ---
+  Overall: 15/17. A well-structured spec. The main gaps are the absence of a consolidated
+  requirements/acceptance-criteria section and no discussion of alternative approaches that were considered and
+  rejected.

@@ -1,0 +1,44 @@
+ 
+  Topics comparison table
+
+  ┌────────────────┬──────────────┐
+  │     Topic      │ gmail-search │
+  ├────────────────┼──────────────┤
+  │ Goal           │ 3            │
+  ├────────────────┼──────────────┤
+  │ Requirements   │ 3            │
+  ├────────────────┼──────────────┤
+  │ Solution       │ 4            │
+  ├────────────────┼──────────────┤
+  │ Out of scope   │ 3            │
+  ├────────────────┼──────────────┤
+  │ Uncertainty    │ 3            │
+  ├────────────────┼──────────────┤
+  │ Total (max 17) │ 16           │
+  └────────────────┴──────────────┘
+
+  Notes:
+  - Solution +1 alternatives: The Trade-offs section explicitly names rejected approaches (IMAP, service accounts,
+  format=full) with reasoning — qualifies for both the alternatives point and the trade-offs point.
+  - Uncertainty −1 open questions: Risks and assumptions are well-covered in a dedicated section, but there are no
+  explicit open questions or acknowledged unknowns still pending a decision.
+
+  Metrics comparison table
+
+  ┌──────────────────────┬──────────────┐
+  │        Metric        │ gmail-search │
+  ├──────────────────────┼──────────────┤
+  │ Word count           │ 447          │
+  ├──────────────────────┼──────────────┤
+  │ Avg section length   │ 31.2         │
+  ├──────────────────────┼──────────────┤
+  │ Avg paragraph length │ 28.9         │
+  ├──────────────────────┼──────────────┤
+  │ Avg bullet length    │ 9.1          │
+  ├──────────────────────┼──────────────┤
+  │ Code snippets ratio  │ 22%          │
+  └──────────────────────┴──────────────┘
+
+  ---
+  Summary: Strong spec — 16/17. The only gap is open questions; everything a reader needs to implement or verify the
+   feature is present. The 22% code ratio is appropriate given the CLI interface and output format examples.

@@ -1,0 +1,52 @@
+
+  ---
+  Scores
+  
+  ┌────────────────┬─────────────────────────┐
+  │     Topic      │ gmail-attachment-search │
+  ├────────────────┼─────────────────────────┤
+  │ Goal           │ 3                       │
+  ├────────────────┼─────────────────────────┤
+  │ Requirements   │ 1                       │
+  ├────────────────┼─────────────────────────┤
+  │ Solution       │ 4                       │
+  ├────────────────┼─────────────────────────┤
+  │ Out of scope   │ 3                       │
+  ├────────────────┼─────────────────────────┤
+  │ Uncertainty    │ 2                       │
+  ├────────────────┼─────────────────────────┤
+  │ Total (max 17) │ 13                      │
+  └────────────────┴─────────────────────────┘
+
+  Notes on non-obvious scores:
+
+  - Requirements (1): There is no dedicated acceptance/testing criteria section. The error-handling table comes
+  closest to verifiable criteria (specific exit codes and output strings), but it covers error paths only — there
+  are no success-path criteria (e.g. "given N matching messages, exactly min(N,3) blocks are printed"). Most implied
+   criteria (correct output format, correct sorting) have to be inferred from the Output and Search Logic sections.
+  - Uncertainty (2): Two assumptions are listed in a dedicated "Assumptions and risks" section (+1 dedicated
+  section, +1 assumptions), but no explicit open questions or risk mitigations are discussed — the risks noted
+  ("inline images appear as attachments") are acknowledged but not evaluated for likelihood or impact.
+
+  ---
+  Metrics
+
+  ┌──────────────────────┬─────────────────────────┐
+  │        Metric        │ gmail-attachment-search │
+  ├──────────────────────┼─────────────────────────┤
+  │ Word count           │ 299                     │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg section length   │ 30.8                    │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg paragraph length │ 25.9                    │
+  ├──────────────────────┼─────────────────────────┤
+  │ Avg bullet length    │ 9.1                     │
+  ├──────────────────────┼─────────────────────────┤
+  │ Code snippets ratio  │ 21%                     │
+  └──────────────────────┴─────────────────────────┘
+
+  ---
+  Summary: The spec is well-structured and concise (299 words). It scores strongly on goal clarity, solution
+  articulation (design choices + alternatives), and out-of-scope coverage. The main weakness is the absence of
+  explicit acceptance criteria — a short "Success criteria" section with 2–3 verifiable pass/fail checks would bring
+   this from 13 to a near-perfect score.
