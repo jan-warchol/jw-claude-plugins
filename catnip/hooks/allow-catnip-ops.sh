@@ -14,6 +14,9 @@ elif [[ "$TOOL" == "Bash" ]]; then
     # Allow mkdir for the .catnip directory structure
     if [[ "$CMD" == *"mkdir"* && "$CMD" == *".catnip"* ]]; then
         printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow"}}'
+    # Allow copying files to/from .catnip
+    elif [[ "$CMD" == *"cp"* && "$CMD" == *".catnip/"* ]]; then
+        printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow"}}'
     # Allow python3 one-liners (e.g. word count) operating on .catnip/ files
     elif [[ "$CMD" == *"python3"* && "$CMD" == *".catnip/"* ]]; then
         printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow"}}'
