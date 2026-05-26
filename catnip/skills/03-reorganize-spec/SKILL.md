@@ -5,12 +5,11 @@ description: >
   Third step in the iterative spec-writing workflow.
 ---
 
-Extend an existing spec by identifying and filling gaps in coverage.
+Improve internal spec structure.
 
 ## Input
 
 `enriched.md` in the process directory.
-
 
 ## Procedure
 

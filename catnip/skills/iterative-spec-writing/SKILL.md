@@ -25,7 +25,8 @@ Collect before proceeding:
 3. Write `metadata.json` in that directory:
    ```json
    {
-     "user_request": "<user request copied verbatim>",
+     "slug": <slug>,
+     "user_request": "<user request copied verbatim>"
    }
    ```
 
@@ -35,57 +36,36 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 
 ```json
  {
-  "subject": "Prepare draft",
+  "subject": "Prepare initial spec",
   "description": "Run skill: `/catnip:01-draft-spec <process directory path> <user request>`.",
-  "metadata": {
-     "slug": <slug>,
-     "user_request": <user request>,
-     "process_dir": <process directory path> 
-  }
 };
 ```
 
 ```json
  {
-  "subject": "Prepare draft",
+  "subject": "Evaluate draft and add missing bits",
   "description": "Run skill: `/catnip:02-enrich-spec <process directory path>`.",
-  "metadata": {
-     "slug": <slug>,
-     "process_dir": <process directory path> 
-  }
 };
 ```
 
 ```json
  {
-  "subject": "Prepare draft",
+  "subject": "Improve the structure",
   "description": "Run skill: `/catnip:03-reorganize-spec <process directory path>`.",
-  "metadata": {
-     "slug": <slug>,
-     "process_dir": <process directory path> 
-  }
 };
 ```
 
 ```json
  {
-  "subject": "Prepare draft",
+  "subject": "Compress the spec",
   "description": "Run skill: `/catnip:04-compress-spec <process directory path>`.",
-  "metadata": {
-     "slug": <slug>,
-     "process_dir": <process directory path> 
-  }
 };
 ```
 
 ```json
  {
-  "subject": "Wrap up the spec",
-  "description": "Run skill: `/catnip:05-wrap-up-spec <process directory path>`.",
-  "metadata": {
-     "slug": <slug>,
-     "process_dir": <process directory path> 
-  }
+  "subject": "Wrap up the process",
+  "description": "Run skill: `/catnip:05-wrap-up-spec <process directory path> <slug>`.",
 };
 ```
 
