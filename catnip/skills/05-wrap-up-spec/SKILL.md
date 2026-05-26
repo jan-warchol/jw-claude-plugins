@@ -5,8 +5,8 @@ description: Wrap up iterative-spec-writing process.
 
 ## Write final spec file
 
-Write same spec as `compressed.md` to the project root, as `<slug>.md`. The slug is given in skill arguments, along the process directory path.
-Use `Write` tool rather then `cp` to avoid permission prompt.
+Copy `compressed.md` to the project root, as `<slug>.md`. The slug is given in skill arguments, along the process directory path.
+Use Bash tool and `cp` command to copy the file.
 
 ## Print summary
 
