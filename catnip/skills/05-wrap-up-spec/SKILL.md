@@ -15,7 +15,7 @@ Print summary in the form:
 ```md
 The specification is ready.
 
-**Process directory**: <process directory path>
+**Process directory**: `<process directory path>`
 
-**Spec file**: <spec file name> (in the project directory)
+**Spec file**: `<spec file name>` (in the project directory)
 ```
