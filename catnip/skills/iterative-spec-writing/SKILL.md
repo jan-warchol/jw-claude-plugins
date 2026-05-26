@@ -17,7 +17,7 @@ Collect before proceeding:
 
 1. Choose a 3–8 word slug from the request: lowercase words joined with hyphens
    (e.g. `oauth-token-refresh`).
-2. Create the working directory:
+2. Create the process directory:
    ```
    .catnip/<YYYYMMDDTHHMMSS>-<slug>/
    ```
@@ -36,11 +36,11 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 ```json
  {
   "subject": "Prepare draft",
-  "description": "Run skill: `/catnip:draft-spec <working directory path> <user request>`. The skill will create `initial.md` in the working directory.",
+  "description": "Run skill: `/catnip:01-draft-spec <process directory path> <user request>`.",
   "metadata": {
      "slug": <slug>,
      "user_request": <user request>,
-     "working_dir": <working directory path> 
+     "process_dir": <process directory path> 
   }
 };
 ```
@@ -48,10 +48,10 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 ```json
  {
   "subject": "Prepare draft",
-  "description": "Run skill: `/catnip:enrich-spec <working directory path>`. The skill will create `enriched.md` in the working directory.",
+  "description": "Run skill: `/catnip:02-enrich-spec <process directory path>`.",
   "metadata": {
      "slug": <slug>,
-     "working_dir": <working directory path> 
+     "process_dir": <process directory path> 
   }
 };
 ```
@@ -59,10 +59,21 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 ```json
  {
   "subject": "Prepare draft",
-  "description": "Run skill: `/catnip:compress-spec <working directory path>`. The skill will create `compressed.md` in the working directory.",
+  "description": "Run skill: `/catnip:03-reorganize-spec <process directory path>`.",
   "metadata": {
      "slug": <slug>,
-     "working_dir": <working directory path> 
+     "process_dir": <process directory path> 
+  }
+};
+```
+
+```json
+ {
+  "subject": "Prepare draft",
+  "description": "Run skill: `/catnip:04-compress-spec <process directory path>`.",
+  "metadata": {
+     "slug": <slug>,
+     "process_dir": <process directory path> 
   }
 };
 ```
@@ -70,10 +81,10 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 ```json
  {
   "subject": "Wrap up the spec",
-  "description": "Copy the `compressed.md` spec from working directory to the project root, as `<slug>.md`",
+  "description": "Run skill: `/catnip:05-wrap-up-spec <process directory path>`.",
   "metadata": {
      "slug": <slug>,
-     "working_dir": <working directory path> 
+     "process_dir": <process directory path> 
   }
 };
 ```
@@ -82,4 +93,4 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 
 Execute tasks one by one in the specified order. The tasks and dedicated skills contain all the necessary information.
 
-Focus on each of the tasks separately without thinking too much about the big picture - trust the process.
+Focus on each of the tasks separately - trust the process.

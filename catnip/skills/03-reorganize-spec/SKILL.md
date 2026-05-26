@@ -1,19 +1,16 @@
 ---
-name: reorganize-spec
+name: 03-reorganize-spec
 description: >
   Reorganize an existing spec so that sections make the most sense.
   Third step in the iterative spec-writing workflow.
 ---
 
-Extend an existing spec by identifying and filling gaps in coverage. Second step of the workflow.
+Extend an existing spec by identifying and filling gaps in coverage.
 
 ## Input
 
-The argument may be:
+`enriched.md` in the process directory.
 
-- **A directory path** (passed by `iterative-spec-writing`): read `enriched.md` from that directory.
-- **A file path**: read that file directly.
-- **Nothing provided**: ask the user for the spec file path.
 
 ## Procedure
 
@@ -25,4 +22,4 @@ Analyze how the spec is organized into sections. Consider:
 
 ## Output
 
-Write the reorganized spec as `reorganized.md` in the same directory as the input file.
+`reorganized.md` in the process directory.
