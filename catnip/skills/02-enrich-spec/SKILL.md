@@ -9,7 +9,7 @@ Extend an existing spec by identifying and filling gaps in coverage. Second step
 
 ## Input
 
-`initial.md` in the process directory.
+The output of the previous step.
 
 ## Procedure
 

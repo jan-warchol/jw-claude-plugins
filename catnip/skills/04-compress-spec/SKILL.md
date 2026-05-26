@@ -9,7 +9,7 @@ Final step of the workflow: compress the spec.
 
 ## Input
 
-`reorganized.md` in the process directory.
+The output of the previous step.
 
 ## Procedure
 
