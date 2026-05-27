@@ -35,7 +35,7 @@ CLAUDE="claude --model $MODEL --effort $EFFORT"
 PROMPT='Create a simple Python script that searches Gmail for emails matching a user-provided query, then returns the last 3 matching emails that have attachments.'
 TECH_EVAL_CRITERIA_PATH=catnip/benchmarks/gmail-attachment-search/tech-criteria.md
 
-OUTPUTS_DIR=catnip/benchmarks/gmail-attachment-search/catnip-phased--tasks
+OUTPUTS_DIR="${1:-catnip/benchmarks/gmail-attachment-search/catnip-phased--tasks}
 
 mkdir -p "$OUTPUTS_DIR"
 
