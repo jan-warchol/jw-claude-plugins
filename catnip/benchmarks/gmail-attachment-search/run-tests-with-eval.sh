@@ -95,6 +95,14 @@ $CLAUDE --plugin-dir ./spec-evaluation \
  -p "/spec-evaluation:structural-evaluation $OUTPUT_DIR/compressed.md" \
  | tee_md "$OUTPUT_DIR/structural-eval.md"
 
+for i in 2 3; do
+  echo_md "_Repeated structural evaluation (structural-eval-${i})_"
+
+  $CLAUDE --plugin-dir ./spec-evaluation \
+    -p "/spec-evaluation:structural-evaluation $OUTPUT_DIR/compressed.md" \
+    | tee_md "$OUTPUT_DIR/structural-eval-$i.md"
+done
+
 format_md <<EOF
 
 ## Technical criteria evaluation
