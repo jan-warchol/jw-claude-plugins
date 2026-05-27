@@ -18,11 +18,12 @@ Evaluate the draft against the following checks:
 - Is the objective clearly and specifically stated?
 - Is the expected behavior described specifically enough to verify?
 - Are key design choices explicitly stated?
+- If there are some counter-intuitive design choices, are they explained?
 - Are trade-offs and rejected alternatives discussed?
 - Are explicit exclusions listed?
-- Are risks, assumptions, and open questions discussed?
+- Are risks, assumptions, and open questions discussed? Are all key assumptions explicitly noted?
 
-If a topic is already covered — even under a section with a different name — leave it as is.
+If a topic is already covered — even under a section with a different name — leave it there.
 
 Prefer expanding existing sections to adding new ones. When the checks turn up closely related
 topics, keep them together under one section (using subsections if helpful), not split across

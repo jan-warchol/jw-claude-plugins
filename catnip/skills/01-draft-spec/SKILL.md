@@ -16,6 +16,13 @@ Please use the following top-level structure:
 - Out of scope
 - Uncertainty
 
+## Mention key assumptions
+
+If you make assumptions that would have significant effect on the spec
+if they turn out false or inaccurate, always note them explicitly.
+That includes both assumptions about available tools and solutions (APIs, libraries)
+and assumptions about user's intentions.
+
 ## Output
 
 `initial.md` in the process directory.
