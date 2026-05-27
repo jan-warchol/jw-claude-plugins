@@ -1,32 +1,42 @@
-## By Eval Type
+Using short names by stripping the `catnip-phased--tasks--` prefix from each directory. Structural scores are out of 17.
 
-| Directory | Struct avg | Struct min | Struct max | Tech avg | Tech min | Tech max |
+## Summary by Eval Type
+
+| Directory | Struct. Avg | Struct. Min | Struct. Max | Tech Avg | Tech Min | Tech Max |
 |---|---|---|---|---|---|---|
-| catnip-phased--tasks--auto-evals | 12.3 | 10 | 14 | 88% | 78% | 99% |
-| catnip-phased--tasks--auto-with-adjusted-inputs | 13.9 | 12 | 16 | 85% | 85% | 85% |
-| catnip-phased--tasks--manual-prompt | 12.2 | 8 | 15 | 88% | 84% | 91% |
+| with-outline-structure | 14.9 | 13 | 17 | 89.7% | 82% | 96% |
+| auto-evals | 12.3 | 10 | 14 | 88.0% | 78% | 99% |
+| auto-with-adjusted-inputs | 13.9 | 12 | 16 | 85.0% | 85% | 85% |
+| manual-prompt | 12.2 | 8 | 15 | 88.3% | 84% | 91% |
 
-## By Avg / Min / Max
+## Summary by Statistic
 
-| Directory | Struct avg | Tech avg | Struct min | Tech min | Struct max | Tech max |
+| Directory | Avg Struct. | Avg Tech | Min Struct. | Min Tech | Max Struct. | Max Tech |
 |---|---|---|---|---|---|---|
-| catnip-phased--tasks--auto-evals | 12.3 | 88% | 10 | 78% | 14 | 99% |
-| catnip-phased--tasks--auto-with-adjusted-inputs | 13.9 | 85% | 12 | 85% | 16 | 85% |
-| catnip-phased--tasks--manual-prompt | 12.2 | 88% | 8 | 84% | 15 | 91% |
+| with-outline-structure | 14.9 | 89.7% | 13 | 82% | 17 | 96% |
+| auto-evals | 12.3 | 88.0% | 10 | 78% | 14 | 99% |
+| auto-with-adjusted-inputs | 13.9 | 85.0% | 12 | 85% | 16 | 85% |
+| manual-prompt | 12.2 | 88.3% | 8 | 84% | 15 | 91% |
 
 ## Detailed Breakdown
 
-| Directory | Sample | Structural (max 17) | Tech |
+| Directory | Sample | Structural Runs (/17) | Tech Score |
 |---|---|---|---|
-| catnip-phased--tasks--auto-evals | 01 | 14 | 99% |
-| catnip-phased--tasks--auto-evals | 02 | 10 | 98% |
-| catnip-phased--tasks--auto-evals | 03 | 12 | 78% |
-| catnip-phased--tasks--auto-evals | 04 | 11, 14, 12 | 80% |
-| catnip-phased--tasks--auto-evals | 05 | 13, 12, 13 | 86% |
-| catnip-phased--tasks--auto-evals | 06 | 12, 12, 13 | 87% |
-| catnip-phased--tasks--auto-with-adjusted-inputs | 01 | 14, 16, 16 | 85% |
-| catnip-phased--tasks--auto-with-adjusted-inputs | 02 | 13, 13, 13 | 85% |
-| catnip-phased--tasks--auto-with-adjusted-inputs | 03 | 14, 12, 14 | 85% |
-| catnip-phased--tasks--manual-prompt | 01 | 13 | 84% |
-| catnip-phased--tasks--manual-prompt | 02 | 15 | 90% |
-| catnip-phased--tasks--manual-prompt | 03 | 12, 13, 8 | 91% |
+| with-outline-structure | 01 | 15, 16, 16 | 91% |
+| with-outline-structure | 02 | 15, 15, 14 | 82% |
+| with-outline-structure | 03 | 13, 13, 13 | 91% |
+| with-outline-structure | 04 | 15, 15, 16 | 93% |
+| with-outline-structure | 05 | 15, 15, 15 | 85% |
+| with-outline-structure | 06 | 16, 15, 17 | 96% |
+| auto-evals | 01 | 14 | 99% |
+| auto-evals | 02 | 10 | 98% |
+| auto-evals | 03 | 12 | 78% |
+| auto-evals | 04 | 11, 14, 12 | 80% |
+| auto-evals | 05 | 13, 12, 13 | 86% |
+| auto-evals | 06 | 12, 12, 13 | 87% |
+| auto-with-adjusted-inputs | 01 | 14, 16, 16 | 85% |
+| auto-with-adjusted-inputs | 02 | 13, 13, 13 | 85% |
+| auto-with-adjusted-inputs | 03 | 14, 12, 14 | 85% |
+| manual-prompt | 01 | 13 | 84% |
+| manual-prompt | 02 | 15 | 90% |
+| manual-prompt | 03 | 12, 13, 8 | 91% |
