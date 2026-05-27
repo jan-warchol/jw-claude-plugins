@@ -41,5 +41,5 @@ fi
 echo >&2 "Running $NUMBER_OF_SAMPLES_TO_RUN samples in $OUTPUTS_DIR..."
 
 for (( i = 0; i < NUMBER_OF_SAMPLES_TO_RUN; ++i )); do
-  ./run-sample-with-eval.sh "$OUTPUTS_DIR"
+  "$(dirname "$0")/run-sample-with-eval.sh" "$OUTPUTS_DIR"
 done
