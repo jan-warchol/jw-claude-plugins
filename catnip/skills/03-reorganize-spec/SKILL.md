@@ -9,7 +9,7 @@ Improve internal spec structure.
 
 ## Input
 
-The output of the previous step.
+`enriched.md` in the process directory.
 
 ## Procedure
 
