@@ -84,6 +84,8 @@ TOTALS_AND_SCORES="$(
 
       echo "$SAMPLE_DIR"
 
+      grep '| Word count' <"$SAMPLE_DIR/structural-eval.md" | tail -n1
+
       echo 'Structural eval totals:'
       for seval in "$SAMPLE_DIR/structural-eval"*".md"; do
         grep '| \*\*Total' <"$seval" | tail -n1
@@ -110,9 +112,9 @@ are separate runs of the same eval job - there is some randomness involved. Plea
 cell and separate by a comma. I'd mostly like to compare the top-level directories (printed in 'Samples in X' lines).
 Please provide 3 tables:
 
-a) a table of top-level directories where only avg/min/max values are visible for each of these directories. Group columns by the eval type first.
+a) a table of top-level directories where only avg/min/max values are visible for each of these directories. Group columns by the eval type first (tech/struct/word count).
 b) same as a), but group he columns by avg/min/max first.
-c) more detailed breakdown with all the individual results.
+c) more detailed breakdown with all the individual results. No need for avg/min/max here, just show all individual numbers.
 
 Label tables with ## headers, drop the a), b), c).
 
