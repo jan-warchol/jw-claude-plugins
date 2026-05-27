@@ -6,20 +6,20 @@ USAGE="$(
 cat <<EOF
 Usage:
 
-    $0 <outputs_dir (relative to benchmarks/gmail-attachment-search)> <number of samples to run>
+  $0 <outputs_dir (relative to benchmarks/gmail-attachment-search)> <number of samples to run>
 EOF
 )"
 
 function die () {
-    echo >&2 "$@"
-    exit 2
+  echo >&2 "$@"
+  exit 2
 }
 
 function die_with_usage () {
-    echo >&2 "ERROR: $*"
-    echo >&2
-    echo >&2 "$USAGE"
-    exit 2
+  echo >&2 "ERROR: $*"
+  echo >&2
+  echo >&2 "$USAGE"
+  exit 2
 }
 
 if (( $# != 2 )); then
@@ -41,5 +41,5 @@ fi
 echo >&2 "Running $NUMBER_OF_SAMPLES_TO_RUN samples in $OUTPUTS_DIR..."
 
 for (( i = 0; i < NUMBER_OF_SAMPLES_TO_RUN; ++i )); do
-  echo ./run-sample-with-eval.sh "$OUTPUTS_DIR"
+  ./run-sample-with-eval.sh "$OUTPUTS_DIR"
 done

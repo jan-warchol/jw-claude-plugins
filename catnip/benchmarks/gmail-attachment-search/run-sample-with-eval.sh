@@ -3,8 +3,8 @@
 set -euo pipefail
 
 function die () {
-    echo >&2 "$@"
-    exit 2
+  echo >&2 "$@"
+  exit 2
 }
 
 function assert_command_available () {
@@ -20,7 +20,7 @@ function format_md () {
 }
 
 function echo_md () {
-    echo "$@" | format_md
+  echo "$@" | format_md
 }
 
 function tee_md () {
@@ -35,7 +35,7 @@ CLAUDE="claude --model $MODEL --effort $EFFORT"
 PROMPT='Create a simple Python script that searches Gmail for emails matching a user-provided query, then returns the last 3 matching emails that have attachments.'
 TECH_EVAL_CRITERIA_PATH=catnip/benchmarks/gmail-attachment-search/tech-criteria.md
 
-OUTPUTS_DIR="${1:-catnip/benchmarks/gmail-attachment-search/catnip-phased--tasks}
+OUTPUTS_DIR="${1:-catnip/benchmarks/gmail-attachment-search/catnip-phased--tasks}"
 
 mkdir -p "$OUTPUTS_DIR"
 
@@ -59,6 +59,14 @@ format_md <<EOF
 **Final spec path**: $FINAL_PATH
 
 EOF
+
+if ! [[ -d "$PROCESS_DIR" ]]; then
+  die "ERROR: '$PROCESS_DIR' is not a directory"
+fi
+
+if ! [[ -f "$FINAL_PATH" ]]; then
+  die "ERROR: '$FINAL_PATH' is not a file"
+fi
 
 if ! diff -q "$PROCESS_DIR/compressed.md" "$FINAL_PATH"; then
   >&2 echo "Final spec is not the same as compressed.md."
