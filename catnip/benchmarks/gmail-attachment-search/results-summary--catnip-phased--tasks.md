@@ -1,42 +1,40 @@
-Using short names by stripping the `catnip-phased--tasks--` prefix from each directory. Structural scores are out of 17.
+## Top-Level Comparison — Grouped by Eval Type
 
-## Summary by Eval Type
+| Directory | Tech avg | Tech min | Tech max | Struct avg (/17) | Struct min | Struct max | WC avg | WC min | WC max |
+|---|---|---|---|---|---|---|---|---|---|
+| with-outline-structure | 89.7% | 82% | 96% | 14.9 | 13 | 17 | 358 | 299 | 414 |
+| auto-evals             | 88.0% | 78% | 99% | 12.3 | 10 | 14 | 365 | 335 | 396 |
+| adjusted-inputs        | 85.0% | 85% | 85% | 13.9 | 12 | 16 | 353 | 271 | 415 |
+| manual-prompt          | 88.3% | 84% | 91% | 12.2 | 8  | 15 | 300 | 285 | 316 |
 
-| Directory | Struct. Avg | Struct. Min | Struct. Max | Tech Avg | Tech Min | Tech Max |
-|---|---|---|---|---|---|---|
-| with-outline-structure | 14.9 | 13 | 17 | 89.7% | 82% | 96% |
-| auto-evals | 12.3 | 10 | 14 | 88.0% | 78% | 99% |
-| auto-with-adjusted-inputs | 13.9 | 12 | 16 | 85.0% | 85% | 85% |
-| manual-prompt | 12.2 | 8 | 15 | 88.3% | 84% | 91% |
+## Top-Level Comparison — Grouped by avg / min / max
 
-## Summary by Statistic
+| Directory | Tech avg | Struct avg | WC avg | Tech min | Struct min | WC min | Tech max | Struct max | WC max |
+|---|---|---|---|---|---|---|---|---|---|
+| with-outline-structure | 89.7% | 14.9 | 358 | 82% | 13 | 299 | 96% | 17 | 414 |
+| auto-evals             | 88.0% | 12.3 | 365 | 78% | 10 | 335 | 99% | 14 | 396 |
+| adjusted-inputs        | 85.0% | 13.9 | 353 | 85% | 12 | 271 | 85% | 16 | 415 |
+| manual-prompt          | 88.3% | 12.2 | 300 | 84% | 8  | 285 | 91% | 15 | 316 |
 
-| Directory | Avg Struct. | Avg Tech | Min Struct. | Min Tech | Max Struct. | Max Tech |
-|---|---|---|---|---|---|---|
-| with-outline-structure | 14.9 | 89.7% | 13 | 82% | 17 | 96% |
-| auto-evals | 12.3 | 88.0% | 10 | 78% | 14 | 99% |
-| auto-with-adjusted-inputs | 13.9 | 85.0% | 12 | 85% | 16 | 85% |
-| manual-prompt | 12.2 | 88.3% | 8 | 84% | 15 | 91% |
+## Detailed per-Sample Breakdown
 
-## Detailed Breakdown
-
-| Directory | Sample | Structural Runs (/17) | Tech Score |
-|---|---|---|---|
-| with-outline-structure | 01 | 15, 16, 16 | 91% |
-| with-outline-structure | 02 | 15, 15, 14 | 82% |
-| with-outline-structure | 03 | 13, 13, 13 | 91% |
-| with-outline-structure | 04 | 15, 15, 16 | 93% |
-| with-outline-structure | 05 | 15, 15, 15 | 85% |
-| with-outline-structure | 06 | 16, 15, 17 | 96% |
-| auto-evals | 01 | 14 | 99% |
-| auto-evals | 02 | 10 | 98% |
-| auto-evals | 03 | 12 | 78% |
-| auto-evals | 04 | 11, 14, 12 | 80% |
-| auto-evals | 05 | 13, 12, 13 | 86% |
-| auto-evals | 06 | 12, 12, 13 | 87% |
-| auto-with-adjusted-inputs | 01 | 14, 16, 16 | 85% |
-| auto-with-adjusted-inputs | 02 | 13, 13, 13 | 85% |
-| auto-with-adjusted-inputs | 03 | 14, 12, 14 | 85% |
-| manual-prompt | 01 | 13 | 84% |
-| manual-prompt | 02 | 15 | 90% |
-| manual-prompt | 03 | 12, 13, 8 | 91% |
+| Directory | Sample | Word count | Structural runs (/17) | Tech score |
+|---|---|---|---|---|
+| with-outline-structure | 01 | 346 | 15, 16, 16 | 91% |
+| with-outline-structure | 02 | 371 | 15, 15, 14 | 82% |
+| with-outline-structure | 03 | 310 | 13, 13, 13 | 91% |
+| with-outline-structure | 04 | 414 | 15, 15, 16 | 93% |
+| with-outline-structure | 05 | 299 | 15, 15, 15 | 85% |
+| with-outline-structure | 06 | 408 | 16, 15, 17 | 96% |
+| auto-evals             | 01 | 342 | 14         | 99% |
+| auto-evals             | 02 | 335 | 10         | 98% |
+| auto-evals             | 03 | 396 | 12         | 78% |
+| auto-evals             | 04 | 392 | 11, 14, 12 | 80% |
+| auto-evals             | 05 | 355 | 13, 12, 13 | 86% |
+| auto-evals             | 06 | 371 | 12, 12, 13 | 87% |
+| adjusted-inputs        | 01 | 415 | 14, 16, 16 | 85% |
+| adjusted-inputs        | 02 | 271 | 13, 13, 13 | 85% |
+| adjusted-inputs        | 03 | 372 | 14, 12, 14 | 85% |
+| manual-prompt          | 01 | 285 | 13         | 84% |
+| manual-prompt          | 02 | 316 | 15         | 90% |
+| manual-prompt          | 03 | 299 | 12, 13, 8  | 91% |
