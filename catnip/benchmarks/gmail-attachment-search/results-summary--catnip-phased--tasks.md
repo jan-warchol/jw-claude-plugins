@@ -24,27 +24,27 @@
 
 | Directory | Sample | Word Count | Struct (runs) | Tech |
 |---|---|---|---|---|
-| with-assumptions-no-reorganize | 01 | 377 | 17, 16, 15 | 98% |
+| with-assumptions-no-reorganize | 01 | 377 | 15, 17, 16 | 98% |
 | with-assumptions-no-reorganize | 02 | 353 | 16, 16, 16 | 89% |
-| with-assumptions-no-reorganize | 03 | 375 | 16, 17, 17 | 85% |
+| with-assumptions-no-reorganize | 03 | 375 | 17, 16, 17 | 85% |
 | with-assumptions | 01 | 330 | 15, 15, 15 | 88% |
 | with-assumptions | 02 | 417 | 17, 17, 17 | 89% |
-| with-assumptions | 03 | 413 | 16, 16, 15 | 97% |
-| with-outline-structure | 01 | 346 | 15, 16, 16 | 91% |
-| with-outline-structure | 02 | 371 | 15, 15, 14 | 82% |
+| with-assumptions | 03 | 413 | 15, 16, 16 | 97% |
+| with-outline-structure | 01 | 346 | 16, 15, 16 | 91% |
+| with-outline-structure | 02 | 371 | 14, 15, 15 | 82% |
 | with-outline-structure | 03 | 310 | 13, 13, 13 | 91% |
-| with-outline-structure | 04 | 414 | 15, 15, 16 | 93% |
+| with-outline-structure | 04 | 414 | 16, 15, 15 | 93% |
 | with-outline-structure | 05 | 299 | 15, 15, 15 | 85% |
-| with-outline-structure | 06 | 408 | 16, 15, 17 | 96% |
+| with-outline-structure | 06 | 408 | 17, 16, 15 | 96% |
 | auto-evals | 01 | 342 | 14 | 99% |
 | auto-evals | 02 | 335 | 10 | 98% |
 | auto-evals | 03 | 396 | 12 | 78% |
-| auto-evals | 04 | 392 | 11, 14, 12 | 80% |
-| auto-evals | 05 | 355 | 13, 12, 13 | 86% |
-| auto-evals | 06 | 371 | 12, 12, 13 | 87% |
-| auto-with-adjusted-inputs | 01 | 415 | 14, 16, 16 | 85% |
+| auto-evals | 04 | 392 | 12, 11, 14 | 80% |
+| auto-evals | 05 | 355 | 13, 13, 12 | 86% |
+| auto-evals | 06 | 371 | 13, 12, 12 | 87% |
+| auto-with-adjusted-inputs | 01 | 415 | 16, 14, 16 | 85% |
 | auto-with-adjusted-inputs | 02 | 271 | 13, 13, 13 | 85% |
-| auto-with-adjusted-inputs | 03 | 372 | 14, 12, 14 | 85% |
+| auto-with-adjusted-inputs | 03 | 372 | 14, 14, 12 | 85% |
 | manual-prompt | 01 | 285 | 13 | 84% |
 | manual-prompt | 02 | 316 | 15 | 90% |
-| manual-prompt | 03 | 299 | 12, 13, 8 | 91% |
+| manual-prompt | 03 | 299 | 8, 12, 13 | 91% |
