@@ -65,6 +65,11 @@ while (( $# )); do
   shift
 done
 
+if (( ${#SUMMARY_NAME} > 100 )); then
+  SUMMARY_NAME_MD5="$(md5sum <<<"$SUMMARY_NAME")"
+  SUMMARY_NAME="${SUMMARY_NAME:0:87}---${SUMMARY_NAME_MD5:0:10}"
+fi
+
 SUMMARY_NAME="$SUMMARY_NAME.md"
 SUMMARY_PATH="$PARENT_DIR/$SUMMARY_NAME"
 
