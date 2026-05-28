@@ -1,11 +1,9 @@
 ---
 name: 02-enrich-spec
-description: >
-  Enrich an existing spec by filling gaps in its coverage.
-  Second step in the iterative spec-writing workflow.
+description: Enrich an existing spec by filling gaps in its coverage.
 ---
 
-Extend an existing spec by identifying and filling gaps in coverage. Second step of the workflow.
+Extend an existing spec by identifying and filling gaps in coverage.
 
 ## Input
 

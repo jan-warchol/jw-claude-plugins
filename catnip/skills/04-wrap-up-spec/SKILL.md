@@ -1,5 +1,5 @@
 ---
-name: 05-wrap-up-spec
+name: 04-wrap-up-spec
 description: Wrap up iterative-spec-writing process.
 ---
 

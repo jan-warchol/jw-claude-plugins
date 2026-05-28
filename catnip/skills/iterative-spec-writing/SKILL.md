@@ -50,22 +50,15 @@ After setup is ready, prepare tasks for running workflow steps using TaskCreate 
 
 ```json
  {
-  "subject": "Improve the structure",
-  "description": "Run skill: `/catnip:03-reorganize-spec <process directory path>`.",
-};
-```
-
-```json
- {
   "subject": "Compress the spec",
-  "description": "Run skill: `/catnip:04-compress-spec <process directory path>`.",
+  "description": "Run skill: `/catnip:03-compress-spec <process directory path>`.",
 };
 ```
 
 ```json
  {
   "subject": "Wrap up the process",
-  "description": "Run skill: `/catnip:05-wrap-up-spec <process directory path> <slug>`.",
+  "description": "Run skill: `/catnip:04-wrap-up-spec <process directory path> <slug>`.",
 };
 ```
 

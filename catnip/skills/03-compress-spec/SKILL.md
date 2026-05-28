@@ -1,5 +1,5 @@
 ---
-name: 04-compress-spec
+name: 03-compress-spec
 description: >
   Compress an existing spec by tightening writing.
   Final step in the iterative spec-writing workflow.
@@ -9,7 +9,7 @@ Final step of the workflow: compress the spec.
 
 ## Input
 
-`reorganized.md` in the process directory.
+`enriched.md` in the process directory.
 
 ## Procedure
 
