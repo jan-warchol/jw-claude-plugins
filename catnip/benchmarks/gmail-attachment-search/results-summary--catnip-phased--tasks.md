@@ -1,27 +1,32 @@
-## Grouped by Eval Type
+## By Eval Type
 
-| Directory | Tech avg | Tech min | Tech max | Struct avg | Struct min | Struct max | WC avg | WC min | WC max |
+| Directory | Struct avg | Struct min | Struct max | Tech avg | Tech min | Tech max | WC avg | WC min | WC max |
 |---|---|---|---|---|---|---|---|---|---|
-| with-assumptions | 91% | 88% | 97% | 15.9 | 15 | 17 | 387 | 330 | 417 |
-| with-outline-structure | 90% | 82% | 96% | 14.9 | 13 | 17 | 358 | 299 | 414 |
-| auto-evals | 88% | 78% | 99% | 12.3 | 10 | 14 | 365 | 335 | 396 |
-| auto-with-adjusted-inputs | 85% | 85% | 85% | 13.9 | 12 | 16 | 353 | 271 | 415 |
-| manual-prompt | 88% | 84% | 91% | 12.2 | 8 | 15 | 300 | 285 | 316 |
+| with-assumptions-no-reorganize | 16.2 | 15 | 17 | 90.7% | 85% | 98% | 368 | 353 | 377 |
+| with-assumptions | 15.9 | 15 | 17 | 91.3% | 88% | 97% | 387 | 330 | 417 |
+| with-outline-structure | 14.9 | 13 | 17 | 89.7% | 82% | 96% | 358 | 299 | 414 |
+| auto-evals | 12.3 | 10 | 14 | 88.0% | 78% | 99% | 365 | 335 | 396 |
+| auto-with-adjusted-inputs | 13.9 | 12 | 16 | 85.0% | 85% | 85% | 353 | 271 | 415 |
+| manual-prompt | 12.2 | 8 | 15 | 88.3% | 84% | 91% | 300 | 285 | 316 |
 
-## Grouped by Avg / Min / Max
+## By Aggregation Type
 
-| Directory | Tech avg | Struct avg | WC avg | Tech min | Struct min | WC min | Tech max | Struct max | WC max |
+| Directory | Struct avg | Tech avg | WC avg | Struct min | Tech min | WC min | Struct max | Tech max | WC max |
 |---|---|---|---|---|---|---|---|---|---|
-| with-assumptions | 91% | 15.9 | 387 | 88% | 15 | 330 | 97% | 17 | 417 |
-| with-outline-structure | 90% | 14.9 | 358 | 82% | 13 | 299 | 96% | 17 | 414 |
-| auto-evals | 88% | 12.3 | 365 | 78% | 10 | 335 | 99% | 14 | 396 |
-| auto-with-adjusted-inputs | 85% | 13.9 | 353 | 85% | 12 | 271 | 85% | 16 | 415 |
-| manual-prompt | 88% | 12.2 | 300 | 84% | 8 | 285 | 91% | 15 | 316 |
+| with-assumptions-no-reorganize | 16.2 | 90.7% | 368 | 15 | 85% | 353 | 17 | 98% | 377 |
+| with-assumptions | 15.9 | 91.3% | 387 | 15 | 88% | 330 | 17 | 97% | 417 |
+| with-outline-structure | 14.9 | 89.7% | 358 | 13 | 82% | 299 | 17 | 96% | 414 |
+| auto-evals | 12.3 | 88.0% | 365 | 10 | 78% | 335 | 14 | 99% | 396 |
+| auto-with-adjusted-inputs | 13.9 | 85.0% | 353 | 12 | 85% | 271 | 16 | 85% | 415 |
+| manual-prompt | 12.2 | 88.3% | 300 | 8 | 84% | 285 | 15 | 91% | 316 |
 
 ## Detailed Breakdown
 
-| Directory | Sample | Word Count | Struct (/17) | Tech |
+| Directory | Sample | Word Count | Struct (runs) | Tech |
 |---|---|---|---|---|
+| with-assumptions-no-reorganize | 01 | 377 | 17, 16, 15 | 98% |
+| with-assumptions-no-reorganize | 02 | 353 | 16, 16, 16 | 89% |
+| with-assumptions-no-reorganize | 03 | 375 | 16, 17, 17 | 85% |
 | with-assumptions | 01 | 330 | 15, 15, 15 | 88% |
 | with-assumptions | 02 | 417 | 17, 17, 17 | 89% |
 | with-assumptions | 03 | 413 | 16, 16, 15 | 97% |
