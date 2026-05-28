@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+trap 'echo >&2 "ERROR: failed at line $LINENO: \`$BASH_COMMAND\` (exit code $?)"' ERR
+
 function die () {
   echo >&2 "$@"
   exit 2
@@ -45,11 +47,27 @@ EXEC_LOG=iterative-spec-writing.log.md
 echo "## Running iterative-spec-writing" | format_md
 echo
 
+set +e
 $CLAUDE --plugin-dir ./catnip -p "/catnip:iterative-spec-writing $PROMPT" \
   | tee_md "$EXEC_LOG"
+CLAUDE_EXIT="$?"
+set -e
 
-PROCESS_DIR=$(grep 'Process directory' "$EXEC_LOG" | tail -n1 | sed -E 's/^.*: `?([^`]+)`?.*$/\1/')
-FINAL_PATH=$(grep 'Spec file' "$EXEC_LOG" | tail -n1 | sed -E 's/^.*: `?([^`]+)`?.*$/\1/')
+if (( CLAUDE_EXIT )); then
+  die "Claude invocation for /iterative-spec-writing failed (exit code $CLAUDE_EXIT)
+
+Claude output tail ($EXEC_LOG):
+$(tail "$EXEC_LOG" || echo "<failed to read the log file>")
+"
+fi
+
+{
+  PROCESS_DIR=$(grep 'Process directory' "$EXEC_LOG" | tail -n1 | sed -E 's/^.*: `?([^`]+)`?.*$/\1/')
+} || die "Failed to extract PROCESS_DIR"
+
+{
+  FINAL_PATH=$(grep 'Spec file' "$EXEC_LOG" | tail -n1 | sed -E 's/^.*: `?([^`]+)`?.*$/\1/')
+} || die "Failed to extract FINAL_PATH"
 
 format_md <<EOF
 
@@ -101,14 +119,16 @@ EOF
 
 $CLAUDE --plugin-dir ./spec-evaluation \
  -p "/spec-evaluation:structural-evaluation $OUTPUT_DIR/compressed.md" \
- | tee_md "$OUTPUT_DIR/structural-eval.md"
+ | tee_md "$OUTPUT_DIR/structural-eval.md" \
+|| echo_md >&2 "**ERROR:** _Structural eval failed._"
 
 for i in 2 3; do
   echo_md "_Repeated structural evaluation (structural-eval-${i})_"
 
   $CLAUDE --plugin-dir ./spec-evaluation \
     -p "/spec-evaluation:structural-evaluation $OUTPUT_DIR/compressed.md" \
-    | tee_md "$OUTPUT_DIR/structural-eval-$i.md"
+    | tee_md "$OUTPUT_DIR/structural-eval-$i.md" \
+  || echo_md >&2 "**ERROR:** _Structural eval (#$i) failed._"
 done
 
 format_md <<EOF
@@ -119,7 +139,8 @@ EOF
 
 $CLAUDE --plugin-dir ./spec-evaluation \
   -p "/spec-evaluation:technical-evaluation spec: $OUTPUT_DIR/compressed.md criteria: $TECH_EVAL_CRITERIA_PATH" \
-  | tee_md "$OUTPUT_DIR/tech-eval.md"
+  | tee_md "$OUTPUT_DIR/tech-eval.md" \
+|| echo_md >&2 "**ERROR:** _Technical eval failed._"
 
 format_md <<EOF
 
