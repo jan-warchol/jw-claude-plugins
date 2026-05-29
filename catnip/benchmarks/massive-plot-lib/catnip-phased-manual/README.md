@@ -26,3 +26,6 @@ a11y, plugins/theming/animations, bar/pie/categorical, CommonJS. ESM-only.
 * Model: sonnet 4.6
 * Effort: high
 * Compression: word limit hardcoded to 1000
+
+## Evaluation summary
+
