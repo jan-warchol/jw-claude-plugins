@@ -23,9 +23,31 @@ a11y, plugins/theming/animations, bar/pie/categorical, CommonJS. ESM-only.
 
 `/catnip:compress-spec enriched.md`
 
-* Model: sonnet 4.6
-* Effort: high
-* Compression: word limit hardcoded to 1000
+- Model: sonnet 4.6
+- Effort: high
+- Compression: word limit hardcoded to 1000
 
 ## Evaluation summary
 
+| Topic              | run1-c1000 | run2-c1000 | run3-c1000 |
+| ------------------ | ---------- | ---------- | ---------- |
+| Goal               | 3          | 3          | 3          |
+| Requirements       | 3          | 3          | 3          |
+| Solution           | 4          | 4          | 4          |
+| Out of scope       | 3          | 3          | 3          |
+| Uncertainty        | 4          | 4          | 3          |
+| **Total (max 17)** | **17**     | **17**     | **16**     |
+
+| Metric      | run1-c1000 | run2-c1000 | run3-c1000 |
+| ----------- | ---------- | ---------- | ---------- |
+| Word count  | 718        | 834        | 844        |
+| Sections    | 14         | 16         | 13         |
+| Subsections | 0          | 1          | 14         |
+
+| Tier                   | run1-c1000 | run2-c1000 | run3-c1000 |
+| ---------------------- | ---------- | ---------- | ---------- |
+| Must (out of 8)        | 6+ 1±      | 5+ 2±      | 5+ 1±      |
+| Should (out of 16)     | 5+ 9±      | 6+ 8±      | 6+ 8±      |
+| Could (out of 17)      | 4+         | 3+         | 3+         |
+| Total points (145 max) | 102        | 94         | 91         |
+| **Score**              | **70%**    | **65%**    | **63%**    |
