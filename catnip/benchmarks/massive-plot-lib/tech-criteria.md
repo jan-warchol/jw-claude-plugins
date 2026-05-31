@@ -25,9 +25,15 @@
 - Symlog parametrization (linear-bridge size in data and screen coords) auto-derived from data;
   manual override available
 - Tick placement must match displayed label precision exactly (no rounding beyond float quirks)
+- Numeric axis labels robust for any range: ≥2 labels, no repeated labels, no overlap, no overflow;
+  Y-axis width adaptive to required label width
 - Auto-fit Y stays active under X-zoom; can only narrow last user-set Y range, never widen
 - Hover highlight: interpolated y at hovered x; fallback to closest x where any series has data
-- NaN/missing values: skip and connect across (uPlot-style)
+- NaN/missing values: skip and connect across (uPlot-style) — line continuity, distinct from markers
+- Non-finite value markers: NaN/±Inf represented on the chart (bug-hunting use case); representation
+  ideally configurable (ignore / dedicated marker / edge-clipped line to ±∞)
+- Integrated/built-in tooltip showing hovered value(s) or all values at hovered X (at least basic;
+  not deferred entirely to the consumer)
 - Canvas stacking (main + overlay); highlighted marks drawn twice; design assumes highlighted set ≪
   total
 - Framework-agnostic core with thin declarative React wrapper
@@ -65,7 +71,14 @@
 - Multiple Y-axes planned, not in initial cut
 - CSS variables preferred for styling (JS config as override); canvas-rendered parts need separate
   escape hatch
+- Single-value (degenerate) ranges auto-expanded to include surrounding context
+- Configurable line stroke width, color, and dash/stroke pattern
+- Modern evergreen browsers only, last ~2 versions (no legacy-browser support)
 
 ## Must Not mention
 
 ## Should Not mention
+
+- Automatic statistical outlier detection (IQR/percentile flagging, outlier rings) — reference relies
+  on visual spotting plus non-finite markers, not computed outliers
+- Bundle-size target/budget — reference explicitly sets none ("No target")
