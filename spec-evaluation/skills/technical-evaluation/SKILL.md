@@ -22,34 +22,57 @@ The value depends on which section the criterion belongs to. Use the following s
 | Tier               | Point value                        |
 | ------------------ | ---------------------------------- |
 | Must mention       | 10                                 |
-| Should mention     | 3                                  |
+| Should mention     | 4                                  |
 | Could mention      | 1                                  |
-| Should not mention | -3 (negative points when present)  |
+| Should not mention | -4 (negative points when present)  |
 | Must not mention   | -10 (negative points when present) |
 
-For each of the criteria, check whether the spec mentions the issue it is about and whether it's
-meaning is consistent with the expectation.
+Score every criterion in two explicit steps. **Do not skip step 1** — writing down the stance
+before the number is what keeps a contradiction from being mis-scored as an absence, and keeps
+partial credit consistent across runs.
 
-A mention must substantively address the concept the criterion describes. Incidental use of related
-terms in a different context does not qualify — e.g. naming a service as a file's download source is
-not the same as acknowledging that setup in that service is required. Parenthetical content in
-criteria is for clarifying the concept's meaning, it's not a definitive checklist of required
-details.
+### Step 1 — Record the spec's stance (mandatory)
 
-For positive tiers (Must/Should/Could), the score is:
+For each criterion, find where the spec addresses the criterion's **core concept** and record its
+stance, with a short quoted snippet (or `—` when silent):
 
-- Full points when the issue is mentioned and consistent with the expectation,
-- Half points when the concept is partially addressed — the spec shows awareness but misses a key
-  element (e.g. mentions a file exists but not that it must be created/obtained). For Must, half is
-  exactly 5. For Should, half is 1.5 — round to 1 or 2 based on how much of the concept is covered.
-  Could criteria have no partial credit: score 0 if not fully addressed.
-- No points if the issue is not mentioned at all,
-- Negative full points if the spec contradicts the criterion.
+- **AGREES** — the spec addresses the core concept consistently with the expectation.
+- **SILENT** — the spec does not address the concept at all.
+- **CONTRADICTS** — the spec addresses the concept but takes the *opposite* position. A spec that
+  quietly *does the opposite* is CONTRADICTS, not SILENT — you do not need an explicit rebuttal.
 
-For negative tiers (Must not/Should not), the score is:
+Judge the stance on the criterion's **core concept only**. Parenthetical and secondary details in a
+criterion clarify what the concept means; they are **not** a checklist. Omitting — or even rejecting
+— a secondary detail does not change the stance; only the position on the core concept does.
+Incidental use of related terms in an unrelated context is not addressing the concept (e.g. naming a
+service as a download source is not acknowledging that setup in that service is required).
 
-- Full points (negative) if the issue is mentioned,
-- No points otherwise (there are no positive points possible for negative tiers).
+Pick one dominant stance per criterion: if the spec gets the core right but rejects a *secondary*
+element, the stance is AGREES; if it rejects the *core*, the stance is CONTRADICTS even when some
+secondary element is present.
+
+### Step 2 — Assign the score from the stance
+
+For positive tiers (Must / Should / Could):
+
+| Stance | Score |
+| ------ | ----- |
+| CONTRADICTS | negative full points (Must −10, Should −4, Could −1). **Never 0 for a contradiction.** |
+| SILENT | 0 |
+| AGREES — core fully conveyed | full points (Must 10, Should 4, Could 1) |
+| AGREES — but a **core** element is missing (awareness shown, substance incomplete, e.g. mentions a file exists but not that it must be created/obtained) | partial = exactly half: Must = 5; Should = 2; Could has no partial → 0. A single partial value per tier — there is no finer gradation. |
+
+Partial credit is only for a missing *core* element, never for a missing parenthetical/secondary
+detail (that stays full).
+
+For **Could** criteria that bundle several listed sub-features, substantially addressing the core
+concept earns the full point — do not require every listed sub-feature to be present. Could is
+full-or-nothing, but "full" means the core concept is covered, not that every sub-detail is.
+
+For negative tiers (Must not / Should not):
+
+- Negative full points (Must not −10, Should not −4) if the spec mentions or does the thing,
+- 0 otherwise (there are no positive points for negative tiers).
 
 The total score is the sum of all point scores.
 
@@ -81,9 +104,11 @@ Print:
   | ---------- | --------------------------- | ------ | ------ | ------ |
   | **MUST**   | Foobar is required input    | +10    | +10    | 0      |
   | **MUST**   | Frobnicator must not throw… | +10    | -10    | +10    |
-  | **SHOULD** | consectetur adipiscing elit | +3     | 0      | +3     |
+  | **SHOULD** | consectetur adipiscing elit | +4     | 0      | +4     |
 
-- Notes on any non-obious score assignments
+- Notes on non-obvious score assignments. Every CONTRADICTS (negative score) and every partial
+  must appear here as a one-line `stance — "quoted snippet" — score` entry, so the direction of
+  meaning is auditable.
 
 - A summary table showing, for each spec, how many criteria per tier scored positively (e.g. fully
   matched "must"), partially (e.g. partially matched "must") and negatively (e.g. matched "must
