@@ -1,1 +1,0 @@
-Write a plan for the following request and save it as a markdown file `base-cc-plan.md`: 
