@@ -60,7 +60,8 @@ do?", "what do success and failure look like?".
 - functional and non-functional requirements
 
 Use specific, verifiable criteria - make it easy to check whether a candidate implementation meets
-the requirements. Prefer specifying measurable thresholds where possible.
+the requirements. Prefer specifying measurable thresholds where possible. Don't put implementation
+details in this section.
 
 ### Design
 
@@ -72,6 +73,9 @@ This is the section for discussing "how?" - the solution and implementation.
 - priorities and trade-offs (if any)
 - rejected alternatives (if any)
 - non-trivial dependencies (if any)
+
+**Important:** avoid describing behavior in this section. All requirements must be documented in
+`Requirements` section and its sub-sections.
 
 ### Unknowns
 
