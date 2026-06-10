@@ -2,8 +2,7 @@
 
 **Complexity-Aware Task Navigation and Intelligent Planning**
 
-A Claude Code plugin that adjusts model behavior based on the assessed complexity of each user
-request.
+A Claude Code plugin with a goal of producing better specifications than base Claude Code.
 
 ## Installation
 
@@ -19,25 +18,20 @@ Then install the plugin itself:
 /plugin install catnip@jan-warchol-plugins
 ```
 
-## Skills
+## Overview
 
-- `catnip:complexity-aware-spec` - Create a spec with depth and composition based on task complexity
-  specified by the user on a 1-10 scale. Note that the skill can only be invoked directly by the
-  user (not by the model), so you must use full skill name to trigger it.
+**Problem statement:** plans created by Claude Code are often too verbose, and yet they can miss
+important sections (assumptions, risks, verifiable criteria, etc.) or fail to clarify crucial
+design decisions with the user.
 
-Example usage:
+**What doesn’t work:** Simply listing everything that should be included will result in bloated
+plans. Similarly, instructing the agent to
+[“ask questions until a common understanding is reached”](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md)
+is overkill (too many questions).
 
-```
-/catnip:complexity-aware-spec Create a simple Python script that searches Gmail for emails matching a user-provided query, then returns the last 3 matching emails that have attachments. complexity: 3
-```
+**Constraints:**
 
-Guidelines for specifying complexity:
-
-- **Level 1**: Simple questions, straightforward edits to a single file. 1-10 lines of output, no
-  reasoning required.
-- **Level 3**: Changes across several files, simple self-contained script using one external API or
-  a question requiring some research. 10-100 lines of output, reasoning required.
-- **Level 5**: Complete implementation of a single moderately complex feature in a software project,
-  including writing tests and updating documentation. 100-1000 lines of output.
-- **Level 10**: Designing and implementing a complex software project. 30,000+ lines of expected
-  output, extensive reasoning and planning.
+- The plugin cannot be too rigid \- models will get smarter, so enforcing a strict structure would
+  backfire (holding future agents back)
+- Size limit: I hope to get the complete solution (skill instructions \+ accompanying hooks)
+  within 2000 lines, preferably much less (3000 _words_).
