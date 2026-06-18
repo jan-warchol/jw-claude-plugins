@@ -33,3 +33,7 @@ python3 scripts/wordcount_server.py path/to/file.md
 
 The script doubles as both the MCP stdio server (no arguments) and a plain CLI (with file
 arguments), and depends only on the Python standard library.
+
+The plugin bundles a `PreToolUse` hook (`hooks/`) that auto-approves the word counter — both the
+`count_words` MCP tool and the `wordcount_server.py` CLI — so installing the plugin pre-approves it
+and you are never prompted to run it.
