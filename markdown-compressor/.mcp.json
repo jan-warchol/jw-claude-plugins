@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "markdown-wordcount": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/wordcount_server.py"]
+    }
+  }
+}

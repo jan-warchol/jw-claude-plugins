@@ -1,0 +1,5 @@
+{
+  "name": "markdown-compressor",
+  "description": "Compress markdown documents (plans, specs, references) into tighter prose with fewer words while preserving all information and structure. Ships an MCP word-count tool that ignores punctuation and formatting.",
+  "version": "0.1.0"
+}
