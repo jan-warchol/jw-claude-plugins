@@ -15,16 +15,21 @@ description:
   130, 200, 300, 500, 800, 1300, 2000, 3000, 5000, 8000.
 - ask the user whether they want to go with that size or a different one -
   AskUserQuestion with 4 options (estimated, 2 below and 1 above)
-- write iteratively: up to 1000 words at a time, and proceed to the next chunk
-  after getting user's approval on what you wrote
+- write iteratively: up to 1000 words at a time, asking for feedback after
+  each chunk
 - inferability principle: write only what cannot be derived from other stated
   content
+- avoid enumerations written in prose. Use bullet points / tables / etc.
+  wherever possible.
+- discuss increasing word budget with the user if there are multiple
+  back-and-forth rounds with feedback.
 
 ## Spec structure
 
-Organize the spec into the following toplevel sections: motivation, requirements,
-approach (optional) and unknowns. Subsections are up to you. Below are guidelines
-on where to put what (the spec doesn't have to cover all mentioned aspects).
+Organize the spec into the following toplevel sections: summary (optional),
+motivation, requirements, approach (optional) and unknowns. Subsections are
+up to you. Below are guidelines on where to put what (the spec doesn't have to
+cover all mentioned aspects).
 
 **Motivation** - "why?"
 
@@ -46,6 +51,8 @@ on where to put what (the spec doesn't have to cover all mentioned aspects).
 
 - key design choices
 - architecture
+- control / data flow diagrams
+- pseudocode with logic overview
 - trade-offs
 - testing strategy
 - rejected alternatives
@@ -70,7 +77,8 @@ Items below could fit either in Requirements and/or in Approach - you decide:
 - input validation
 - security
 - performance / scalability
-- backward compatibility / public API changes
+- backward compatibility
+- public API changes (always include if present!)
 
 ## Output size
 
