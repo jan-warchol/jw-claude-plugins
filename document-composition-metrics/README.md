@@ -11,11 +11,11 @@ Supported for now: markdown documents and mermaid flowcharts, sequence diagrams 
 ### `scripts/markdown-metrics.py`
 
 ```
-scripts/markdown-metrics.py [--json] [--chars-per-word N] FILE.md [FILE.md ...]
+scripts/markdown-metrics.py [--json] [--chars-per-word N] [FILE.md ...]
 ```
 
 Requires [uv](https://docs.astral.sh/uv/). The `mistletoe` dependency is declared inline and
-installed automatically.
+installed automatically. With no `FILE`, or with `-`, reads standard input.
 
 | Metric                | Meaning                                                    |
 |-----------------------|------------------------------------------------------------|
@@ -30,11 +30,13 @@ installed automatically.
 ### `scripts/mermaid-metrics.py`
 
 ```
-scripts/mermaid-metrics.py [--json] [--chars-per-word N] FILE [FILE ...]
+scripts/mermaid-metrics.py [--json] [--chars-per-word N] [FILE ...]
 ```
 
 Plain Python 3, no dependencies. Accepts `.mmd` files, or markdown files (each ` ```mermaid ` block
-is measured separately). Any lines it could not parse are listed in `unparsed_lines`.
+is measured separately). With no `FILE`, or with `-`, reads standard input, treated as markdown if
+it contains a ` ```mermaid ` block and as a single diagram otherwise. Any lines it could not parse
+are listed in `unparsed_lines`.
 
 | Metric             | Flowchart | Sequence diagram                  | Class diagram   |
 |--------------------|-----------|-----------------------------------|-----------------|

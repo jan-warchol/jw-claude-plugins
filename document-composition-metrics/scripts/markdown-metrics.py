@@ -20,7 +20,9 @@ Metrics per file:
   avg_list_item_words   mean words of an item's own text, nested lists excluded
 
 Usage:
-  markdown-metrics.py [--json] [--chars-per-word N] FILE.md [FILE.md ...]
+  markdown-metrics.py [--json] [--chars-per-word N] [FILE.md ...]
+
+With no FILE, or when FILE is -, read standard input.
 """
 
 import argparse
@@ -131,8 +133,14 @@ def list_item_chars(node, items):
 
 # ── Top level ────────────────────────────────────────────────────────────────
 
+def read_input(path):
+    if path == "-":
+        return sys.stdin.buffer.read().decode("utf-8")
+    return Path(path).read_text(encoding="utf-8")
+
+
 def analyze(path, chars_per_word=CHARS_PER_WORD):
-    text = Path(path).read_text(encoding="utf-8")
+    text = read_input(path)
 
     match = FRONT_MATTER.match(text)
     if match:
@@ -152,7 +160,7 @@ def analyze(path, chars_per_word=CHARS_PER_WORD):
         return round(sum(values) / len(values) / chars_per_word, 1) if values else None
 
     return {
-        "file": str(path),
+        "file": "<stdin>" if path == "-" else str(path),
         "normalized_words": round(total_chars / chars_per_word),
         "code_percent": round(100 * code_non_space / non_space) if non_space else 0,
         "sections": len(sections),
@@ -173,7 +181,8 @@ def format_text(result):
 
 def main():
     parser = argparse.ArgumentParser(description="Measure size and structure of markdown documents.")
-    parser.add_argument("files", nargs="+", metavar="FILE")
+    parser.add_argument("files", nargs="*", default=["-"], metavar="FILE",
+                        help="markdown files; - or none reads standard input")
     parser.add_argument("--json", action="store_true", help="print a JSON array")
     parser.add_argument("--chars-per-word", type=float, default=CHARS_PER_WORD,
                         help=f"normalization constant (default: {CHARS_PER_WORD})")

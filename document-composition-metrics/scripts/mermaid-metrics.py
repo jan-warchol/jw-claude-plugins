@@ -18,10 +18,12 @@ header line and comments. Lines a parser does not understand are listed in
 `unparsed_lines`.
 
 Input: .mmd files, or markdown files (every ```mermaid block is a diagram).
+With no FILE, or when FILE is -, standard input is read; it is treated as
+markdown if it contains a ```mermaid block, otherwise as a single diagram.
 See DESIGN.md for the rationale.
 
 Usage:
-  mermaid-metrics.py [--json] [--chars-per-word N] FILE [FILE ...]
+  mermaid-metrics.py [--json] [--chars-per-word N] [FILE ...]
 """
 
 import argparse
@@ -369,11 +371,18 @@ def analyze_diagram(name, source, chars_per_word):
 
 
 def analyze_file(path, chars_per_word=CHARS_PER_WORD):
-    text = Path(path).read_text(encoding="utf-8")
-    if Path(path).suffix.lower() in (".md", ".markdown"):
+    if path == "-":
+        name = "<stdin>"
+        text = sys.stdin.buffer.read().decode("utf-8")
+        is_markdown = MARKDOWN_BLOCK.search(text) is not None
+    else:
+        name = str(path)
+        text = Path(path).read_text(encoding="utf-8")
+        is_markdown = Path(path).suffix.lower() in (".md", ".markdown")
+    if is_markdown:
         blocks = [m.group(2) for m in MARKDOWN_BLOCK.finditer(text)]
-        return [analyze_diagram(f"{path}#{i}", b, chars_per_word) for i, b in enumerate(blocks, 1)]
-    return [analyze_diagram(str(path), text, chars_per_word)]
+        return [analyze_diagram(f"{name}#{i}", b, chars_per_word) for i, b in enumerate(blocks, 1)]
+    return [analyze_diagram(name, text, chars_per_word)]
 
 
 def format_text(result):
@@ -391,7 +400,8 @@ def format_text(result):
 
 def main():
     parser = argparse.ArgumentParser(description="Measure size of mermaid diagrams.")
-    parser.add_argument("files", nargs="+", metavar="FILE")
+    parser.add_argument("files", nargs="*", default=["-"], metavar="FILE",
+                        help=".mmd or markdown files; - or none reads standard input")
     parser.add_argument("--json", action="store_true", help="print a JSON array")
     parser.add_argument("--chars-per-word", type=float, default=CHARS_PER_WORD,
                         help=f"normalization constant (default: {CHARS_PER_WORD})")
