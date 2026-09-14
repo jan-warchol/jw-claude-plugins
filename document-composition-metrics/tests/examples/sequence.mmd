@@ -1,0 +1,30 @@
+---
+title: Login flow
+---
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant W as Web server
+    participant DB
+    box Aqua Backend services
+        participant Auth
+    end
+    U->>+W: Open login page
+    W-->>-U: Login form
+    loop Every attempt
+        U->>W: Submit credentials
+        W->>Auth: Verify
+        alt valid
+            Auth-->>W: Token
+        else invalid
+            Auth--xW: Rejected
+        end
+    end
+    Note over U,W: Session starts
+    W-)DB: Log event
+    rect rgb(200, 220, 255)
+        DB->>DB: Rotate logs
+    end
+    activate W
+    deactivate W
+    this line is garbage

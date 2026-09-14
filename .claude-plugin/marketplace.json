@@ -19,6 +19,16 @@
       "name": "catnip",
       "source": "./catnip",
       "description": "Complexity-Aware Task Navigation and Intelligent Planning. Adjusts model behavior based on the assessed complexity of each user request."
+    },
+    {
+      "name": "spec-evaluation",
+      "source": "./spec-evaluation",
+      "description": "Skills for evaluating and comparing plans and specs"
+    },
+    {
+      "name": "document-composition-metrics",
+      "source": "./document-composition-metrics",
+      "description": "Measure document size and structure (markdown, mermaid) with normalized word counts that ignore formatting and punctuation."
     }
   ]
 }

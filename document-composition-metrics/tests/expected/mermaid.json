@@ -1,0 +1,48 @@
+[
+  {
+    "diagram": "flowchart-edge-cases.mmd",
+    "type": "graph",
+    "nodes": 13,
+    "connections": 9,
+    "groups": 1,
+    "normalized_words": 90,
+    "unparsed_lines": [
+      "this is garbage ###"
+    ]
+  },
+  {
+    "diagram": "sequence.mmd",
+    "type": "sequenceDiagram",
+    "nodes": 4,
+    "connections": 8,
+    "groups": 4,
+    "normalized_words": 160,
+    "unparsed_lines": [
+      "this line is garbage"
+    ]
+  },
+  {
+    "diagram": "class.mmd",
+    "type": "classDiagram",
+    "nodes": 5,
+    "connections": 4,
+    "groups": 1,
+    "normalized_words": 126
+  },
+  {
+    "diagram": "diagrams-in-markdown.md#1",
+    "type": "flowchart",
+    "nodes": 11,
+    "connections": 9,
+    "groups": 1,
+    "normalized_words": 88
+  },
+  {
+    "diagram": "diagrams-in-markdown.md#2",
+    "type": "sequenceDiagram",
+    "nodes": 2,
+    "connections": 1,
+    "groups": 0,
+    "normalized_words": 16
+  }
+]

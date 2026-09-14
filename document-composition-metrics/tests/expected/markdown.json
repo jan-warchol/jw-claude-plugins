@@ -1,0 +1,12 @@
+[
+  {
+    "file": "markdown-basic.md",
+    "normalized_words": 141,
+    "code_percent": 12,
+    "sections": 2,
+    "avg_section_words": 65.5,
+    "avg_paragraph_words": 27.3,
+    "avg_list_words": 29.0,
+    "avg_list_item_words": 9.7
+  }
+]

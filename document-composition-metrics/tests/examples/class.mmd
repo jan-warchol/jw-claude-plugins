@@ -1,0 +1,24 @@
+classDiagram
+    direction LR
+    note "Domain model"
+    class Animal {
+        <<abstract>>
+        +String name
+        +int age
+        +makeSound() void
+    }
+    class Duck["Wild duck"]
+    class Cage~Animal~
+    Animal <|-- Duck
+    Animal "1" o-- "many" Cage : lives in
+    Zoo *-- Cage
+    Duck ..> Pond
+    Duck : +swim()
+    <<interface>> Pond
+    namespace Places {
+        class Zoo {
+            +String city
+        }
+    }
+    note for Duck "Can fly"
+    style Duck fill:#f9f
