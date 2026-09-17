@@ -14,10 +14,12 @@ Metrics per file:
                         front matter excluded)
   code_percent          % of non-whitespace characters of the rendered text that are
                         in code blocks or inline code
-  avg_section_words     mean body words per section (content between headings)
-  avg_paragraph_words   mean words per paragraph (list items excluded)
-  avg_list_words        mean words per top-level list, nested lists included
-  avg_list_item_words   mean words of an item's own text, nested lists excluded
+  section_words         body words per section (content between headings)
+  paragraph_words       words per paragraph (list items excluded)
+  list_words            words per top-level list, nested lists included
+  list_item_words       words of an item's own text, nested lists excluded
+
+The last four are distributions, reported as the 15th, 50th and 85th percentile.
 
 Usage:
   markdown-metrics.py [--json] [--chars-per-word N] [FILE.md ...]
@@ -35,6 +37,7 @@ from mistletoe import Document
 from mistletoe.html_renderer import HtmlRenderer
 
 CHARS_PER_WORD = 6
+PERCENTILES = (15, 50, 85)
 
 FRONT_MATTER = re.compile(r"\A(---|\+\+\+)[ \t]*\r?\n.*?^\1[ \t]*(\r?\n|\Z)", re.DOTALL | re.MULTILINE)
 
@@ -133,6 +136,15 @@ def list_item_chars(node, items):
 
 # ── Top level ────────────────────────────────────────────────────────────────
 
+def percentile(values, p):
+    """Linear interpolation between closest ranks (like numpy's default)."""
+    values = sorted(values)
+    rank = (len(values) - 1) * p / 100
+    low = int(rank)
+    high = min(low + 1, len(values) - 1)
+    return values[low] + (values[high] - values[low]) * (rank - low)
+
+
 def read_input(path):
     if path == "-":
         return sys.stdin.buffer.read().decode("utf-8")
@@ -156,26 +168,33 @@ def analyze(path, chars_per_word=CHARS_PER_WORD):
     paragraph_and_list_chars(doc, paragraphs, lists)
     list_item_chars(doc, items)
 
-    def avg(values):
-        return round(sum(values) / len(values) / chars_per_word, 1) if values else None
+    def distribution(values):
+        if not values:
+            return None
+        return {f"p{p}": round(percentile(values, p) / chars_per_word, 1) for p in PERCENTILES}
 
     return {
         "file": "<stdin>" if path == "-" else str(path),
         "normalized_words": round(total_chars / chars_per_word),
         "code_percent": round(100 * code_non_space / non_space) if non_space else 0,
         "sections": len(sections),
-        "avg_section_words": avg(sections),
-        "avg_paragraph_words": avg(paragraphs),
-        "avg_list_words": avg(lists),
-        "avg_list_item_words": avg(items),
+        "section_words": distribution(sections),
+        "paragraph_words": distribution(paragraphs),
+        "list_words": distribution(lists),
+        "list_item_words": distribution(items),
     }
 
 
 def format_text(result):
     lines = [result["file"]]
     for key, value in result.items():
-        if key != "file":
-            lines.append(f"  {key:<22}{'-' if value is None else value}")
+        if key == "file":
+            continue
+        if value is None:
+            value = "-"
+        elif isinstance(value, dict):
+            value = "  ".join(f"{k} {v}" for k, v in value.items())
+        lines.append(f"  {key:<22}{value}")
     return "\n".join(lines)
 
 

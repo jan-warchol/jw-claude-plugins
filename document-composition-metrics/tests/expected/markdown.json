@@ -4,9 +4,25 @@
     "normalized_words": 141,
     "code_percent": 12,
     "sections": 2,
-    "avg_section_words": 65.5,
-    "avg_paragraph_words": 27.3,
-    "avg_list_words": 29.0,
-    "avg_list_item_words": 9.7
+    "section_words": {
+      "p15": 40.6,
+      "p50": 65.5,
+      "p85": 90.3
+    },
+    "paragraph_words": {
+      "p15": 19.5,
+      "p50": 30.0,
+      "p85": 34.9
+    },
+    "list_words": {
+      "p15": 29.0,
+      "p50": 29.0,
+      "p85": 29.0
+    },
+    "list_item_words": {
+      "p15": 9.3,
+      "p50": 10.0,
+      "p85": 10.0
+    }
   }
 ]

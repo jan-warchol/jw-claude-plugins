@@ -1,5 +1,5 @@
 {
   "name": "document-composition-metrics",
   "description": "Measure document size and structure (markdown, mermaid) with normalized word counts that ignore formatting and punctuation.",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

@@ -88,12 +88,17 @@ Structure metrics use the same unit, and code blocks are excluded from them:
 
 | Metric                | Unit measured                                                        |
 |-----------------------|----------------------------------------------------------------------|
-| `avg_section_words`   | body between two headings (text before the first heading is a section) |
-| `avg_paragraph_words` | a paragraph, including in block quotes; list item text is not a paragraph |
-| `avg_list_words`      | a whole top-level list, nested lists included                        |
-| `avg_list_item_words` | one item's own text, nested sub-lists excluded                       |
+| `section_words`       | body between two headings (text before the first heading is a section) |
+| `paragraph_words`     | a paragraph, including in block quotes; list item text is not a paragraph |
+| `list_words`          | a whole top-level list, nested lists included                        |
+| `list_item_words`     | one item's own text, nested sub-lists excluded                       |
 
-Long average paragraphs point to walls of text. Long list items point to bullets that should be
+Each is reported as the 15th, 50th and 85th percentile rather than a mean. A mean hides the
+shape: one huge section pulls it up and a dozen one-line sections pull it down, and both look like
+a normal document. The median shows the typical unit, and p15 and p85 show the short and long
+tails without being decided by a single outlier.
+
+Long paragraphs point to walls of text. Long list items point to bullets that should be
 paragraphs or split. Very short sections point to over-fragmentation.
 
 ## Mermaid metrics

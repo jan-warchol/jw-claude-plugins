@@ -22,10 +22,13 @@ installed automatically. With no `FILE`, or with `-`, reads standard input.
 | `normalized_words`    | normalized words in the document (code included, front matter excluded) |
 | `code_percent`        | % of non-whitespace characters in code blocks and inline code |
 | `sections`            | number of sections (text between headings)                 |
-| `avg_section_words`   | mean section length                                        |
-| `avg_paragraph_words` | mean paragraph length                                      |
-| `avg_list_words`      | mean length of a whole top-level list                      |
-| `avg_list_item_words` | mean length of a list item's own text                      |
+| `section_words`       | section length                                             |
+| `paragraph_words`     | paragraph length                                           |
+| `list_words`          | length of a whole top-level list                           |
+| `list_item_words`     | length of a list item's own text                           |
+
+The last four are distributions, reported as the 15th, 50th and 85th percentile (`p15`, `p50`,
+`p85`), or empty when the document has no such element.
 
 ### `scripts/mermaid-metrics.py`
 
