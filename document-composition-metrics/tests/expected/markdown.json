@@ -23,6 +23,44 @@
       "p15": 9.3,
       "p50": 10.0,
       "p85": 10.0
+    },
+    "structured_percent": 32,
+    "anchor_gap_words": {
+      "p15": 8.4,
+      "p50": 10.0,
+      "p85": 20.8
+    }
+  },
+  {
+    "file": "markdown-scanning.md",
+    "normalized_words": 162,
+    "code_percent": 2,
+    "sections": 1,
+    "section_words": {
+      "p15": 157.0,
+      "p50": 157.0,
+      "p85": 157.0
+    },
+    "paragraph_words": {
+      "p15": 19.3,
+      "p50": 34.0,
+      "p85": 36.1
+    },
+    "list_words": {
+      "p15": 47.0,
+      "p50": 47.0,
+      "p85": 47.0
+    },
+    "list_item_words": {
+      "p15": 6.9,
+      "p50": 9.0,
+      "p85": 25.1
+    },
+    "structured_percent": 30,
+    "anchor_gap_words": {
+      "p15": 5.3,
+      "p50": 7.5,
+      "p85": 16.6
     }
   }
 ]

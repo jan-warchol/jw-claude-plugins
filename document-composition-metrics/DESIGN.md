@@ -101,6 +101,47 @@ tails without being decided by a single outlier.
 Long paragraphs point to walls of text. Long list items point to bullets that should be
 paragraphs or split. Very short sections point to over-fragmentation.
 
+### Structured vs. prose
+
+`structured_percent` is the share of text that reads as structure (list items and table
+cells) rather than prose (paragraphs). Headings and code are neither and are left out.
+
+A list item is not automatically structure. Four bullets, each as long as a paragraph, read
+the same as four paragraphs. So each list item's own text and each table cell counts as
+structure only up to a cap, and whatever is left over counts as prose:
+
+```
+structured chars of an item or cell = min(length, cap)
+prose chars of an item or cell      = max(0, length − cap)
+```
+
+The start of a bullet is what the eye lands on, and the rest of a long bullet is read as
+a paragraph. A hard cutoff (items over the cap count as prose entirely) would make the
+score jump at the threshold and reward trimming items to just under it. The cap scales
+the score smoothly instead.
+
+The default cap is **13 normalized words**, about one ordinary sentence. `--structured-cap`
+changes it.
+
+### Scannability
+
+`anchor_gap_words` measures how far a reader has to go through plain text before reaching
+something that stands out visually. An anchor is:
+
+- the start of a paragraph or list item
+- a heading, code block, table or thematic break
+- a bold, italic, strikethrough, inline code or link span, or an image
+
+A gap is the plain text between two consecutive anchors, in reading order. The text of
+anchors themselves (headings, emphasized spans, code) is not part of any gap. Tables are
+skipped: every cell is an anchor, so they contain no gaps. Two anchors in a row (e.g.
+`**Note:**` at the start of a paragraph) make an empty gap, which is not reported.
+
+Too few anchors and too many are both failure modes: long gaps are walls of text, and
+very short ones mean that so much stands out that nothing does. Both are visible in the
+distribution: long gaps in p85, over-formatting in low p15 and p50. The ideal range is not
+known yet and should be calibrated on documents known to be good and bad.
+
 ## Mermaid metrics
 
 The size of a diagram is not just its text. Every node and every connection is something the

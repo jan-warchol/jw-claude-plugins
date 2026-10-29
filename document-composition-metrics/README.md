@@ -11,7 +11,7 @@ Supported for now: markdown documents and mermaid flowcharts, sequence diagrams 
 ### `scripts/markdown-metrics.py`
 
 ```
-scripts/markdown-metrics.py [--json] [--chars-per-word N] [FILE.md ...]
+scripts/markdown-metrics.py [--json] [--chars-per-word N] [--structured-cap N] [FILE.md ...]
 ```
 
 Requires [uv](https://docs.astral.sh/uv/). The `mistletoe` dependency is declared inline and
@@ -26,8 +26,10 @@ installed automatically. With no `FILE`, or with `-`, reads standard input.
 | `paragraph_words`     | paragraph length                                           |
 | `list_words`          | length of a whole top-level list                           |
 | `list_item_words`     | length of a list item's own text                           |
+| `structured_percent`  | % of text in list items and table cells rather than paragraphs; only the first 13 words of each item or cell count |
+| `anchor_gap_words`    | length of plain text between visual anchors (paragraph and item starts, headings, emphasis, code, links) |
 
-The last four are distributions, reported as the 15th, 50th and 85th percentile (`p15`, `p50`,
+The `..._words` metrics except `normalized_words` are distributions, reported as the 15th, 50th and 85th percentile (`p15`, `p50`,
 `p85`), or empty when the document has no such element.
 
 ### `scripts/mermaid-metrics.py`

@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")/examples"
 scripts=../../scripts
 declare -A outputs=(
-  [markdown.json]="$scripts/markdown-metrics.py --json --chars-per-word 1 markdown-basic.md"
+  [markdown.json]="$scripts/markdown-metrics.py --json --chars-per-word 1 markdown-basic.md markdown-scanning.md"
   [mermaid.json]="$scripts/mermaid-metrics.py --json --chars-per-word 1 flowchart-edge-cases.mmd sequence.mmd class.mmd diagrams-in-markdown.md"
 )
 status=0
